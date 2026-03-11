@@ -1,12 +1,12 @@
 package cms.storage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static cms.testutil.Assert.assertThrows;
 import static cms.testutil.TypicalPersons.ALICE;
 import static cms.testutil.TypicalPersons.HOON;
 import static cms.testutil.TypicalPersons.IDA;
 import static cms.testutil.TypicalPersons.getTypicalAddressBook;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.IOException;
 import java.nio.file.Path;

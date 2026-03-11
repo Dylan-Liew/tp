@@ -1,11 +1,11 @@
 package cms.logic.parser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static cms.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static cms.testutil.Assert.assertThrows;
 import static cms.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;

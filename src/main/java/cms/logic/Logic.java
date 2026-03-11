@@ -2,13 +2,13 @@ package cms.logic;
 
 import java.nio.file.Path;
 
-import javafx.collections.ObservableList;
 import cms.commons.core.GuiSettings;
 import cms.logic.commands.CommandResult;
 import cms.logic.commands.exceptions.CommandException;
 import cms.logic.parser.exceptions.ParseException;
 import cms.model.ReadOnlyAddressBook;
 import cms.model.person.Person;
+import javafx.collections.ObservableList;
 
 /**
  * API of the Logic component

@@ -3,9 +3,9 @@ package cms.model;
 import java.nio.file.Path;
 import java.util.function.Predicate;
 
-import javafx.collections.ObservableList;
 import cms.commons.core.GuiSettings;
 import cms.model.person.Person;
+import javafx.collections.ObservableList;
 
 /**
  * The API of the Model component.

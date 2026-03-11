@@ -5,8 +5,6 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
 import cms.commons.core.Config;
 import cms.commons.core.LogsCenter;
 import cms.commons.core.Version;
@@ -30,6 +28,8 @@ import cms.storage.StorageManager;
 import cms.storage.UserPrefsStorage;
 import cms.ui.Ui;
 import cms.ui.UiManager;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Runs the application.

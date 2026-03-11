@@ -1,11 +1,11 @@
 package cms.logic.commands;
 
+import static cms.testutil.Assert.assertThrows;
+import static cms.testutil.TypicalPersons.ALICE;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static cms.testutil.Assert.assertThrows;
-import static cms.testutil.TypicalPersons.ALICE;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
-import javafx.collections.ObservableList;
 import cms.commons.core.GuiSettings;
 import cms.logic.Messages;
 import cms.logic.commands.exceptions.CommandException;
@@ -24,6 +23,7 @@ import cms.model.ReadOnlyAddressBook;
 import cms.model.ReadOnlyUserPrefs;
 import cms.model.person.Person;
 import cms.testutil.PersonBuilder;
+import javafx.collections.ObservableList;
 
 public class AddCommandTest {
 

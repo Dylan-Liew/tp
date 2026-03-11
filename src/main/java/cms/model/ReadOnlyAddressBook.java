@@ -1,7 +1,7 @@
 package cms.model;
 
-import javafx.collections.ObservableList;
 import cms.model.person.Person;
+import javafx.collections.ObservableList;
 
 /**
  * Unmodifiable view of an address book

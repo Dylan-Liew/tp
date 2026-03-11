@@ -2,15 +2,15 @@ package cms.ui;
 
 import java.util.logging.Logger;
 
+import cms.MainApp;
+import cms.commons.core.LogsCenter;
+import cms.commons.util.StringUtil;
+import cms.logic.Logic;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import cms.MainApp;
-import cms.commons.core.LogsCenter;
-import cms.commons.util.StringUtil;
-import cms.logic.Logic;
 
 /**
  * The manager of the UI component.

@@ -1,7 +1,7 @@
 package cms.model.person;
 
-import static java.util.Objects.requireNonNull;
 import static cms.commons.util.AppUtil.checkArgument;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Represents a Person's name in the address book.

@@ -1,9 +1,9 @@
 package cms.commons.util;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.Test;
-
 import static cms.testutil.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 public class AppUtilTest {
 

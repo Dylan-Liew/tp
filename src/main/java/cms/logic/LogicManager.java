@@ -5,7 +5,6 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import javafx.collections.ObservableList;
 import cms.commons.core.GuiSettings;
 import cms.commons.core.LogsCenter;
 import cms.logic.commands.Command;
@@ -17,6 +16,7 @@ import cms.model.Model;
 import cms.model.ReadOnlyAddressBook;
 import cms.model.person.Person;
 import cms.storage.Storage;
+import javafx.collections.ObservableList;
 
 /**
  * The main LogicManager of the app.

@@ -1,7 +1,7 @@
 package cms.logic.commands;
 
-import static java.util.Objects.requireNonNull;
 import static cms.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static java.util.Objects.requireNonNull;
 
 import cms.model.Model;
 

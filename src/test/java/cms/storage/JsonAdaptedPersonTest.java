@@ -1,9 +1,9 @@
 package cms.storage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static cms.storage.JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORMAT;
 import static cms.testutil.Assert.assertThrows;
 import static cms.testutil.TypicalPersons.BENSON;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,14 @@
 package cms.logic.commands;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static cms.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static cms.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static cms.testutil.TypicalPersons.CARL;
 import static cms.testutil.TypicalPersons.ELLE;
 import static cms.testutil.TypicalPersons.FIONA;
 import static cms.testutil.TypicalPersons.getTypicalAddressBook;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;

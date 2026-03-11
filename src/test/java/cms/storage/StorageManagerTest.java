@@ -1,8 +1,8 @@
 package cms.storage;
 
+import static cms.testutil.TypicalPersons.getTypicalAddressBook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static cms.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
 

@@ -1,6 +1,5 @@
 package cms.logic;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static cms.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static cms.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static cms.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
@@ -9,6 +8,7 @@ import static cms.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static cms.testutil.Assert.assertThrows;
 import static cms.testutil.TypicalPersons.AMY;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
