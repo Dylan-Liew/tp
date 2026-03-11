@@ -45,7 +45,7 @@ public class GithubUsername {
 
         // instanceof handles nulls
         if (!(other instanceof GithubUsername)) {
-            return false
+            return false;
         }
 
         GithubUsername otherGithubUsername = (GithubUsername) other;
