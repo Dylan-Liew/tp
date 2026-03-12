@@ -9,7 +9,6 @@ import java.util.Set;
 import cms.commons.core.index.Index;
 import cms.commons.util.StringUtil;
 import cms.logic.parser.exceptions.ParseException;
-import cms.model.person.Address;
 import cms.model.person.Email;
 import cms.model.person.Name;
 import cms.model.person.Phone;
@@ -63,21 +62,6 @@ public class ParserUtil {
             throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
         }
         return new Phone(trimmedPhone);
-    }
-
-    /**
-     * Parses a {@code String address} into an {@code Address}.
-     * Leading and trailing whitespaces will be trimmed.
-     *
-     * @throws ParseException if the given {@code address} is invalid.
-     */
-    public static Address parseAddress(String address) throws ParseException {
-        requireNonNull(address);
-        String trimmedAddress = address.trim();
-        if (!Address.isValidAddress(trimmedAddress)) {
-            throw new ParseException(Address.MESSAGE_CONSTRAINTS);
-        }
-        return new Address(trimmedAddress);
     }
 
     /**
