@@ -1,4 +1,4 @@
-gg---
+---
 layout: page
 title: User Guide
 ---
@@ -94,6 +94,24 @@ Examples:
 Shows a list of all students & tutors in the Course Management System.
 
 Format: `list`
+
+
+### Locating student / tutors by name: `find`
+
+Finds student / tutors whose names contain any of the given keywords.
+
+Format: `find KEYWORD [MORE_KEYWORDS]`
+
+* The search is case-insensitive. e.g `hans` will match `Hans`
+* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* Only the name is searched.
+* Only full words will be matched e.g. `Han` will not match `Hans`
+* student / tutors matching at least one keyword will be returned (i.e. `OR` search).
+  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+
+Examples:
+* `find John` returns `john` and `John Doe`
+* `find alex david` returns `Alex Yeoh`, `David Li`<br>
 
 
 ### Deleting a student / tutor : `delete`
