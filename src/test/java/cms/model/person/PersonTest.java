@@ -80,9 +80,35 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
+        // different nusId -> returns false
+        editedAlice = new PersonBuilder(ALICE).withNusId("A1234567B").build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different soc username -> returns false
+        editedAlice = new PersonBuilder(ALICE).withSocUsername("alice1").build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different github username -> returns false
+        editedAlice = new PersonBuilder(ALICE).withGithubUsername("alice-gh").build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different role -> returns false
+        editedAlice = new PersonBuilder(ALICE).withRole("tutor").build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different tutorial group -> returns false
+        editedAlice = new PersonBuilder(ALICE).withTutorialGroup("T02").build();
+        assertFalse(ALICE.equals(editedAlice));
+
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+    }
+
+    @Test
+    public void hashCodeMethod() {
+        Person aliceCopy = new PersonBuilder(ALICE).build();
+        assertEquals(ALICE.hashCode(), aliceCopy.hashCode());
     }
 
     @Test
