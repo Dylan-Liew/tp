@@ -7,15 +7,20 @@ import java.util.Iterator;
 import java.util.List;
 
 import cms.model.person.exceptions.DuplicatePersonException;
+import cms.model.person.exceptions.DuplicatePersonFieldException;
 import cms.model.person.exceptions.PersonNotFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * A list of persons that enforces uniqueness between its elements and does not allow nulls.
- * A person is considered unique by comparing using {@code Person#isSamePerson(Person)}. As such, adding and updating of
- * persons uses Person#isSamePerson(Person) for equality so as to ensure that the person being added or updated is
- * unique in terms of identity in the UniquePersonList. However, the removal of a person uses Person#equals(Object) so
+ * A list of persons that enforces uniqueness between its elements and does not
+ * allow nulls.
+ * A person is considered unique by comparing using
+ * {@code Person#isSamePerson(Person)}. As such, adding and updating of
+ * persons uses Person#isSamePerson(Person) for equality so as to ensure that
+ * the person being added or updated is
+ * unique in terms of identity in the UniquePersonList. However, the removal of
+ * a person uses Person#equals(Object) so
  * as to ensure that the person with exactly the same fields will be removed.
  * <p>
  * Supports a minimal set of list operations.
@@ -25,8 +30,8 @@ import javafx.collections.ObservableList;
 public class UniquePersonList implements Iterable<Person> {
 
     private final ObservableList<Person> internalList = FXCollections.observableArrayList();
-    private final ObservableList<Person> internalUnmodifiableList =
-            FXCollections.unmodifiableObservableList(internalList);
+    private final ObservableList<Person> internalUnmodifiableList = FXCollections
+            .unmodifiableObservableList(internalList);
 
     /**
      * Returns true if the list contains an equivalent person as the given argument.
@@ -34,6 +39,15 @@ public class UniquePersonList implements Iterable<Person> {
     public boolean contains(Person toCheck) {
         requireNonNull(toCheck);
         return internalList.stream().anyMatch(toCheck::isSamePerson);
+    }
+
+    /**
+     * Returns true if the list contains a person with a conflicting field as the
+     * given argument.
+     */
+    public boolean containsFieldConflict(Person toCheck) {
+        requireNonNull(toCheck);
+        return internalList.stream().anyMatch(existingPerson -> toCheck.findConflictingField(existingPerson) != null);
     }
 
     /**
@@ -45,13 +59,15 @@ public class UniquePersonList implements Iterable<Person> {
         if (contains(toAdd)) {
             throw new DuplicatePersonException();
         }
+        ensureNoFieldConflict(toAdd, null);
         internalList.add(toAdd);
     }
 
     /**
      * Replaces the person {@code target} in the list with {@code editedPerson}.
      * {@code target} must exist in the list.
-     * The person identity of {@code editedPerson} must not be the same as another existing person in the list.
+     * The person identity of {@code editedPerson} must not be the same as another
+     * existing person in the list.
      */
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
@@ -65,6 +81,7 @@ public class UniquePersonList implements Iterable<Person> {
             throw new DuplicatePersonException();
         }
 
+        ensureNoFieldConflict(editedPerson, target);
         internalList.set(index, editedPerson);
     }
 
@@ -90,9 +107,7 @@ public class UniquePersonList implements Iterable<Person> {
      */
     public void setPersons(List<Person> persons) {
         requireAllNonNull(persons);
-        if (!personsAreUnique(persons)) {
-            throw new DuplicatePersonException();
-        }
+        ensurePersonsAreUnique(persons);
 
         internalList.setAll(persons);
     }
@@ -135,16 +150,51 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
-     * Returns true if {@code persons} contains only unique persons.
+     * Ensures that the specified list of persons contains only unique persons.
+     *
+     * @param persons the list of persons to check
+     * @throws DuplicatePersonException      if a duplicate person is found
+     * @throws DuplicatePersonFieldException if a duplicate field is found between
+     *                                       any two persons
      */
-    private boolean personsAreUnique(List<Person> persons) {
+    private void ensurePersonsAreUnique(List<Person> persons) {
         for (int i = 0; i < persons.size() - 1; i++) {
             for (int j = i + 1; j < persons.size(); j++) {
                 if (persons.get(i).isSamePerson(persons.get(j))) {
-                    return false;
+                    throw new DuplicatePersonException(persons.get(i).toString()
+                            + " and " + persons.get(j).toString());
+                }
+
+                FieldConflict conflict = persons.get(i).findConflictingField(persons.get(j));
+                if (conflict != null) {
+                    throw new DuplicatePersonFieldException(conflict);
                 }
             }
         }
-        return true;
     }
+
+    /**
+     * Ensures that the specified person does not conflict with any existing person
+     * in the list.
+     *
+     * @param personToCheck  the person to check for conflicts
+     * @param personToIgnore the person to ignore when checking for conflicts
+     * @throws DuplicatePersonFieldException if a duplicate field is found between
+     *                                       {@code personToCheck} and any existing
+     *                                       person in the list (except for
+     *                                       {@code personToIgnore})
+     */
+    private void ensureNoFieldConflict(Person personToCheck, Person personToIgnore) {
+        for (Person existingPerson : internalList) {
+            if (existingPerson == personToIgnore) {
+                continue;
+            }
+
+            FieldConflict conflict = personToCheck.findConflictingField(existingPerson);
+            if (conflict != null) {
+                throw new DuplicatePersonFieldException(conflict);
+            }
+        }
+    }
+
 }

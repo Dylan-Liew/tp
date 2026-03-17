@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import cms.logic.commands.CommandTestUtil;
+import cms.model.person.exceptions.DuplicatePersonFieldException;
 import cms.model.person.exceptions.DuplicatePersonException;
 import cms.model.person.exceptions.PersonNotFoundException;
 import cms.testutil.PersonBuilder;
@@ -55,6 +57,19 @@ public class UniquePersonListTest {
         uniquePersonList.add(ALICE);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(ALICE));
     }
+
+        @Test
+        public void add_duplicateSocUsername_throwsDuplicatePersonFieldException() {
+        uniquePersonList.add(ALICE);
+        Person duplicateSocUsernamePerson = new PersonBuilder(BOB)
+            .withSocUsername(ALICE.getSocUsername().value)
+            .build();
+
+        assertThrows(DuplicatePersonFieldException.class,
+            String.format("A person with SOC username [%s] already exists in the system.",
+                CommandTestUtil.VALID_SOCUSERNAME_AMY),
+            () -> uniquePersonList.add(duplicateSocUsernamePerson));
+        }
 
     @Test
     public void setPerson_nullTargetPerson_throwsNullPointerException() {
@@ -104,6 +119,18 @@ public class UniquePersonListTest {
         uniquePersonList.add(ALICE);
         uniquePersonList.add(BOB);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPerson(ALICE, BOB));
+    }
+
+    @Test
+    public void setPerson_editedPersonHasNonUniqueSocUsername_throwsDuplicatePersonFieldException() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+        Person editedBob = new PersonBuilder(BOB).withSocUsername(ALICE.getSocUsername().value).build();
+
+        assertThrows(DuplicatePersonFieldException.class,
+                String.format("A person with SOC username [%s] already exists in the system.",
+                        CommandTestUtil.VALID_SOCUSERNAME_AMY),
+                () -> uniquePersonList.setPerson(BOB, editedBob));
     }
 
     @Test
@@ -158,6 +185,19 @@ public class UniquePersonListTest {
         List<Person> listWithDuplicatePersons = Arrays.asList(ALICE, ALICE);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPersons(listWithDuplicatePersons));
     }
+
+        @Test
+        public void setPersons_listWithDuplicateSocUsername_throwsDuplicatePersonFieldException() {
+        Person duplicateSocUsernamePerson = new PersonBuilder(BOB)
+            .withSocUsername(ALICE.getSocUsername().value)
+            .build();
+        List<Person> listWithDuplicateSocUsername = Arrays.asList(ALICE, duplicateSocUsernamePerson);
+
+        assertThrows(DuplicatePersonFieldException.class,
+            String.format("A person with SOC username [%s] already exists in the system.",
+                CommandTestUtil.VALID_SOCUSERNAME_AMY),
+            () -> uniquePersonList.setPersons(listWithDuplicateSocUsername));
+        }
 
     @Test
     public void asUnmodifiableObservableList_modifyList_throwsUnsupportedOperationException() {

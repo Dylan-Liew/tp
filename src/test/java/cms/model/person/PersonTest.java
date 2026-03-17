@@ -9,6 +9,7 @@ import static cms.testutil.TypicalPersons.ALICE;
 import static cms.testutil.TypicalPersons.BOB;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ public class PersonTest {
     @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
         Person person = new PersonBuilder().build();
-        assertThrows(UnsupportedOperationException.class, () -> person.getTags().remove(0));
+        assertThrows(UnsupportedOperationException.class, () -> person.getTags().clear());
     }
 
     @Test
@@ -48,6 +49,42 @@ public class PersonTest {
         String nameWithTrailingSpaces = VALID_NAME_BOB + " ";
         editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces).build();
         assertFalse(BOB.isSamePerson(editedBob));
+    }
+
+    @Test
+    public void findConflictingField() {
+        Person duplicateEmailPerson = new PersonBuilder(ALICE)
+                .withNusId("A7654321B")
+                .build();
+        FieldConflict emailConflict = ALICE.findConflictingField(duplicateEmailPerson);
+        assertEquals("email", emailConflict.getFieldName());
+        assertEquals(ALICE.getEmail().toString(), emailConflict.getFieldValue());
+
+        Person duplicateSocUsernamePerson = new PersonBuilder(ALICE)
+                .withNusId("A7654322B")
+                .withEmail("another@example.com")
+                .build();
+        FieldConflict socUsernameConflict = ALICE.findConflictingField(duplicateSocUsernamePerson);
+        assertEquals("SOC username", socUsernameConflict.getFieldName());
+        assertEquals(ALICE.getSocUsername().toString(), socUsernameConflict.getFieldValue());
+
+        Person duplicateGithubUsernamePerson = new PersonBuilder(ALICE)
+                .withNusId("A7654323B")
+                .withEmail("yetanother@example.com")
+                .withSocUsername("alice02")
+                .build();
+        FieldConflict githubUsernameConflict = ALICE.findConflictingField(duplicateGithubUsernamePerson);
+        assertEquals("GitHub username", githubUsernameConflict.getFieldName());
+        assertEquals(ALICE.getGithubUsername().toString(), githubUsernameConflict.getFieldValue());
+
+        Person noConflictPerson = new PersonBuilder(ALICE)
+                .withNusId("A7654324B")
+                .withEmail("clean@example.com")
+                .withSocUsername("alice03")
+                .withGithubUsername("alice-clean")
+                .build();
+        assertNull(ALICE.findConflictingField(noConflictPerson));
+        assertNull(ALICE.findConflictingField(null));
     }
 
     @Test

@@ -45,4 +45,19 @@ public class AddCommandIntegrationTest {
                 AddCommand.MESSAGE_DUPLICATE_PERSON);
     }
 
+    @Test
+    public void execute_duplicateSocUsername_throwsCommandException() {
+        Person personInList = model.getAddressBook().getPersonList().get(0);
+        Person duplicateSocUsernamePerson = new PersonBuilder()
+                .withNusId("A1111111B")
+                .withEmail("fresh@example.com")
+                .withSocUsername(personInList.getSocUsername().value)
+                .withGithubUsername("fresh-gh")
+                .build();
+
+        assertCommandFailure(new AddCommand(duplicateSocUsernamePerson), model,
+                String.format("A person with SOC username [%s] already exists in the system.",
+                        personInList.getSocUsername().value));
+    }
+
 }

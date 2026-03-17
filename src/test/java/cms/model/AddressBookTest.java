@@ -16,6 +16,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import cms.model.person.Person;
+import cms.model.person.exceptions.DuplicatePersonFieldException;
 import cms.model.person.exceptions.DuplicatePersonException;
 import cms.testutil.PersonBuilder;
 import javafx.collections.FXCollections;
@@ -50,6 +51,19 @@ public class AddressBookTest {
         AddressBookStub newData = new AddressBookStub(newPersons);
 
         assertThrows(DuplicatePersonException.class, () -> addressBook.resetData(newData));
+    }
+
+    @Test
+    public void resetData_withDuplicateSocUsername_throwsDuplicatePersonFieldException() {
+        Person duplicateSocUsernamePerson = new PersonBuilder(ALICE)
+                .withNusId("A9999999Z")
+                .withEmail("alice2@example.com")
+                .withGithubUsername("alice-p2")
+                .build();
+        List<Person> newPersons = Arrays.asList(ALICE, duplicateSocUsernamePerson);
+        AddressBookStub newData = new AddressBookStub(newPersons);
+
+        assertThrows(DuplicatePersonFieldException.class, () -> addressBook.resetData(newData));
     }
 
     @Test
