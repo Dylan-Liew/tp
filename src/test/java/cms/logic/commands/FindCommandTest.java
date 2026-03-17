@@ -7,8 +7,7 @@ import static cms.testutil.TypicalPersons.ELLE;
 import static cms.testutil.TypicalPersons.FIONA;
 import static cms.testutil.TypicalPersons.getTypicalAddressBook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,8 +24,8 @@ import cms.model.person.NusIdContainsKeywordsPredicate;
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
  */
 public class FindCommandTest {
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-    private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void equals() {
@@ -38,21 +37,18 @@ public class FindCommandTest {
         FindCommand findFirstCommand = new FindCommand(firstPredicate);
         FindCommand findSecondCommand = new FindCommand(secondPredicate);
 
-        // same object -> returns true
-        assertTrue(findFirstCommand.equals(findFirstCommand));
-
         // same values -> returns true
         FindCommand findFirstCommandCopy = new FindCommand(firstPredicate);
-        assertTrue(findFirstCommand.equals(findFirstCommandCopy));
+        assertEquals(findFirstCommand, findFirstCommandCopy);
 
         // different types -> returns false
-        assertFalse(findFirstCommand.equals(1));
+        assertNotEquals(new Object(), findFirstCommand);
 
         // null -> returns false
-        assertFalse(findFirstCommand.equals(null));
+        assertNotEquals(null, findFirstCommand);
 
         // different person -> returns false
-        assertFalse(findFirstCommand.equals(findSecondCommand));
+        assertNotEquals(findSecondCommand, findFirstCommand);
     }
 
     @Test
@@ -76,7 +72,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_findByNusId_singleId_found() {
+    public void execute_nusId_singlePersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         // Use ELLE's NUS ID from TypicalPersons: A0234504F
         NusIdContainsKeywordsPredicate predicate =
@@ -88,7 +84,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_findByNusId_multipleIds_found() {
+    public void execute_nusId_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
         NusIdContainsKeywordsPredicate predicate =
                 new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G")); // CARL and FIONA
@@ -99,7 +95,7 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_findByNusId_noMatches_zeroResults() {
+    public void execute_nusId_noPersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
         NusIdContainsKeywordsPredicate predicate =
                 new NusIdContainsKeywordsPredicate(Collections.singletonList("A9999999Z"));
@@ -111,9 +107,11 @@ public class FindCommandTest {
 
     @Test
     public void toStringMethod() {
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("keyword"));
+        NameContainsKeywordsPredicate predicate =
+                new NameContainsKeywordsPredicate(Collections.singletonList("keyword"));
         FindCommand findCommand = new FindCommand(predicate);
-        String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
+        String expected = FindCommand.class.getCanonicalName()
+                + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
     }
 
