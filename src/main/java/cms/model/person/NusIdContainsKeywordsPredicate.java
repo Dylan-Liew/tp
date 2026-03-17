@@ -12,7 +12,7 @@ public class NusIdContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
     public NusIdContainsKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+        this.keywords = (keywords == null) ? List.of() : keywords;
     }
 
     @Override
