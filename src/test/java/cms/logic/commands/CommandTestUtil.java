@@ -84,9 +84,15 @@ public class CommandTestUtil {
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
+                .withNusId(VALID_NUSID_AMY).withRole(VALID_ROLE_AMY)
+                .withSocUsername(VALID_SOCUSERNAME_AMY).withGithubUsername(VALID_GITHUBUSERNAME_AMY)
+                .withTutorialGroup(VALID_TUTORIALGROUP_AMY)
                 .withTags(VALID_TAG_FRIEND).build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
+                .withNusId(VALID_NUSID_BOB).withRole(VALID_ROLE_BOB)
+                .withSocUsername(VALID_SOCUSERNAME_BOB).withGithubUsername(VALID_GITHUBUSERNAME_BOB)
+                .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
                 .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
     }
 
