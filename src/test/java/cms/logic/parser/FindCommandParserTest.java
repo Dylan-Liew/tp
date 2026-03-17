@@ -5,6 +5,7 @@ import static cms.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static cms.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import cms.model.person.NusIdContainsKeywordsPredicate;
 
 public class FindCommandParserTest {
 
-    private FindCommandParser parser = new FindCommandParser();
+    private final FindCommandParser parser = new FindCommandParser();
 
     @Test
     public void parse_emptyArg_throwsParseException() {
@@ -42,12 +43,12 @@ public class FindCommandParserTest {
     @Test
     public void parse_idPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand =
-                new FindCommand(new NusIdContainsKeywordsPredicate(Arrays.asList("A0234504F")));
+                new FindCommand(new NusIdContainsKeywordsPredicate(Collections.singletonList("A0234504F")));
         assertParseSuccess(parser, " id/A0234504F", expectedFindCommand);
     }
 
     @Test
-    public void parse_idPrefix_multipleIds_returnsFindCommand() {
+    public void parse_id_multipleIds() {
         FindCommand expectedFindCommand =
                 new FindCommand(new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G")));
         assertParseSuccess(parser, " id/A0234502D A0234505G", expectedFindCommand);
