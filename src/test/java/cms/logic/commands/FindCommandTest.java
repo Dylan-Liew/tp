@@ -18,6 +18,7 @@ import cms.model.Model;
 import cms.model.ModelManager;
 import cms.model.UserPrefs;
 import cms.model.person.AllFieldsContainsKeywordsPredicate;
+import cms.model.person.CombinedFindPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
 import cms.model.person.NusIdContainsKeywordsPredicate;
 
@@ -66,7 +67,8 @@ public class FindCommandTest {
     @Test
     public void execute_namePrefix_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("Kurz", "Elle", "Kunz"));
+        NameContainsKeywordsPredicate predicate =
+                new NameContainsKeywordsPredicate(Arrays.asList("Kurz", "Elle", "Kunz"));
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -77,7 +79,8 @@ public class FindCommandTest {
     public void execute_idPrefix_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
         NusIdContainsKeywordsPredicate predicate =
-                new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G")); // CARL and FIONA
+                new NusIdContainsKeywordsPredicate(
+                        Arrays.asList("A0234502D", "A0234505G"));
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -87,12 +90,19 @@ public class FindCommandTest {
     @Test
     public void execute_combinedPrefixes_returnsUnion() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        AllFieldsContainsKeywordsPredicate allPred = new AllFieldsContainsKeywordsPredicate(Arrays.asList("Kurz"));
-        NameContainsKeywordsPredicate namePred = new NameContainsKeywordsPredicate(Arrays.asList("Elle"));
-        NusIdContainsKeywordsPredicate idPred = new NusIdContainsKeywordsPredicate(Arrays.asList("A0234505G"));
-        FindCommand command = new FindCommand(person -> allPred.test(person) || namePred.test(person) || idPred.test(person));
-        expectedModel.updateFilteredPersonList(person -> allPred.test(person) || namePred.test(person) || idPred.test(person));
+        AllFieldsContainsKeywordsPredicate allPredicate =
+                new AllFieldsContainsKeywordsPredicate(Arrays.asList("Kurz"));
+        NameContainsKeywordsPredicate namePredicate =
+                new NameContainsKeywordsPredicate(Arrays.asList("Elle"));
+        NusIdContainsKeywordsPredicate idPredicate =
+                new NusIdContainsKeywordsPredicate(Arrays.asList("A0234505G"));
+        CombinedFindPredicate combinedPredicate =
+                new CombinedFindPredicate(allPredicate, namePredicate, idPredicate);
+
+        FindCommand command = new FindCommand(combinedPredicate);
+        expectedModel.updateFilteredPersonList(combinedPredicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
+
         // Expected union: CARL (Kurz), ELLE (name), FIONA (nusId)
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
     }
@@ -106,5 +116,4 @@ public class FindCommandTest {
                 + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
     }
-
 }
