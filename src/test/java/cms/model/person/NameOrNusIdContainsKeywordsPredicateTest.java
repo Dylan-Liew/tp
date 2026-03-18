@@ -77,4 +77,49 @@ public class NameOrNusIdContainsKeywordsPredicateTest {
                 Collections.emptyList(), Collections.singletonList("A0234504F"));
         assertTrue(predicateUpper.test(new PersonBuilder().withNusId("a0234504f").build()));
     }
+
+    @Test
+    public void equals() {
+        NameOrNusIdContainsKeywordsPredicate firstPredicate =
+                new NameOrNusIdContainsKeywordsPredicate(Arrays.asList("a"), Arrays.asList("A0123456B"));
+        NameOrNusIdContainsKeywordsPredicate secondPredicate =
+                new NameOrNusIdContainsKeywordsPredicate(Arrays.asList("b"), Arrays.asList("A0123457B"));
+
+        // same object -> returns true (covers lines 40-41)
+        assertEquals(firstPredicate, firstPredicate);
+
+        // same values -> returns true (covers line 47 true)
+        NameOrNusIdContainsKeywordsPredicate firstPredicateCopy =
+                new NameOrNusIdContainsKeywordsPredicate(Arrays.asList("a"), Arrays.asList("A0123456B"));
+        assertEquals(firstPredicate, firstPredicateCopy);
+
+        // different types -> returns false (covers lines 43-44)
+        assertFalse(firstPredicate.equals(1));
+
+        // null -> returns false (also covers lines 43-44)
+        assertFalse(firstPredicate.equals(null));
+
+        // different predicate -> returns false (covers line 47 false)
+        assertFalse(firstPredicate.equals(secondPredicate));
+    }
+
+    @Test
+    public void test_personWithNullNusId_idKeywords_returnsFalse() {
+        NameOrNusIdContainsKeywordsPredicate predicate = new NameOrNusIdContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.singletonList("A0123456B"));
+
+        // Build a normal person and override getNusId() to return null to simulate missing NusId
+        Person base = new PersonBuilder().withNusId("A0123456B").build();
+        Person personWithNullNus = new Person(base.getName(), base.getPhone(), base.getEmail(), base.getNusId(),
+                base.getSocUsername(), base.getGithubUsername(), base.getRole(), base.getTutorialGroup(),
+                base.getTags()) {
+            @Override
+            public NusId getNusId() {
+                return null;
+            }
+        };
+
+        // Predicate should return false when person's NusId is null (short-circuited)
+        assertFalse(predicate.test(personWithNullNus));
+    }
 }

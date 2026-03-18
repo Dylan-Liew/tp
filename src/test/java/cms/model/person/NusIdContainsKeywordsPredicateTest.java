@@ -108,4 +108,19 @@ public class NusIdContainsKeywordsPredicateTest {
         NusIdContainsKeywordsPredicate predicate = new NusIdContainsKeywordsPredicate(null);
         assertFalse(predicate.test(new PersonBuilder().withNusId("A0123456B").build()));
     }
+
+    @Test
+    public void test_keywordsFieldNull_returnsFalse_usingReflection() throws Exception {
+        // create a predicate with non-empty keywords
+        NusIdContainsKeywordsPredicate predicate =
+                new NusIdContainsKeywordsPredicate(Collections.singletonList("A0123456B"));
+
+        // use reflection to set the private field 'keywords' to null to exercise the keywords == null branch
+        java.lang.reflect.Field keywordsField = NusIdContainsKeywordsPredicate.class.getDeclaredField("keywords");
+        keywordsField.setAccessible(true);
+        keywordsField.set(predicate, null);
+
+        // build a person with matching nus id; predicate should return false because keywords field is null
+        assertFalse(predicate.test(new PersonBuilder().withNusId("A0123456B").build()));
+    }
 }
