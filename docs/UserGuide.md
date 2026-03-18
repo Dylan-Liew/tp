@@ -78,6 +78,7 @@ Format: `help`
 Adds a student / tutor to the address book.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A student / tutor can have any number of tags (including 0)
 </div>
