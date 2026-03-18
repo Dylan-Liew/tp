@@ -77,17 +77,18 @@ Format: `help`
 
 Adds a student / tutor to the Course Management System.
 
-Format: `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME 
+Format: `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME
         gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A student / tutor can have any number of tags (including 0)
 </div>
 
+Acceptable field values are listed in [Acceptable Person Fields](#acceptable-person-fields).
+
 Examples:
 * `add n/David Tan id/A0211111C role/student soc/davidtan gh/davidtan99 e/david@u.nus.edu p/97654321 t/T05`
-* `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01
-`
+* `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01 tag/python-experienced`
 
 ### Listing all student & tutor : `list`
 
@@ -156,6 +157,131 @@ Furthermore, certain edits can cause the CMS to behave in unexpected ways (e.g.,
 ### Archiving data files `[coming in v2.0]`
 
 _Details coming soon ..._
+
+## Acceptable Person Fields
+
+Use this section as a quick checklist when entering commands that require person fields (e.g. `add`).
+
+### `n/NAME` {#field-name}
+This is the person's name. You can have multiple people with the same name, but each person must have a unique [NUS ID](#field-nus-id), [SOC username](#field-soc-username), and [GitHub username](#field-github-username).
+
+What to enter:
+* Letters, numbers, and spaces only.
+* Cannot be blank.
+* Extra spaces at the start or end are ignored.
+* Multiple spaces between words are reduced to one space. E.g. `John   Doe` will be stored as `John Doe`.
+
+Example:
+* Valid: `n/John Doe`
+* Invalid: `n/John@Doe`
+
+### `id/NUS_ID` {#field-nus-id}
+This is the person's NUS ID. It is used to uniquely identify a person in the CMS.
+
+What to enter:
+* Must look like `A0234567B` or `U0234567B`.
+* Starts with `A` or `U`, followed by 7 digits, and ends with a letter.
+* No spaces.
+* Must be unique in the system.
+
+Example:
+* Valid: `id/A0234567B`
+* Invalid: `id/A234567B` (not 7 digits)
+
+### `role/ROLE` {#field-role}
+This is the person's role in the course, which can be either `student` or `tutor`. It is used to distinguish students from tutors in the CMS.
+
+What to enter:
+* Only `student` or `tutor`.
+* Use lowercase exactly as shown.
+* No spaces.
+
+Example:
+* Valid: `role/student`
+* Invalid: `role/Student`
+
+### `soc/SOC_USERNAME` {#field-soc-username}
+This is the person's SoC-style username. It is used for integration with SoC systems in the future.
+
+What to enter:
+* Either a SoC-style username or the default [NUS ID](#field-nus-id).
+* SoC-style username rules:
+    * 5 to 8 characters.
+    * Lowercase letters, digits, and hyphens only.
+    * Cannot start or end with a hyphen.
+    * No spaces.
+    * Stored in lowercase.
+    * Must be unique in the system.
+
+Example:
+* Valid: `soc/john1`
+* Valid: `soc/a0234567b`
+* Invalid: `soc/-john`
+
+### `gh/GITHUB_USERNAME` {#field-github-username}
+
+What to enter:
+* 1 to 39 characters.
+* Letters, digits, and hyphens only.
+* Cannot start or end with a hyphen.
+* No spaces.
+* Stored in lowercase.
+* Must be unique in the system.
+
+Example:
+* Valid: `gh/jane-lim123`
+* Invalid: `gh/-jane`
+
+### `e/EMAIL` {#field-email}
+This is the person's primary email address.
+
+What to enter:
+* A valid email like `name@domain`.
+* No spaces.
+* Stored in lowercase.
+
+Example:
+* Valid: `e/johndoe@u.nus.edu`
+* Invalid: `e/johndoe@u`
+
+### `p/PHONE` {#field-phone}
+This is the person's primary phone number.
+
+What to enter:
+* Digits only.
+* At least 3 digits.
+* No `+`, spaces, or dashes.
+
+Example:
+* Valid: `p/91234567`
+* Invalid: `p/+6591234567`
+
+### `t/TUTORIAL_GROUP` {#field-tutorial-group}
+This is the person's tutorial group, which is used to group students and tutors together in the CMS.
+
+What to enter:
+* Must be `T` plus 2 digits, from `T01` to `T99`.
+* No spaces.
+* Lowercase input is automatically converted to uppercase.
+
+Example:
+* Valid: `t/T01`
+* Invalid: `t/T1`
+
+### `tag/TAG` {#field-tag}
+This is used to store additional information about the person that does not fit into the other fields. It is optional and can be repeated to store multiple tags for the same person.
+
+What to enter:
+* You can provide zero or more tags.
+* Use letters, digits, and hyphens.
+* No spaces inside a tag.
+* Cannot start or end with a hyphen.
+* Tags are stored in lowercase.
+* Repeated tags for the same person are kept only once.
+
+Example:
+* Valid: `tag/python-experienced`
+* Invalid: `tag/needs help`
 
 --------------------------------------------------------------------------------------------------------------------
 
