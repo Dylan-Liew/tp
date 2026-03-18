@@ -1,18 +1,19 @@
 package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static cms.logic.parser.CliSyntax.PREFIX_ALL;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
 import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import cms.logic.commands.FindCommand;
 import cms.logic.parser.exceptions.ParseException;
+import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
-import cms.model.person.NameOrNusIdContainsKeywordsPredicate;
-import cms.model.person.NusId;
 import cms.model.person.NusIdContainsKeywordsPredicate;
 
 /**
@@ -33,51 +34,51 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        // Tokenize for optional prefixes
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_NUSID);
+        // Tokenize for required prefixes
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_ALL, PREFIX_NAME, PREFIX_NUSID);
 
+        boolean hasAll = argMultimap.getValue(PREFIX_ALL).isPresent();
         boolean hasName = argMultimap.getValue(PREFIX_NAME).isPresent();
         boolean hasNusId = argMultimap.getValue(PREFIX_NUSID).isPresent();
 
-        if (hasName && hasNusId) {
+        // require at least one prefix to be present and no preamble
+        if (!(hasAll || hasName || hasNusId) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        if (hasName) {
-            String nameArg = argMultimap.getValue(PREFIX_NAME).get().trim();
-            if (nameArg.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            List<String> nameKeywords = Arrays.stream(nameArg.split("\\s+"))
+        // Build predicates for each prefix present and combine with OR
+        List<String> allKeywords = new ArrayList<>();
+        if (hasAll) {
+            // getAllValues returns list of values for the prefix; split each by whitespace
+            allKeywords = argMultimap.getAllValues(PREFIX_ALL).stream()
+                    .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
+                    .filter(s -> !s.isEmpty())
                     .collect(Collectors.toList());
-            return new FindCommand(new NameContainsKeywordsPredicate(nameKeywords));
         }
 
+        List<String> nameKeywords = new ArrayList<>();
+        if (hasName) {
+            nameKeywords = argMultimap.getAllValues(PREFIX_NAME).stream()
+                    .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.toList());
+        }
+
+        List<String> idKeywords = new ArrayList<>();
         if (hasNusId) {
-            String idArg = argMultimap.getValue(PREFIX_NUSID).get().trim();
-            if (idArg.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-            }
-            List<String> idKeywords = Arrays.stream(idArg.split("\\s+"))
+            idKeywords = argMultimap.getAllValues(PREFIX_NUSID).stream()
+                    .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
+                    .filter(s -> !s.isEmpty())
                     .map(String::toUpperCase)
                     .collect(Collectors.toList());
-            return new FindCommand(new NusIdContainsKeywordsPredicate(idKeywords));
         }
 
-        // New behavior: no prefixes -> split tokens and classify each as name or NUS ID
-        List<String> tokens = Arrays.stream(trimmedArgs.split("\\s+"))
-                .collect(Collectors.toList());
+        AllFieldsContainsKeywordsPredicate allPredicate = new AllFieldsContainsKeywordsPredicate(allKeywords);
+        NameContainsKeywordsPredicate namePredicate = new NameContainsKeywordsPredicate(nameKeywords);
+        NusIdContainsKeywordsPredicate idPredicate = new NusIdContainsKeywordsPredicate(idKeywords);
 
-        List<String> nameKeywords = tokens.stream()
-                .filter(token -> !NusId.isValidNusId(token))
-                .collect(Collectors.toList());
-
-        List<String> idKeywords = tokens.stream()
-                .filter(token -> NusId.isValidNusId(token))
-                .map(String::toUpperCase)
-                .collect(Collectors.toList());
-
-        return new FindCommand(new NameOrNusIdContainsKeywordsPredicate(nameKeywords, idKeywords));
+        // Combined predicate: matches if any prefix-predicate matches
+        return new FindCommand(new cms.model.person.CombinedFindPredicate(allPredicate, namePredicate, idPredicate));
     }
 
 }

@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 import cms.model.Model;
 import cms.model.ModelManager;
 import cms.model.UserPrefs;
+import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
-import cms.model.person.NameOrNusIdContainsKeywordsPredicate;
 import cms.model.person.NusIdContainsKeywordsPredicate;
 
 /**
@@ -53,31 +53,10 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_zeroKeywords_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        NameContainsKeywordsPredicate predicate = preparePredicate(" ");
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Collections.emptyList(), model.getFilteredPersonList());
-    }
-
-    @Test
-    public void execute_multipleKeywords_multiplePersonsFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        NameContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
-    }
-
-    @Test
-    public void execute_nusId_singlePersonFound() {
+    public void execute_allPrefix_singlePersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
-        // Use ELLE's NUS ID from TypicalPersons: A0234504F
-        NusIdContainsKeywordsPredicate predicate =
-                new NusIdContainsKeywordsPredicate(Collections.singletonList("A0234504F"));
+        AllFieldsContainsKeywordsPredicate predicate =
+                new AllFieldsContainsKeywordsPredicate(Collections.singletonList("Elle"));
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -85,7 +64,17 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_nusId_multiplePersonsFound() {
+    public void execute_namePrefix_multiplePersonsFound() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
+        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Arrays.asList("Kurz", "Elle", "Kunz"));
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_idPrefix_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
         NusIdContainsKeywordsPredicate predicate =
                 new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G")); // CARL and FIONA
@@ -96,27 +85,16 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_nusId_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        NusIdContainsKeywordsPredicate predicate =
-                new NusIdContainsKeywordsPredicate(Collections.singletonList("A9999999Z"));
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
+    public void execute_combinedPrefixes_returnsUnion() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
+        AllFieldsContainsKeywordsPredicate allPred = new AllFieldsContainsKeywordsPredicate(Arrays.asList("Kurz"));
+        NameContainsKeywordsPredicate namePred = new NameContainsKeywordsPredicate(Arrays.asList("Elle"));
+        NusIdContainsKeywordsPredicate idPred = new NusIdContainsKeywordsPredicate(Arrays.asList("A0234505G"));
+        FindCommand command = new FindCommand(person -> allPred.test(person) || namePred.test(person) || idPred.test(person));
+        expectedModel.updateFilteredPersonList(person -> allPred.test(person) || namePred.test(person) || idPred.test(person));
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Collections.emptyList(), model.getFilteredPersonList());
-    }
-
-    @Test
-    public void execute_unprefixedLowercaseNusId_singlePersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
-        // lowercase nus id token (no prefix) should match ELLE whose nusId is A0234504F
-        NameOrNusIdContainsKeywordsPredicate predicate =
-                new NameOrNusIdContainsKeywordsPredicate(
-                        Collections.emptyList(), Collections.singletonList("a0234504f"));
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Collections.singletonList(ELLE), model.getFilteredPersonList());
+        // Expected union: CARL (Kurz), ELLE (name), FIONA (nusId)
+        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
     }
 
     @Test
@@ -129,10 +107,4 @@ public class FindCommandTest {
         assertEquals(expected, findCommand.toString());
     }
 
-    /**
-     * Parses {@code userInput} into a {@code NameContainsKeywordsPredicate}.
-     */
-    private NameContainsKeywordsPredicate preparePredicate(String userInput) {
-        return new NameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
-    }
 }

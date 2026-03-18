@@ -10,8 +10,9 @@ import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 import cms.logic.commands.FindCommand;
+import cms.model.person.CombinedFindPredicate;
+import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
-import cms.model.person.NameOrNusIdContainsKeywordsPredicate;
 import cms.model.person.NusIdContainsKeywordsPredicate;
 
 public class FindCommandParserTest {
@@ -19,70 +20,52 @@ public class FindCommandParserTest {
     private final FindCommandParser parser = new FindCommandParser();
 
     @Test
-    public void parse_emptyArg_throwsParseException() {
-        assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    public void parse_noPrefix_throwsParseException() {
+        assertParseFailure(parser, "john doe", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommand() {
-        // no leading and trailing whitespaces
-        FindCommand expectedFindCommand = new FindCommand(
-                new NameOrNusIdContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"),
-                        java.util.Collections.emptyList()));
-        assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
+    public void parse_allPrefix_singleAndMultipleValues_returnsFindCommand() {
+        FindCommand expectedSingle = new FindCommand(
+                new CombinedFindPredicate(new AllFieldsContainsKeywordsPredicate(Collections.singletonList("john")),
+                        new NameContainsKeywordsPredicate(Collections.emptyList()),
+                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " a/john", expectedSingle);
 
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+        FindCommand expectedMulti = new FindCommand(
+                new CombinedFindPredicate(new AllFieldsContainsKeywordsPredicate(Arrays.asList("john", "A0234504F")),
+                        new NameContainsKeywordsPredicate(Collections.emptyList()),
+                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " a/john A0234504F", expectedMulti);
     }
 
     @Test
     public void parse_namePrefix_returnsFindCommand() {
-        FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, " n/Alice Bob", expectedFindCommand);
+        FindCommand expected = new FindCommand(
+                new CombinedFindPredicate(new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
+                        new NameContainsKeywordsPredicate(Arrays.asList("John", "David")),
+                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " n/John David", expected);
     }
 
     @Test
-    public void parse_idPrefix_returnsFindCommand() {
-        FindCommand expectedFindCommand =
-                new FindCommand(new NusIdContainsKeywordsPredicate(Collections.singletonList("A0234504F")));
-        assertParseSuccess(parser, " id/A0234504F", expectedFindCommand);
-
-        // lowercase id should also be accepted (case-insensitive)
-        FindCommand expectedFindCommandLower =
-                new FindCommand(new NusIdContainsKeywordsPredicate(Collections.singletonList("A0234504F")));
-        assertParseSuccess(parser, " id/a0234504f", expectedFindCommandLower);
+    public void parse_idPrefix_multipleIds_returnsFindCommand() {
+        FindCommand expected = new FindCommand(
+                new CombinedFindPredicate(new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
+                        new NameContainsKeywordsPredicate(Collections.emptyList()),
+                        new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G"))));
+        assertParseSuccess(parser, " id/A0234502D A0234505G", expected);
     }
 
     @Test
-    public void parse_id_multipleIds() {
-        FindCommand expectedFindCommand =
-                new FindCommand(new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G")));
-        assertParseSuccess(parser, " id/A0234502D A0234505G", expectedFindCommand);
-    }
-
-    @Test
-    public void parse_bothPrefixes_throwsParseException() {
-        assertParseFailure(parser, " n/Alice id/A0234504F",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_emptyNamePrefix_throwsParseException() {
-        assertParseFailure(parser, " n/   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_emptyIdPrefix_throwsParseException() {
-        assertParseFailure(parser, " id/  ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_unprefixedMixedTokens_classifiesCorrectly() {
-        // unprefixed tokens: one name token and one NUS ID token
-        FindCommand expectedFindCommand = new FindCommand(
-                new NameOrNusIdContainsKeywordsPredicate(Arrays.asList("john"), Arrays.asList("A0234504F")));
-        assertParseSuccess(parser, "john A0234504F", expectedFindCommand);
+    public void parse_multiplePrefixes_combined_returnsFindCommand() {
+        // a/john david n/tan lim id/a12345678b a0211111c
+        FindCommand expected = new FindCommand(
+                new cms.model.person.CombinedFindPredicate(
+                        new AllFieldsContainsKeywordsPredicate(Arrays.asList("john", "david")),
+                        new NameContainsKeywordsPredicate(Arrays.asList("tan", "lim")),
+                        new NusIdContainsKeywordsPredicate(Arrays.asList("A12345678B", "A0211111C"))));
+        assertParseSuccess(parser, " a/john david n/tan lim id/a12345678b a0211111c", expected);
     }
 
 }
