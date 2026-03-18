@@ -63,7 +63,14 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(thirdPersonToDelete);
         expectedModel.deletePerson(firstPersonToDelete);
 
-        assertCommandSuccess(deleteCommand, model, DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, expectedModel);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
+                String.join("\n",
+                        "Alice Pauline id/A0000001B role/student soc/amybee gh/amybee"
+                                + " p/94351253 e/alice@example.com t/T01 tag/friends",
+                        "Carl Kurz id/A0234502D role/student soc/carlk gh/carl-kurz"
+                                + " p/95352563 e/heinz@example.com t/T01"));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -74,7 +81,11 @@ public class DeleteCommandTest {
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
 
-        assertCommandSuccess(deleteCommand, model, DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, expectedModel);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
+                "Alice Pauline id/A0000001B role/student soc/amybee gh/amybee"
+                        + " p/94351253 e/alice@example.com t/T01 tag/friends");
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
