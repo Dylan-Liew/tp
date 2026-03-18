@@ -121,6 +121,39 @@ public class FindCommandParserTest {
                         new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G"))));
         assertParseSuccess(parser, " id/a0234502d a0234505g", expected);
     }
+
+    @Test
+    public void parse_allPrefix_blankValue() {
+        // a/ with only spaces should result in empty allKeywords list after filtering
+        FindCommand expected = new FindCommand(
+                new CombinedFindPredicate(
+                        new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
+                        new NameContainsKeywordsPredicate(Collections.emptyList()),
+                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " a/  ", expected);
+    }
+
+    @Test
+    public void parse_namePrefix_blankValue() {
+        // n/ with only spaces should result in empty nameKeywords list after filtering
+        FindCommand expected = new FindCommand(
+                new CombinedFindPredicate(
+                        new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
+                        new NameContainsKeywordsPredicate(Collections.emptyList()),
+                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " n/   ", expected);
+    }
+
+    @Test
+    public void parse_idPrefix_blankValue() {
+        // id/ with only spaces should result in empty idKeywords list after filtering
+        FindCommand expected = new FindCommand(
+                new CombinedFindPredicate(
+                        new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
+                        new NameContainsKeywordsPredicate(Collections.emptyList()),
+                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " id/   ", expected);
+    }
 }
 
 

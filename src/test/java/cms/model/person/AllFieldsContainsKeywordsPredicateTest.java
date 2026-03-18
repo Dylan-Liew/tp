@@ -174,5 +174,137 @@ public class AllFieldsContainsKeywordsPredicateTest {
         // basic sanity: round-trip via equals on keywords isn't available, but toString should mention the keywords
         assertEquals(true, s.contains("keywords"));
     }
+
+    // Helper test Person subclass that allows overriding specific getters to return null
+    private static class PartialPerson extends Person {
+        private final boolean nulNusId;
+        private final boolean nulPhone;
+        private final boolean nulEmail;
+        private final boolean nulSoc;
+        private final boolean nulGithub;
+        private final boolean nulRole;
+        private final boolean nulTutorial;
+
+        PartialPerson(boolean nulNusId, boolean nulPhone, boolean nulEmail, boolean nulSoc,
+                boolean nulGithub, boolean nulRole, boolean nulTutorial) {
+            super(new Name("X"), new Phone("11111111"), new Email("x@x.com"), new NusId("A0000001B"),
+                    new SocUsername("socuser"), new GithubUsername("ghuser"), Role.STUDENT,
+                    new TutorialGroup("T01"), Collections.emptySet());
+            this.nulNusId = nulNusId;
+            this.nulPhone = nulPhone;
+            this.nulEmail = nulEmail;
+            this.nulSoc = nulSoc;
+            this.nulGithub = nulGithub;
+            this.nulRole = nulRole;
+            this.nulTutorial = nulTutorial;
+        }
+
+        @Override
+        public NusId getNusId() {
+            return nulNusId ? null : super.getNusId();
+        }
+
+        @Override
+        public Phone getPhone() {
+            return nulPhone ? null : super.getPhone();
+        }
+
+        @Override
+        public Email getEmail() {
+            return nulEmail ? null : super.getEmail();
+        }
+
+        @Override
+        public SocUsername getSocUsername() {
+            return nulSoc ? null : super.getSocUsername();
+        }
+
+        @Override
+        public GithubUsername getGithubUsername() {
+            return nulGithub ? null : super.getGithubUsername();
+        }
+
+        @Override
+        public Role getRole() {
+            return nulRole ? null : super.getRole();
+        }
+
+        @Override
+        public TutorialGroup getTutorialGroup() {
+            return nulTutorial ? null : super.getTutorialGroup();
+        }
+    }
+
+    @Test
+    public void nusIdNull_branchHandled() {
+        Person p = new PartialPerson(true, false, false, false, false, false, false);
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("A0000001B"));
+        // nusId getter returns null, so predicate should not match nusId; overall should be false
+        assertFalse(pred.test(p));
+    }
+
+    @Test
+    public void phoneNull_branchHandled() {
+        Person p = new PartialPerson(false, true, false, false, false, false, false);
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("1111"));
+        assertFalse(pred.test(p));
+    }
+
+    @Test
+    public void emailNull_branchHandled() {
+        Person p = new PartialPerson(false, false, true, false, false, false, false);
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("x@x.com"));
+        assertFalse(pred.test(p));
+    }
+
+    @Test
+    public void socNull_branchHandled() {
+        Person p = new PartialPerson(false, false, false, true, false, false, false);
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("socuser"));
+        assertFalse(pred.test(p));
+    }
+
+    @Test
+    public void githubNull_branchHandled() {
+        Person p = new PartialPerson(false, false, false, false, true, false, false);
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("ghuser"));
+        assertFalse(pred.test(p));
+    }
+
+    @Test
+    public void roleNull_branchHandled() {
+        Person p = new PartialPerson(false, false, false, false, false, true, false);
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("student"));
+        assertFalse(pred.test(p));
+    }
+
+    @Test
+    public void tutorialNull_branchHandled() {
+        Person p = new PartialPerson(false, false, false, false, false, false, true);
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("T01"));
+        assertFalse(pred.test(p));
+    }
+
+    @Test
+    public void keywordsFieldNull_viaReflection_handled() throws Exception {
+        // create a predicate with non-empty keywords
+        AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
+                Arrays.asList("alice"));
+        // forcibly set private field 'keywords' to null to exercise the keywords==null branch
+        java.lang.reflect.Field f = AllFieldsContainsKeywordsPredicate.class.getDeclaredField("keywords");
+        f.setAccessible(true);
+        f.set(pred, null);
+
+        Person person = new PersonBuilder().withName("Alice").build();
+        // should return false when keywords is null
+        assertFalse(pred.test(person));
+    }
 }
 
