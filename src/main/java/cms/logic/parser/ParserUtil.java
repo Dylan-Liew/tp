@@ -2,8 +2,10 @@ package cms.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import cms.commons.core.index.Index;
@@ -38,6 +40,26 @@ public class ParserUtil {
             throw new ParseException(MESSAGE_INVALID_INDEX);
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+    }
+
+    /**
+     * Parses whitespace-separated one-based indexes into a list of {@code Index} objects.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if any specified index is invalid or if no indexes are provided.
+     */
+    public static List<Index> parseIndexes(String oneBasedIndexes) throws ParseException {
+        String trimmedIndexes = oneBasedIndexes.trim();
+        if (trimmedIndexes.isEmpty()) {
+            throw new ParseException(MESSAGE_INVALID_INDEX);
+        }
+
+        String[] tokens = trimmedIndexes.split("\\s+");
+        List<Index> indexes = new ArrayList<>();
+        for (String token : tokens) {
+            indexes.add(parseIndex(token));
+        }
+        return indexes;
     }
 
     /**
