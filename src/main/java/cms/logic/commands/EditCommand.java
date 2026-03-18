@@ -1,9 +1,14 @@
 package cms.logic.commands;
 
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
+import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
+import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
+import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
+import static cms.logic.parser.CliSyntax.PREFIX_TUTORIALGROUP;
 import static cms.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static java.util.Objects.requireNonNull;
 
@@ -45,6 +50,11 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
+            + "[" + PREFIX_NUSID + "NUS ID] "
+            + "[" + PREFIX_ROLE + "ROLE] "
+            + "[" + PREFIX_SOCUSERNAME + "SOC USERNAME] "
+            + "[" + PREFIX_GITHUBUSERNAME + "GITHUB USERNAME] "
+            + "[" + PREFIX_TUTORIALGROUP + "TUTORIAL GROUP] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -100,11 +110,14 @@ public class EditCommand extends Command {
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        NusId updatedNusId = personToEdit.getNusId();
-        SocUsername updatedSocUsername = personToEdit.getSocUsername();
-        GithubUsername updatedGithubUsername = personToEdit.getGithubUsername();
-        Role updatedRole = personToEdit.getRole();
-        TutorialGroup updatedTutorialGroup = personToEdit.getTutorialGroup();
+        NusId updatedNusId = editPersonDescriptor.getNusId().orElse(personToEdit.getNusId());
+        SocUsername updatedSocUsername = editPersonDescriptor.getSocUsername()
+                .orElse(personToEdit.getSocUsername());
+        GithubUsername updatedGithubUsername = editPersonDescriptor.getGithubUsername()
+                .orElse(personToEdit.getGithubUsername());
+        Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole());
+        TutorialGroup updatedTutorialGroup = editPersonDescriptor.getTutorialGroup()
+                .orElse(personToEdit.getTutorialGroup());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedNusId,
@@ -143,6 +156,11 @@ public class EditCommand extends Command {
         private Name name;
         private Phone phone;
         private Email email;
+        private NusId nusId;
+        private Role role;
+        private SocUsername socUsername;
+        private GithubUsername githubUsername;
+        private TutorialGroup tutorialGroup;
         private Set<Tag> tags;
 
         public EditPersonDescriptor() {
@@ -156,6 +174,11 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
+            setNusId(toCopy.nusId);
+            setRole(toCopy.role);
+            setSocUsername(toCopy.socUsername);
+            setGithubUsername(toCopy.githubUsername);
+            setTutorialGroup(toCopy.tutorialGroup);
             setTags(toCopy.tags);
         }
 
@@ -163,7 +186,8 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, nusId, role,
+                    socUsername, githubUsername, tutorialGroup, tags);
         }
 
         public void setName(Name name) {
@@ -188,6 +212,46 @@ public class EditCommand extends Command {
 
         public Optional<Email> getEmail() {
             return Optional.ofNullable(email);
+        }
+
+        public void setNusId(NusId nusId) {
+            this.nusId = nusId;
+        }
+
+        public Optional<NusId> getNusId() {
+            return Optional.ofNullable(nusId);
+        }
+
+        public void setRole(Role role) {
+            this.role = role;
+        }
+
+        public Optional<Role> getRole() {
+            return Optional.ofNullable(role);
+        }
+
+        public void setSocUsername(SocUsername socUsername) {
+            this.socUsername = socUsername;
+        }
+
+        public Optional<SocUsername> getSocUsername() {
+            return Optional.ofNullable(socUsername);
+        }
+
+        public void setGithubUsername(GithubUsername githubUsername) {
+            this.githubUsername = githubUsername;
+        }
+
+        public Optional<GithubUsername> getGithubUsername() {
+            return Optional.ofNullable(githubUsername);
+        }
+
+        public void setTutorialGroup(TutorialGroup tutorialGroup) {
+            this.tutorialGroup = tutorialGroup;
+        }
+
+        public Optional<TutorialGroup> getTutorialGroup() {
+            return Optional.ofNullable(tutorialGroup);
         }
 
         /**
@@ -222,6 +286,11 @@ public class EditCommand extends Command {
             return Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
+                    && Objects.equals(nusId, otherEditPersonDescriptor.nusId)
+                    && Objects.equals(role, otherEditPersonDescriptor.role)
+                    && Objects.equals(socUsername, otherEditPersonDescriptor.socUsername)
+                    && Objects.equals(githubUsername, otherEditPersonDescriptor.githubUsername)
+                    && Objects.equals(tutorialGroup, otherEditPersonDescriptor.tutorialGroup)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
 
@@ -231,6 +300,11 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("phone", phone)
                     .add("email", email)
+                    .add("nusId", nusId)
+                    .add("role", role)
+                    .add("socUsername", socUsername)
+                    .add("githubUsername", githubUsername)
+                    .add("tutorialGroup", tutorialGroup)
                     .add("tags", tags)
                     .toString();
         }

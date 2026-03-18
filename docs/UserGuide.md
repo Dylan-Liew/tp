@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+Course Management System (CMS) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CMS can get your contact management tasks done faster than traditional GUI apps.
 
 * Table of Contents
 {:toc}
@@ -15,11 +15,11 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/se-edu/CMS-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for your CMS.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar CMS.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -28,7 +28,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01` : Adds a contact named `John Doe` to the Course Management System.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -75,40 +75,27 @@ Format: `help`
 
 ### Adding a student / tutor: `add`
 
-Adds a student / tutor to the address book.
+Adds a student / tutor to the Course Management System.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME
+        gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A student / tutor can have any number of tags (including 0)
 </div>
 
+Acceptable field values are listed in [Acceptable Person Fields](#acceptable-person-fields).
+
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/David Tan id/A0211111C role/student soc/davidtan gh/davidtan99 e/david@u.nus.edu p/97654321 t/T05`
+* `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01 tag/python-experienced`
 
 ### Listing all student & tutor : `list`
 
-Shows a list of all students & tutors in the address book.
+Shows a list of all students & tutors in the Course Management System.
 
 Format: `list`
 
-### Editing a student / tutor : `edit`
-
-Edits an existing student / tutor in the address book.
-
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
-
-* Edits the student / tutor at the specified `INDEX`. The index refers to the index number shown in the displayed student / tutor list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the student / tutor will be removed i.e adding of tags is not cumulative.
-* You can remove all the student / tutor’s tags by typing `t/` without
-    specifying any tags after it.
-
-Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st student / tutor to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd student / tutor to be `Betsy Crower` and clears all existing tags.
 
 ### Locating student / tutors by name: `find`
 
@@ -126,11 +113,11 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 Examples:
 * `find John` returns `john` and `John Doe`
 * `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+
 
 ### Deleting a student / tutor : `delete`
 
-Deletes the specified student / tutor from the address book.
+Deletes the specified student / tutor from the Course Management System.
 
 Format: `delete INDEX`
 
@@ -139,12 +126,12 @@ Format: `delete INDEX`
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd student / tutor in the address book.
+* `list` followed by `delete 2` deletes the 2nd student / tutor in the Course Management System.
 * `find Betsy` followed by `delete 1` deletes the 1st student / tutor in the results of the `find` command.
 
 ### Clearing all entries : `clear`
 
-Clears all entries from the address book.
+Clears all entries from the Course Management System.
 
 Format: `clear`
 
@@ -156,27 +143,152 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+CMS data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+CMS data are saved automatically as a JSON file `[JAR file location]/data/CMS.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file makes its format invalid, CMS will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause the CMS to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
 ### Archiving data files `[coming in v2.0]`
 
 _Details coming soon ..._
 
+## Acceptable Person Fields
+
+Use this section as a quick checklist when entering commands that require person fields (e.g. `add`).
+
+### `n/NAME` {#field-name}
+This is the person's name. You can have multiple people with the same name, but each person must have a unique [NUS ID](#field-nus-id), [SOC username](#field-soc-username), and [GitHub username](#field-github-username).
+
+What to enter:
+* Letters, numbers, and spaces only.
+* Cannot be blank.
+* Extra spaces at the start or end are ignored.
+* Multiple spaces between words are reduced to one space. E.g. `John   Doe` will be stored as `John Doe`.
+
+Example:
+* Valid: `n/John Doe`
+* Invalid: `n/John@Doe`
+
+### `id/NUS_ID` {#field-nus-id}
+This is the person's NUS ID. It is used to uniquely identify a person in the CMS.
+
+What to enter:
+* Must look like `A0234567B` or `U0234567B`.
+* Starts with `A` or `U`, followed by 7 digits, and ends with a letter.
+* No spaces.
+* Must be unique in the system.
+
+Example:
+* Valid: `id/A0234567B`
+* Invalid: `id/A234567B` (not 7 digits)
+
+### `role/ROLE` {#field-role}
+This is the person's role in the course, which can be either `student` or `tutor`. It is used to distinguish students from tutors in the CMS.
+
+What to enter:
+* Only `student` or `tutor`.
+* Use lowercase exactly as shown.
+* No spaces.
+
+Example:
+* Valid: `role/student`
+* Invalid: `role/Student`
+
+### `soc/SOC_USERNAME` {#field-soc-username}
+This is the person's SoC-style username. It is used for integration with SoC systems in the future.
+
+What to enter:
+* Either a SoC-style username or the default [NUS ID](#field-nus-id).
+* SoC-style username rules:
+    * 5 to 8 characters.
+    * Lowercase letters, digits, and hyphens only.
+    * Cannot start or end with a hyphen.
+    * No spaces.
+    * Stored in lowercase.
+    * Must be unique in the system.
+
+Example:
+* Valid: `soc/john1`
+* Valid: `soc/a0234567b`
+* Invalid: `soc/-john`
+
+### `gh/GITHUB_USERNAME` {#field-github-username}
+
+What to enter:
+* 1 to 39 characters.
+* Letters, digits, and hyphens only.
+* Cannot start or end with a hyphen.
+* No spaces.
+* Stored in lowercase.
+* Must be unique in the system.
+
+Example:
+* Valid: `gh/jane-lim123`
+* Invalid: `gh/-jane`
+
+### `e/EMAIL` {#field-email}
+This is the person's primary email address.
+
+What to enter:
+* A valid email like `name@domain`.
+* No spaces.
+* Stored in lowercase.
+
+Example:
+* Valid: `e/johndoe@u.nus.edu`
+* Invalid: `e/johndoe@u`
+
+### `p/PHONE` {#field-phone}
+This is the person's primary phone number.
+
+What to enter:
+* Digits only.
+* At least 3 digits.
+* No `+`, spaces, or dashes.
+
+Example:
+* Valid: `p/91234567`
+* Invalid: `p/+6591234567`
+
+### `t/TUTORIAL_GROUP` {#field-tutorial-group}
+This is the person's tutorial group, which is used to group students and tutors together in the CMS.
+
+What to enter:
+* Must be `T` plus 2 digits, from `T01` to `T99`.
+* No spaces.
+* Lowercase input is automatically converted to uppercase.
+
+Example:
+* Valid: `t/T01`
+* Invalid: `t/T1`
+
+### `tag/TAG` {#field-tag}
+This is used to store additional information about the person that does not fit into the other fields. It is optional and can be repeated to store multiple tags for the same person.
+
+What to enter:
+* You can provide zero or more tags.
+* Use letters, digits, and hyphens.
+* No spaces inside a tag.
+* Cannot start or end with a hyphen.
+* Tags are stored in lowercase.
+* Repeated tags for the same person are kept only once.
+
+Example:
+* Valid: `tag/python-experienced`
+* Invalid: `tag/needs help`
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous CMS home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -191,10 +303,8 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add** | `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG…​` <br> e.g., `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
 **Help** | `help`

@@ -2,9 +2,14 @@ package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
+import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
+import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
+import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
+import static cms.logic.parser.CliSyntax.PREFIX_TUTORIALGROUP;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
@@ -32,7 +37,9 @@ public class EditCommandParser implements Parser<EditCommand> {
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_TAG);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                        PREFIX_NUSID, PREFIX_ROLE, PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME,
+                        PREFIX_TUTORIALGROUP, PREFIX_TAG);
 
         Index index;
 
@@ -42,7 +49,9 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_NUSID, PREFIX_ROLE, PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME,
+                PREFIX_TUTORIALGROUP);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
@@ -55,7 +64,26 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
-        parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
+        if (argMultimap.getValue(PREFIX_NUSID).isPresent()) {
+            editPersonDescriptor.setNusId(ParserUtil.parseNusId(argMultimap.getValue(PREFIX_NUSID).get()));
+        }
+        if (argMultimap.getValue(PREFIX_ROLE).isPresent()) {
+            editPersonDescriptor.setRole(ParserUtil.parseRole(argMultimap.getValue(PREFIX_ROLE).get()));
+        }
+        if (argMultimap.getValue(PREFIX_SOCUSERNAME).isPresent()) {
+            editPersonDescriptor.setSocUsername(
+                    ParserUtil.parseSocUsername(argMultimap.getValue(PREFIX_SOCUSERNAME).get()));
+        }
+        if (argMultimap.getValue(PREFIX_GITHUBUSERNAME).isPresent()) {
+            editPersonDescriptor.setGithubUsername(
+                    ParserUtil.parseGithubUsername(argMultimap.getValue(PREFIX_GITHUBUSERNAME).get()));
+        }
+        if (argMultimap.getValue(PREFIX_TUTORIALGROUP).isPresent()) {
+            editPersonDescriptor.setTutorialGroup(
+                    ParserUtil.parseTutorialGroup(argMultimap.getValue(PREFIX_TUTORIALGROUP).get()));
+        }
+        parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG))
+                .ifPresent(editPersonDescriptor::setTags);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);

@@ -3,12 +3,14 @@ package cms.logic.parser;
 import static cms.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static cms.testutil.Assert.assertThrows;
 import static cms.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static cms.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -51,6 +53,17 @@ public class ParserUtilTest {
 
         // Leading and trailing whitespaces
         assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("  1  "));
+    }
+
+    @Test
+    public void parseIndexes_emptyInput_throwsParseException() {
+        assertThrows(ParseException.class, MESSAGE_INVALID_INDEX, () -> ParserUtil.parseIndexes("   "));
+    }
+
+    @Test
+    public void parseIndexes_validInput_success() throws Exception {
+        assertEquals(List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON), ParserUtil.parseIndexes("1 2"));
+        assertEquals(List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON), ParserUtil.parseIndexes("  1   2  "));
     }
 
     @Test

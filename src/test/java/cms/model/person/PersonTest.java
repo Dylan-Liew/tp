@@ -2,6 +2,7 @@ package cms.model.person;
 
 import static cms.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_NAME_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSID_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static cms.testutil.Assert.assertThrows;
@@ -9,6 +10,7 @@ import static cms.testutil.TypicalPersons.ALICE;
 import static cms.testutil.TypicalPersons.BOB;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -31,22 +33,21 @@ public class PersonTest {
         // null -> returns false
         assertFalse(ALICE.isSamePerson(null));
 
-        // same name, all other attributes different -> returns true
+        // same NUS ID, all other attributes different -> returns true
         Person editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
-            .withTags(VALID_TAG_HUSBAND).build();
+            .withTags(VALID_TAG_HUSBAND).withName(VALID_NAME_BOB).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
-        // different name, all other attributes same -> returns false
-        editedAlice = new PersonBuilder(ALICE).withName(VALID_NAME_BOB).build();
+        // different NUS ID, all other attributes same -> returns false
+        editedAlice = new PersonBuilder(ALICE).withNusId(VALID_NUSID_BOB).build();
         assertFalse(ALICE.isSamePerson(editedAlice));
 
-        // name differs in case, all other attributes same -> returns false
+        // name differs in case, NUS ID unchanged -> returns true
         Person editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).build();
-        assertFalse(BOB.isSamePerson(editedBob));
+        assertTrue(BOB.isSamePerson(editedBob));
 
-        // name has trailing spaces, all other attributes same -> returns false
-        String nameWithTrailingSpaces = VALID_NAME_BOB + " ";
-        editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces).build();
+        // NUS ID has different value, all other attributes same -> returns false
+        editedBob = new PersonBuilder(BOB).withNusId("A1111111A").build();
         assertFalse(BOB.isSamePerson(editedBob));
     }
 
@@ -103,6 +104,35 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+    }
+
+    @Test
+    public void findConflictingField() {
+        // null -> returns null
+        assertNull(ALICE.findConflictingField(null));
+
+        // same email -> returns email conflict
+        Person emailConflict = new PersonBuilder(BOB).withEmail(ALICE.getEmail().toString()).build();
+        FieldConflict emailFieldConflict = ALICE.findConflictingField(emailConflict);
+        assertEquals("email", emailFieldConflict.getFieldName());
+        assertEquals(ALICE.getEmail().toString(), emailFieldConflict.getFieldValue());
+
+        // same SOC username -> returns SOC username conflict
+        Person socUsernameConflict = new PersonBuilder(BOB).withSocUsername(ALICE.getSocUsername().toString()).build();
+        FieldConflict socFieldConflict = ALICE.findConflictingField(socUsernameConflict);
+        assertEquals("SOC username", socFieldConflict.getFieldName());
+        assertEquals(ALICE.getSocUsername().toString(), socFieldConflict.getFieldValue());
+
+        // same GitHub username -> returns GitHub username conflict
+        Person githubUsernameConflict = new PersonBuilder(BOB)
+                .withGithubUsername(ALICE.getGithubUsername().toString())
+                .build();
+        FieldConflict githubFieldConflict = ALICE.findConflictingField(githubUsernameConflict);
+        assertEquals("GitHub username", githubFieldConflict.getFieldName());
+        assertEquals(ALICE.getGithubUsername().toString(), githubFieldConflict.getFieldValue());
+
+        // no shared unique fields -> returns null
+        assertNull(ALICE.findConflictingField(BOB));
     }
 
     @Test

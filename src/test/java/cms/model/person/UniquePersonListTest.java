@@ -15,6 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import cms.model.person.exceptions.DuplicatePersonException;
+import cms.model.person.exceptions.DuplicatePersonFieldException;
 import cms.model.person.exceptions.PersonNotFoundException;
 import cms.testutil.PersonBuilder;
 
@@ -46,6 +47,23 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void containsFieldConflict_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.containsFieldConflict(null));
+    }
+
+    @Test
+    public void containsFieldConflict_personNotInList_returnsFalse() {
+        assertFalse(uniquePersonList.containsFieldConflict(ALICE));
+    }
+
+    @Test
+    public void containsFieldConflict_personWithConflictingFieldInList_returnsTrue() {
+        uniquePersonList.add(ALICE);
+        Person editedAlice = new PersonBuilder(ALICE).withNusId("A1234567C").build();
+        assertTrue(uniquePersonList.containsFieldConflict(editedAlice));
+    }
+
+    @Test
     public void add_nullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniquePersonList.add(null));
     }
@@ -54,6 +72,16 @@ public class UniquePersonListTest {
     public void add_duplicatePerson_throwsDuplicatePersonException() {
         uniquePersonList.add(ALICE);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(ALICE));
+    }
+
+    @Test
+    public void add_personWithConflictingEmail_throwsDuplicatePersonFieldException() {
+        uniquePersonList.add(ALICE);
+        Person editedAlice = new PersonBuilder(ALICE).withNusId("A1234567C").build();
+        String expectedErrorMessage = "A person with email [" + ALICE.getEmail() + "] already exists in the system.";
+
+        assertThrows(DuplicatePersonFieldException.class,
+            expectedErrorMessage, () -> uniquePersonList.add(editedAlice));
     }
 
     @Test
@@ -107,6 +135,36 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void setPerson_editedPersonHasConflictingSocUsername_throwsDuplicatePersonFieldException() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+
+        Person editedAlice = new PersonBuilder(ALICE)
+            .withSocUsername(BOB.getSocUsername().toString())
+            .build();
+        String expectedErrorMessage = "A person with SOC username ["
+            + BOB.getSocUsername() + "] already exists in the system.";
+
+        assertThrows(DuplicatePersonFieldException.class,
+            expectedErrorMessage, () -> uniquePersonList.setPerson(ALICE, editedAlice));
+    }
+
+    @Test
+    public void setPerson_editedPersonHasConflictingGithubUsername_throwsDuplicatePersonFieldException() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+
+        Person editedAlice = new PersonBuilder(ALICE)
+            .withGithubUsername(BOB.getGithubUsername().toString())
+            .build();
+        String expectedErrorMessage = "A person with GitHub username ["
+            + BOB.getGithubUsername() + "] already exists in the system.";
+
+        assertThrows(DuplicatePersonFieldException.class,
+            expectedErrorMessage, () -> uniquePersonList.setPerson(ALICE, editedAlice));
+    }
+
+    @Test
     public void remove_nullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniquePersonList.remove(null));
     }
@@ -157,6 +215,16 @@ public class UniquePersonListTest {
     public void setPersons_listWithDuplicatePersons_throwsDuplicatePersonException() {
         List<Person> listWithDuplicatePersons = Arrays.asList(ALICE, ALICE);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPersons(listWithDuplicatePersons));
+    }
+
+    @Test
+    public void setPersons_listWithDuplicateFields_throwsDuplicatePersonFieldException() {
+        Person editedAlice = new PersonBuilder(ALICE).withNusId("A1234567C").build();
+        List<Person> listWithDuplicateFieldPersons = Arrays.asList(ALICE, editedAlice);
+        String expectedErrorMessage = "A person with email [" + ALICE.getEmail() + "] already exists in the system.";
+
+        assertThrows(DuplicatePersonFieldException.class,
+            expectedErrorMessage, () -> uniquePersonList.setPersons(listWithDuplicateFieldPersons));
     }
 
     @Test

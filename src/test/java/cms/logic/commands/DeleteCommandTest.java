@@ -5,10 +5,14 @@ import static cms.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static cms.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static cms.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static cms.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static cms.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
 import static cms.testutil.TypicalPersons.getTypicalAddressBook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +54,35 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_validIndexesUnfilteredList_success() {
+        DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person thirdPersonToDelete = expectedModel.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
+        Person firstPersonToDelete = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        expectedModel.deletePerson(thirdPersonToDelete);
+        expectedModel.deletePerson(firstPersonToDelete);
+
+        assertCommandSuccess(deleteCommand, model, DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, expectedModel);
+    }
+
+    @Test
+    public void execute_duplicateIndexesUnfilteredList_deletesPersonOnce() {
+        DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON));
+
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
+        assertCommandSuccess(deleteCommand, model, DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, expectedModel);
+    }
+
+    @Test
+    public void constructor_emptyIndexes_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new DeleteCommand(List.of()));
+    }
+
+    @Test
     public void execute_validIndexFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -83,6 +116,8 @@ public class DeleteCommandTest {
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
+        DeleteCommand deleteMultipleIndexesCommand =
+                new DeleteCommand(List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON));
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
@@ -99,6 +134,9 @@ public class DeleteCommandTest {
 
         // different person -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
+
+        // different number of indexes -> returns false
+        assertFalse(deleteFirstCommand.equals(deleteMultipleIndexesCommand));
     }
 
     @Test
@@ -107,6 +145,11 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
         String expected = DeleteCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
         assertEquals(expected, deleteCommand.toString());
+
+        List<Index> targetIndexes = List.of(Index.fromOneBased(1), Index.fromOneBased(2));
+        DeleteCommand multiDeleteCommand = new DeleteCommand(targetIndexes);
+        String multiExpected = DeleteCommand.class.getCanonicalName() + "{targetIndexes=" + targetIndexes + "}";
+        assertEquals(multiExpected, multiDeleteCommand.toString());
     }
 
     /**

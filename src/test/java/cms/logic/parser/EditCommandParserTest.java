@@ -3,21 +3,31 @@ package cms.logic.parser;
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static cms.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
+import static cms.logic.commands.CommandTestUtil.GITHUBUSERNAME_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static cms.logic.commands.CommandTestUtil.NAME_DESC_AMY;
+import static cms.logic.commands.CommandTestUtil.NUSID_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
+import static cms.logic.commands.CommandTestUtil.ROLE_DESC_AMY;
+import static cms.logic.commands.CommandTestUtil.SOCUSERNAME_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
 import static cms.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
+import static cms.logic.commands.CommandTestUtil.TUTORIALGROUP_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static cms.logic.commands.CommandTestUtil.VALID_GITHUBUSERNAME_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_NAME_AMY;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSID_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
+import static cms.logic.commands.CommandTestUtil.VALID_SOCUSERNAME_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static cms.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static cms.logic.commands.CommandTestUtil.VALID_TUTORIALGROUP_AMY;
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
@@ -140,6 +150,36 @@ public class EditCommandParserTest {
         // email
         userInput = targetIndex.getOneBased() + EMAIL_DESC_AMY;
         descriptor = new EditPersonDescriptorBuilder().withEmail(VALID_EMAIL_AMY).build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // nusId
+        userInput = targetIndex.getOneBased() + NUSID_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withNusId(VALID_NUSID_AMY).build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // role
+        userInput = targetIndex.getOneBased() + ROLE_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withRole(VALID_ROLE_AMY).build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // socUsername
+        userInput = targetIndex.getOneBased() + SOCUSERNAME_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withSocUsername(VALID_SOCUSERNAME_AMY).build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // githubUsername
+        userInput = targetIndex.getOneBased() + GITHUBUSERNAME_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withGithubUsername(VALID_GITHUBUSERNAME_AMY).build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // tutorialGroup
+        userInput = targetIndex.getOneBased() + TUTORIALGROUP_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withTutorialGroup(VALID_TUTORIALGROUP_AMY).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 

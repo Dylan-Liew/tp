@@ -54,6 +54,18 @@ public class AddCommandTest {
     }
 
     @Test
+    public void execute_duplicateFields_throwsCommandException() {
+        Person validPerson = new PersonBuilder().build();
+        Person editedPerson = new PersonBuilder(validPerson)
+                .withNusId("A7654321Z")
+                .build();
+        AddCommand addCommand = new AddCommand(editedPerson);
+        ModelStub modelStub = new ModelStubWithPerson(validPerson);
+
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_FIELDS, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
     public void equals() {
         Person alice = new PersonBuilder().withName("Alice").build();
         Person bob = new PersonBuilder().withName("Bob").build();
@@ -139,6 +151,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasPersonWithConflictingField(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
@@ -175,6 +192,12 @@ public class AddCommandTest {
             requireNonNull(person);
             return this.person.isSamePerson(person);
         }
+
+        @Override
+        public boolean hasPersonWithConflictingField(Person person) {
+            requireNonNull(person);
+            return this.person.findConflictingField(person) != null;
+        }
     }
 
     /**
@@ -187,6 +210,12 @@ public class AddCommandTest {
         public boolean hasPerson(Person person) {
             requireNonNull(person);
             return personsAdded.stream().anyMatch(person::isSamePerson);
+        }
+
+        @Override
+        public boolean hasPersonWithConflictingField(Person person) {
+            requireNonNull(person);
+            return false;
         }
 
         @Override

@@ -12,7 +12,8 @@ import cms.model.tag.Tag;
 
 /**
  * Represents a Person in the course management system.
- * Guarantees: details are present and not null, field values are validated, immutable.
+ * Guarantees: details are present and not null, field values are validated,
+ * immutable.
  */
 public class Person {
 
@@ -71,7 +72,6 @@ public class Person {
         return githubUsername;
     }
 
-
     public Role getRole() {
         return role;
     }
@@ -81,7 +81,8 @@ public class Person {
     }
 
     /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
+     * Returns an immutable tag set, which throws
+     * {@code UnsupportedOperationException}
      * if modification is attempted.
      */
     public Set<Tag> getTags() {
@@ -89,7 +90,7 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both persons have the same NUS ID.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -98,7 +99,30 @@ public class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getName().equals(getName());
+                && otherPerson.getNusId().equals(getNusId());
+    }
+
+    /**
+     * Returns the first conflicting unique field shared with {@code otherPerson}, if any.
+     */
+    public FieldConflict findConflictingField(Person otherPerson) {
+        if (otherPerson == null) {
+            return null;
+        }
+
+        if (email.equals(otherPerson.email)) {
+            return new FieldConflict("email", otherPerson.email.toString());
+        }
+
+        if (socUsername.equals(otherPerson.socUsername)) {
+            return new FieldConflict("SOC username", otherPerson.socUsername.toString());
+        }
+
+        if (githubUsername.equals(otherPerson.githubUsername)) {
+            return new FieldConflict("GitHub username", otherPerson.githubUsername.toString());
+        }
+
+        return null;
     }
 
     /**

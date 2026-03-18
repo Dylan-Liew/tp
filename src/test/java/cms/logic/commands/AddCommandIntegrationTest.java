@@ -28,7 +28,11 @@ public class AddCommandIntegrationTest {
 
     @Test
     public void execute_newPerson_success() {
-        Person validPerson = new PersonBuilder().build();
+        Person validPerson = new PersonBuilder().withNusId("A7654321Z")
+                .withEmail("newperson@example.com")
+                .withSocUsername("newsoc1")
+                .withGithubUsername("newpersongh")
+                .build();
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addPerson(validPerson);
@@ -43,6 +47,17 @@ public class AddCommandIntegrationTest {
         Person personInList = model.getAddressBook().getPersonList().get(0);
         assertCommandFailure(new AddCommand(personInList), model,
                 AddCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
+    public void execute_duplicateFields_throwsCommandException() {
+        Person personInList = model.getAddressBook().getPersonList().get(0);
+        Person editedPerson = new PersonBuilder(personInList)
+                .withNusId("A7654321Z")
+                .build();
+
+        assertCommandFailure(new AddCommand(editedPerson), model,
+                AddCommand.MESSAGE_DUPLICATE_FIELDS);
     }
 
 }

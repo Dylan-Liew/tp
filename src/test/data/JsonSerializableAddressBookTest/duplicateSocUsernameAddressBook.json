@@ -1,0 +1,28 @@
+{
+  "persons": [
+    {
+      "name": "Jane Doe",
+      "phone": "91234567",
+      "email": "jane@example.com",
+      "nusId": "A1234567B",
+      "socUsername": "johndoe",
+      "githubUsername": "janedoe",
+      "address": "123, Test Street",
+      "role": "student",
+      "tutorialGroup": "T01",
+      "tags": []
+    },
+    {
+      "name": "John Doe",
+      "phone": "98765432",
+      "email": "john@example.com",
+      "nusId": "A2345678C",
+      "socUsername": "johndoe",
+      "githubUsername": "john-doe",
+      "address": "456, Example Avenue",
+      "role": "student",
+      "tutorialGroup": "T02",
+      "tags": []
+    }
+  ]
+}
