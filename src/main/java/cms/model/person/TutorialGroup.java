@@ -21,8 +21,19 @@ public class TutorialGroup {
      */
     public TutorialGroup(String tutorialGroup) {
         requireNonNull(tutorialGroup);
-        checkArgument(isValidTutorialGroup(tutorialGroup), MESSAGE_CONSTRAINTS);
-        value = tutorialGroup;
+        String canonical = canonicalise(tutorialGroup);
+        checkArgument(isValidTutorialGroup(canonical), MESSAGE_CONSTRAINTS);
+        value = canonical;
+    }
+
+    /**
+     * Canonicalises the tutorial group: trims spaces and converts to uppercase.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.trim().toUpperCase();
     }
 
     /**

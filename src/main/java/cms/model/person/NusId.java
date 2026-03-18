@@ -10,8 +10,9 @@ import static java.util.Objects.requireNonNull;
 public class NusId {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "NUS ID must be in the format A#######X where # is a digit and X is an uppercase letter (e.g., A0234567B).";
-    public static final String VALIDATION_REGEX = "A\\d{7}[A-Z]";
+            "NUS ID must be in the format A#######X or U#######X where # is a digit "
+                + "and X is a letter (e.g., A0234567B or U0234567B).";
+    public static final String VALIDATION_REGEX = "[AU]\\d{7}[A-Z]";
     public final String value;
 
     /**
@@ -21,15 +22,26 @@ public class NusId {
      */
     public NusId(String nusId) {
         requireNonNull(nusId);
-        checkArgument(isValidNusId(nusId), MESSAGE_CONSTRAINTS);
-        value = nusId;
+        String canonical = canonicalise(nusId);
+        checkArgument(isValidNusId(canonical), MESSAGE_CONSTRAINTS);
+        value = canonical;
+    }
+
+    /**
+     * Canonicalises the NUS ID: trims spaces and converts to uppercase.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.trim().toUpperCase();
     }
 
     /**
      * Returns true if a given string is a valid NUS ID.
      */
     public static boolean isValidNusId(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return canonicalise(test).matches(VALIDATION_REGEX);
     }
 
     @Override

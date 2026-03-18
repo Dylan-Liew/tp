@@ -27,8 +27,9 @@ public class Name {
      */
     public Name(String name) {
         requireNonNull(name);
-        checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
-        fullName = name;
+        String canonical = canonicalise(name);
+        checkArgument(isValidName(canonical), MESSAGE_CONSTRAINTS);
+        fullName = canonical;
     }
 
     /**
@@ -38,6 +39,16 @@ public class Name {
         return test.matches(VALIDATION_REGEX);
     }
 
+    /**
+     * Canonicalises the name: strips leading/trailing spaces, collapses multiple spaces, preserves case.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        String collapsed = input.trim().replaceAll(" +", " ");
+        return collapsed;
+    }
 
     @Override
     public String toString() {
