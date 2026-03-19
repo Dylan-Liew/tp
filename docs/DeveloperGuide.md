@@ -433,6 +433,27 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Adding a student / tutor
+
+1. Adding a person while all persons are being shown
+
+   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+   1. Test case: `add n/John Doe id/A0123456X role/student soc/johnd gh/john-gh p/91234567 
+      e/john@example.com t/T01`<br>
+      Expected: New contact is added to the list. Details of the added contact shown in the status message.
+
+   1. Test case: `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99 
+      e/david@u.nus.edu p/97654321 t/T05` twice<br>
+      Expected: If a person with the same NUS ID / SoC username / GitHub username / email already exists, 
+      the app shows an error message indicating 
+      a duplicate NUS ID. No person is added. Status bar remains the same.
+
+   1. Other incorrect add commands to try: `add`, `add n/`<br>
+      Expected: Validation errors are shown describing the missing required fields or incorrect format.
+
+1. _{ more test cases …​ }_
+
 ### Saving data
 
 1. Dealing with missing/corrupted data files
@@ -440,3 +461,4 @@ testers are expected to do more *exploratory* testing.
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+
