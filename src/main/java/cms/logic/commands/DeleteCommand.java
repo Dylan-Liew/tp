@@ -4,7 +4,6 @@ import static cms.commons.util.AppUtil.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,7 +15,6 @@ import cms.logic.commands.exceptions.CommandException;
 import cms.model.Model;
 import cms.model.person.NusId;
 import cms.model.person.Person;
-import cms.model.tag.Tag;
 
 /**
  * Deletes one or more persons identified using their displayed indexes from the address book.
@@ -30,9 +28,9 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes one or more persons by their displayed index or NUS ID.\n"
-            + "Parameters: INDEX [MORE_INDEXES]... or id/NUS_ID [id/MORE_NUS_IDS]...\n"
+            + "Parameters: INDEX [MORE_INDEXES]... or id/NUS_ID [MORE_NUS_IDS]...\n"
             + "Examples: " + COMMAND_WORD + " 1, " + COMMAND_WORD + " 1 2 3, "
-            + COMMAND_WORD + " id/A1234567B, " + COMMAND_WORD + " id/A1234567B id/A2345678C";
+            + COMMAND_WORD + " id/A1234567B, " + COMMAND_WORD + " id/A1234567B A2345678C";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted persons:\n%1$s";
@@ -103,11 +101,13 @@ public class DeleteCommand extends Command {
                     String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(deletedPersons.get(0))));
         }
 
-        String deletedPersonsMessage = deletedPersons.stream()
-                .map(DeleteCommand::formatDeletedPersonDetails)
-                .collect(Collectors.joining("\n"));
+        return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, formatDeletedPersons(deletedPersons)));
+    }
 
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, deletedPersonsMessage));
+    private String formatDeletedPersons(List<Person> deletedPersons) {
+        return deletedPersons.stream()
+                .map(Messages::format)
+                .collect(Collectors.joining("\n"));
     }
 
     private List<Person> deletePersonsByIndex(Model model) throws CommandException {
@@ -208,32 +208,4 @@ public class DeleteCommand extends Command {
                 .toString();
     }
 
-    /**
-     * Formats a deleted person's details for the bulk delete success message.
-     */
-    private static String formatDeletedPersonDetails(Person person) {
-        String tags = person.getTags().stream()
-                .map(DeleteCommand::formatTag)
-                .sorted(Comparator.naturalOrder())
-                .collect(Collectors.joining(" "));
-
-        String personDetails = person.getName()
-                + " id/" + person.getNusId()
-                + " role/" + person.getRole()
-                + " soc/" + person.getSocUsername()
-                + " gh/" + person.getGithubUsername()
-                + " p/" + person.getPhone()
-                + " e/" + person.getEmail()
-                + " t/" + person.getTutorialGroup();
-
-        if (!tags.isEmpty()) {
-            personDetails += " " + tags;
-        }
-
-        return personDetails;
-    }
-
-    private static String formatTag(Tag tag) {
-        return "tag/" + tag.tagName;
-    }
 }

@@ -66,10 +66,8 @@ public class DeleteCommandTest {
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
                 String.join("\n",
-                        "Alice Pauline id/A0000001B role/student soc/amybee gh/amybee"
-                                + " p/94351253 e/alice@example.com t/T01 tag/friends",
-                        "Carl Kurz id/A0234502D role/student soc/carlk gh/carl-kurz"
-                                + " p/95352563 e/heinz@example.com t/T01"));
+                        Messages.format(firstPersonToDelete),
+                        Messages.format(thirdPersonToDelete)));
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
@@ -115,10 +113,8 @@ public class DeleteCommandTest {
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
                 String.join("\n",
-                        "Alice Pauline id/A0000001B role/student soc/amybee gh/amybee"
-                                + " p/94351253 e/alice@example.com t/T01 tag/friends",
-                        "Carl Kurz id/A0234502D role/student soc/carlk gh/carl-kurz"
-                                + " p/95352563 e/heinz@example.com t/T01"));
+                        Messages.format(firstPersonToDelete),
+                        Messages.format(thirdPersonToDelete)));
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }

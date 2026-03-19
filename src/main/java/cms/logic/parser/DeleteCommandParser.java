@@ -1,11 +1,10 @@
 package cms.logic.parser;
 
-import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cms.commons.core.index.Index;
+import cms.logic.Messages;
 import cms.logic.commands.DeleteCommand;
 import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.NusId;
@@ -23,25 +22,33 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
      */
     public DeleteCommand parse(String args) throws ParseException {
         try {
-            String normalizedArgs = args.startsWith(" ") ? args : " " + args;
-            ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(normalizedArgs, PREFIX_NUSID);
-            List<String> nusIdValues = argMultimap.getAllValues(PREFIX_NUSID);
-
-            if (!nusIdValues.isEmpty()) {
-                if (!argMultimap.getPreamble().isEmpty()) {
-                    throw new ParseException(
-                            String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-                }
-                List<NusId> nusIds = ParserUtil.parseNusIds(nusIdValues);
+            String trimmedArgs = args.trim();
+            if (trimmedArgs.startsWith("id/")) {
+                List<NusId> nusIds = ParserUtil.parseNusIds(parseNusIdTokens(trimmedArgs));
                 return DeleteCommand.byNusIds(nusIds);
             }
 
-            List<Index> indexes = ParserUtil.parseIndexes(args);
+            List<Index> indexes = ParserUtil.parseIndexes(trimmedArgs);
             return new DeleteCommand(indexes);
         } catch (ParseException pe) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE), pe);
+                    String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE), pe);
         }
+    }
+
+    private List<String> parseNusIdTokens(String trimmedArgs) throws ParseException {
+        String[] tokens = trimmedArgs.split("\\s+");
+        if (tokens.length == 0) {
+            throw new ParseException(NusId.MESSAGE_CONSTRAINTS);
+        }
+
+        return List.of(tokens).stream()
+                .map(this::stripNusIdPrefix)
+                .collect(Collectors.toList());
+    }
+
+    private String stripNusIdPrefix(String token) {
+        return token.startsWith("id/") ? token.substring(3) : token;
     }
 
 }

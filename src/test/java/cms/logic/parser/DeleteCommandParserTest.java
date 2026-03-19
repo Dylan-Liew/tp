@@ -32,6 +32,8 @@ public class DeleteCommandParserTest {
         assertParseSuccess(parser, "1 2", new DeleteCommand(List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON)));
         assertParseSuccess(parser, "id/" + VALID_NUSID_AMY,
                 DeleteCommand.byNusId(new NusId(VALID_NUSID_AMY)));
+        assertParseSuccess(parser, "id/" + VALID_NUSID_AMY + " " + VALID_NUSID_BOB,
+                DeleteCommand.byNusIds(List.of(new NusId(VALID_NUSID_AMY), new NusId(VALID_NUSID_BOB))));
         assertParseSuccess(parser, "id/" + VALID_NUSID_AMY + " id/" + VALID_NUSID_BOB,
                 DeleteCommand.byNusIds(List.of(new NusId(VALID_NUSID_AMY), new NusId(VALID_NUSID_BOB))));
     }
@@ -40,6 +42,8 @@ public class DeleteCommandParserTest {
     public void parse_invalidArgs_throwsParseException() {
         assertParseFailure(parser, "a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "id/" + VALID_NUSID_AMY + " 1",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "1 id/" + VALID_NUSID_AMY,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
