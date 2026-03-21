@@ -2,6 +2,7 @@ package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static cms.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static cms.logic.parser.CliSyntax.PREFIX_NAME;
 import static cms.testutil.Assert.assertThrows;
 import static cms.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +24,10 @@ import cms.logic.commands.FindCommand;
 import cms.logic.commands.HelpCommand;
 import cms.logic.commands.ListCommand;
 import cms.logic.parser.exceptions.ParseException;
+import cms.model.person.AllFieldsContainsKeywordsPredicate;
+import cms.model.person.CombinedFindPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
+import cms.model.person.NusIdContainsKeywordsPredicate;
 import cms.model.person.Person;
 import cms.testutil.EditPersonDescriptorBuilder;
 import cms.testutil.PersonBuilder;
@@ -72,8 +76,13 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+                FindCommand.COMMAND_WORD + " " + PREFIX_NAME + keywords.stream().collect(Collectors.joining(" ")));
+        assertEquals(new FindCommand(
+                new CombinedFindPredicate(
+                        new AllFieldsContainsKeywordsPredicate(java.util.Collections.emptyList()),
+                        new NameContainsKeywordsPredicate(keywords),
+                        new NusIdContainsKeywordsPredicate(java.util.Collections.emptyList())
+                )), command);
     }
 
     @Test

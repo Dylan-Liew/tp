@@ -2,10 +2,12 @@ package cms.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.Predicate;
+
 import cms.commons.util.ToStringBuilder;
 import cms.logic.Messages;
 import cms.model.Model;
-import cms.model.person.NameContainsKeywordsPredicate;
+import cms.model.person.Person;
 
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
@@ -15,14 +17,16 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " alice bob charlie";
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Finds all persons by name, NUS ID, or any field (using the a/ prefix).\n"
+            + "Parameters: a/KEYWORD [MORE_KEYWORDS]... | n/NAME [MORE_NAMES]... | id/NUS_ID [MORE_IDS]... "
+            + "(multiple prefixes allowed; no prefix treats input as name search)\n"
+            + "Examples: " + COMMAND_WORD + " a/Alice Bob, " + COMMAND_WORD + " n/Alice Bob, "
+            + COMMAND_WORD + " id/A0234567B, " + COMMAND_WORD + " a/Alice n/Bob id/A0123456B";
 
-    private final NameContainsKeywordsPredicate predicate;
+    private final Predicate<Person> predicate;
 
-    public FindCommand(NameContainsKeywordsPredicate predicate) {
+    public FindCommand(Predicate<Person> predicate) {
         this.predicate = predicate;
     }
 

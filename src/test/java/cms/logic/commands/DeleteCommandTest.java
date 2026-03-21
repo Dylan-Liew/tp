@@ -21,6 +21,7 @@ import cms.logic.Messages;
 import cms.model.Model;
 import cms.model.ModelManager;
 import cms.model.UserPrefs;
+import cms.model.person.NusId;
 import cms.model.person.Person;
 
 /**
@@ -63,7 +64,12 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(thirdPersonToDelete);
         expectedModel.deletePerson(firstPersonToDelete);
 
-        assertCommandSuccess(deleteCommand, model, DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, expectedModel);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
+                String.join("\n",
+                        Messages.format(firstPersonToDelete),
+                        Messages.format(thirdPersonToDelete)));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -74,7 +80,65 @@ public class DeleteCommandTest {
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
 
-        assertCommandSuccess(deleteCommand, model, DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS, expectedModel);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validNusIdUnfilteredList_success() {
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = DeleteCommand.byNusId(personToDelete.getNusId());
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validNusIdsUnfilteredList_success() {
+        Person firstPersonToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person thirdPersonToDelete = model.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = DeleteCommand.byNusIds(
+                List.of(firstPersonToDelete.getNusId(), thirdPersonToDelete.getNusId()));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(firstPersonToDelete);
+        expectedModel.deletePerson(thirdPersonToDelete);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
+                String.join("\n",
+                        Messages.format(firstPersonToDelete),
+                        Messages.format(thirdPersonToDelete)));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_invalidNusIdUnfilteredList_throwsCommandException() {
+        DeleteCommand deleteCommand = DeleteCommand.byNusId(new NusId("A9999999Z"));
+
+        assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_INVALID_NUS_ID);
+    }
+
+    @Test
+    public void execute_duplicateNusIdsUnfilteredList_deletesPersonOnce() {
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = DeleteCommand.byNusIds(
+                List.of(personToDelete.getNusId(), personToDelete.getNusId()));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -126,6 +190,11 @@ public class DeleteCommandTest {
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
+        // same nus id values -> returns true
+        DeleteCommand deleteFirstNusIdCommand = DeleteCommand.byNusId(new NusId("A0000001B"));
+        DeleteCommand deleteFirstNusIdCommandCopy = DeleteCommand.byNusId(new NusId("A0000001B"));
+        assertTrue(deleteFirstNusIdCommand.equals(deleteFirstNusIdCommandCopy));
+
         // different types -> returns false
         assertFalse(deleteFirstCommand.equals(1));
 
@@ -137,6 +206,9 @@ public class DeleteCommandTest {
 
         // different number of indexes -> returns false
         assertFalse(deleteFirstCommand.equals(deleteMultipleIndexesCommand));
+
+        // different target type -> returns false
+        assertFalse(deleteFirstCommand.equals(deleteFirstNusIdCommand));
     }
 
     @Test
@@ -150,6 +222,11 @@ public class DeleteCommandTest {
         DeleteCommand multiDeleteCommand = new DeleteCommand(targetIndexes);
         String multiExpected = DeleteCommand.class.getCanonicalName() + "{targetIndexes=" + targetIndexes + "}";
         assertEquals(multiExpected, multiDeleteCommand.toString());
+
+        NusId targetNusId = new NusId("A0000001B");
+        DeleteCommand deleteByNusIdCommand = DeleteCommand.byNusId(targetNusId);
+        String nusIdExpected = DeleteCommand.class.getCanonicalName() + "{targetNusId=" + targetNusId + "}";
+        assertEquals(nusIdExpected, deleteByNusIdCommand.toString());
     }
 
     /**

@@ -63,6 +63,24 @@ public class ParserUtil {
     }
 
     /**
+     * Parses {@code Collection<String> nusIds} into a list of {@code NusId}s.
+     *
+     * @throws ParseException if no NUS IDs are provided or if any provided NUS ID is invalid.
+     */
+    public static List<NusId> parseNusIds(Collection<String> nusIds) throws ParseException {
+        requireNonNull(nusIds);
+        if (nusIds.isEmpty()) {
+            throw new ParseException(NusId.MESSAGE_CONSTRAINTS);
+        }
+
+        List<NusId> parsedNusIds = new ArrayList<>();
+        for (String nusId : nusIds) {
+            parsedNusIds.add(parseNusId(nusId));
+        }
+        return parsedNusIds;
+    }
+
+    /**
      * Parses a {@code String name} into a {@code Name}.
      * Leading and trailing whitespaces will be trimmed.
      *

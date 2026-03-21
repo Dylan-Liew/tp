@@ -6,6 +6,7 @@ package cms.logic.parser;
 public class CliSyntax {
 
     /* Prefix definitions */
+    public static final Prefix PREFIX_ALL = new Prefix("a/");
     public static final Prefix PREFIX_NAME = new Prefix("n/");
     public static final Prefix PREFIX_NUSID = new Prefix("id/");
     public static final Prefix PREFIX_ROLE = new Prefix("role/");

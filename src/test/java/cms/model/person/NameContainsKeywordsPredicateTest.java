@@ -82,4 +82,18 @@ public class NameContainsKeywordsPredicateTest {
         String expected = NameContainsKeywordsPredicate.class.getCanonicalName() + "{keywords=" + keywords + "}";
         assertEquals(expected, predicate.toString());
     }
+
+    @Test
+    public void test_nullKeywords_treatedAsEmpty() {
+        // Constructor should treat null as empty list
+        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(null);
+
+        // Predicate should behave like one constructed with an empty list
+        NameContainsKeywordsPredicate emptyPredicate =
+                new NameContainsKeywordsPredicate(Collections.emptyList());
+        assertEquals(emptyPredicate, predicate);
+
+        // And testing any person should return false
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
+    }
 }

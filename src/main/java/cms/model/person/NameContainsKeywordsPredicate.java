@@ -13,7 +13,7 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
     public NameContainsKeywordsPredicate(List<String> keywords) {
-        this.keywords = keywords;
+        this.keywords = (keywords == null) ? List.of() : keywords;
     }
 
     @Override

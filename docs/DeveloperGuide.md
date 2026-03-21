@@ -414,7 +414,24 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+### Adding a student / tutor
+
+1. Adding a person while all persons are being shown
+
+   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+   1. Test case: `add n/John Doe id/A0123456X role/student soc/johnd gh/john-gh p/91234567 
+      e/john@example.com t/T01`<br>
+      Expected: New contact is added to the list. Details of the added contact shown in the status message.
+
+   1. Test case: `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99 
+      e/david@u.nus.edu p/97654321 t/T05` twice<br>
+      Expected: If a person with the same NUS ID / SoC username / GitHub username / email already exists, 
+      the app shows an error message indicating 
+      a duplicate NUS ID. No person is added. Status bar remains the same.
+
+   1. Other incorrect add commands to try: `add`, `add n/`<br>
+      Expected: Validation errors are shown describing the missing required fields or incorrect format.
 
 ### Deleting a person
 
@@ -423,20 +440,22 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `delete 1 3`<br>
+      Expected: First and third contacts are deleted from the list. Details of the deleted contacts shown in the status message.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+   1. Test case: `delete id/A0000001B`<br>
+      Expected: The contact with NUS ID `A0000001B` is deleted from the list. Details of the deleted contact shown in the status message.
 
-1. _{ more test cases …​ }_
+   1. Test case: `delete id/A0000001B A0000003D`<br>
+      Expected: The contacts with NUS IDs `A0000001B` and `A0000003D` are deleted from the list. Details of the deleted contacts shown in the status message.
 
-### Saving data
+   1. Test case: `delete 1 1`<br>
+      Expected: First contact is deleted only once. Details of the deleted contact shown in the status message.
 
-1. Dealing with missing/corrupted data files
+   1. Test case: `delete id/A0000001B A0000001B`<br>
+      Expected: The contact with NUS ID `A0000001B` is deleted only once. Details of the deleted contact shown in the status message.
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases …​ }_
+   1. Other incorrect delete commands to try: `delete`, `delete 0`, `delete x`, `delete 999`, `delete id/A9999999Z`<br>
+      Expected: Error messages are shown describing the invalid command format or invalid target person(s).
