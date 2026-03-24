@@ -54,15 +54,10 @@ public class FieldConflict {
      * Returns the conflicting field value from the conflicting person.
      */
     public String getFieldValue() {
-        switch (fieldType) {
-        case EMAIL:
-            return conflictingPerson.getEmail().toString();
-        case SOC_USERNAME:
-            return conflictingPerson.getSocUsername().toString();
-        case GITHUB_USERNAME:
-            return conflictingPerson.getGithubUsername().toString();
-        default:
-            throw new IllegalStateException("Unknown conflict field type: " + fieldType);
-        }
+        return switch (fieldType) {
+        case EMAIL -> conflictingPerson.getEmail().toString();
+        case SOC_USERNAME -> conflictingPerson.getSocUsername().toString();
+        case GITHUB_USERNAME -> conflictingPerson.getGithubUsername().toString();
+        };
     }
 }
