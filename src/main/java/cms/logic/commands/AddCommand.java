@@ -39,7 +39,7 @@ public class AddCommand extends Command {
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
-            + PREFIX_NUSID + "A1234567 "
+            + PREFIX_NUSID + "A1234567E "
             + PREFIX_ROLE + "student "
             + PREFIX_SOCUSERNAME + "johndoe "
             + PREFIX_GITHUBUSERNAME + "johndoe "
