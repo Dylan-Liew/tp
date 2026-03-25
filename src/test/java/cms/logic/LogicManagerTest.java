@@ -10,6 +10,13 @@ import static cms.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.ROLE_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.SOCUSERNAME_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.TUTORIALGROUP_DESC_AMY;
+import static cms.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_GITHUBUSERNAME_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_NAME_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSID_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_SOCUSERNAME_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_TUTORIALGROUP_BOB;
 import static cms.testutil.Assert.assertThrows;
 import static cms.testutil.TypicalPersons.AMY;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -210,13 +217,13 @@ public class LogicManagerTest {
         Person expectedCurrentPerson = new PersonBuilder(AMY).withTags().build();
 
         Path importPath = createImportFileWithSinglePerson(new PersonBuilder()
-                .withName("Bob Person")
-                .withNusId("A0000002C")
-                .withSocUsername("bobsoc")
-                .withGithubUsername("bobgit")
-                .withEmail("bob@example.com")
-                .withPhone("91234567")
-                .withTutorialGroup("T02")
+                .withName(VALID_NAME_BOB)
+                .withNusId(VALID_NUSID_BOB)
+                .withSocUsername(VALID_SOCUSERNAME_BOB)
+                .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
                 .build());
 
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
@@ -234,13 +241,13 @@ public class LogicManagerTest {
         Person expectedCurrentPerson = new PersonBuilder(AMY).withTags().build();
 
         Person incomingPerson = new PersonBuilder()
-                .withName("Bob Person")
-                .withNusId("A0000002C")
-                .withSocUsername("bobsoc")
-                .withGithubUsername("bobgit")
-                .withEmail("bob@example.com")
-                .withPhone("91234567")
-                .withTutorialGroup("T02")
+                .withName(VALID_NAME_BOB)
+                .withNusId(VALID_NUSID_BOB)
+                .withSocUsername(VALID_SOCUSERNAME_BOB)
+                .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
                 .build();
         Path importPath = createImportFileWithSinglePerson(incomingPerson);
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
@@ -261,13 +268,13 @@ public class LogicManagerTest {
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
 
         Person incomingPerson = new PersonBuilder()
-                .withName("Bob Person")
-                .withNusId("A0000002C")
-                .withSocUsername("bobsoc")
-                .withGithubUsername("bobgit")
-                .withEmail("bob@example.com")
-                .withPhone("91234567")
-                .withTutorialGroup("T02")
+                .withName(VALID_NAME_BOB)
+                .withNusId(VALID_NUSID_BOB)
+                .withSocUsername(VALID_SOCUSERNAME_BOB)
+                .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
                 .build();
         Path importPath = createImportFileWithSinglePerson(incomingPerson);
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
