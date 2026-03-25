@@ -20,6 +20,7 @@ import cms.logic.commands.DeleteCommand;
 import cms.logic.commands.EditCommand;
 import cms.logic.commands.EditCommand.EditPersonDescriptor;
 import cms.logic.commands.ExitCommand;
+import cms.logic.commands.ExportCommand;
 import cms.logic.commands.FindCommand;
 import cms.logic.commands.HelpCommand;
 import cms.logic.commands.ListCommand;
@@ -70,6 +71,18 @@ public class AddressBookParserTest {
     public void parseCommand_exit() throws Exception {
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD) instanceof ExitCommand);
         assertTrue(parser.parseCommand(ExitCommand.COMMAND_WORD + " 3") instanceof ExitCommand);
+    }
+
+    @Test
+    public void parseCommand_export() throws Exception {
+        String path = "data/export.json";
+        ExportCommand command = (ExportCommand) parser.parseCommand(ExportCommand.COMMAND_WORD + " " + path);
+        assertEquals(new ExportCommand(java.nio.file.Path.of(path)), command);
+
+        String quotedPathWithWhitespace = "C:/Users/Josh/My Documents/export.json";
+        ExportCommand commandQuoted = (ExportCommand) parser.parseCommand(
+            ExportCommand.COMMAND_WORD + " \"" + quotedPathWithWhitespace + "\"");
+        assertEquals(new ExportCommand(java.nio.file.Path.of(quotedPathWithWhitespace)), commandQuoted);
     }
 
     @Test

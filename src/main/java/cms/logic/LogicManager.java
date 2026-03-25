@@ -9,6 +9,7 @@ import cms.commons.core.GuiSettings;
 import cms.commons.core.LogsCenter;
 import cms.logic.commands.Command;
 import cms.logic.commands.CommandResult;
+import cms.logic.commands.ExportCommand;
 import cms.logic.commands.exceptions.CommandException;
 import cms.logic.parser.AddressBookParser;
 import cms.logic.parser.exceptions.ParseException;
@@ -23,9 +24,14 @@ import javafx.collections.ObservableList;
  */
 public class LogicManager implements Logic {
     public static final String FILE_OPS_ERROR_FORMAT = "Could not save data due to the following error: %s";
+    public static final String FILE_OPS_EXPORT_ERROR_FORMAT =
+        "Could not export data to file %s due to the following error: %s";
 
     public static final String FILE_OPS_PERMISSION_ERROR_FORMAT =
             "Could not save data to file %s due to insufficient permissions to write to the file or the folder.";
+
+    public static final String FILE_OPS_EXPORT_PERMISSION_ERROR_FORMAT =
+        "Could not export data to file %s due to insufficient permissions to write to the file or the folder.";
 
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
@@ -56,6 +62,18 @@ public class LogicManager implements Logic {
             throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
         } catch (IOException ioe) {
             throw new CommandException(String.format(FILE_OPS_ERROR_FORMAT, ioe.getMessage()), ioe);
+        }
+
+        if (command instanceof ExportCommand) {
+            Path exportFilePath = ((ExportCommand) command).getExportFilePath();
+            try {
+                storage.saveAddressBook(model.getAddressBook(), exportFilePath);
+            } catch (AccessDeniedException e) {
+                throw new CommandException(String.format(FILE_OPS_EXPORT_PERMISSION_ERROR_FORMAT, exportFilePath), e);
+            } catch (IOException ioe) {
+                throw new CommandException(String.format(FILE_OPS_EXPORT_ERROR_FORMAT,
+                        exportFilePath, ioe.getMessage()), ioe);
+            }
         }
 
         return commandResult;
