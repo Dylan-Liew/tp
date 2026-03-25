@@ -216,6 +216,7 @@ public class LogicManagerTest {
                 .withGithubUsername("bobgit")
                 .withEmail("bob@example.com")
                 .withPhone("91234567")
+                .withTutorialGroup("T02")
                 .build());
 
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
@@ -239,6 +240,7 @@ public class LogicManagerTest {
                 .withGithubUsername("bobgit")
                 .withEmail("bob@example.com")
                 .withPhone("91234567")
+                .withTutorialGroup("T02")
                 .build();
         Path importPath = createImportFileWithSinglePerson(incomingPerson);
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
@@ -265,6 +267,7 @@ public class LogicManagerTest {
                 .withGithubUsername("bobgit")
                 .withEmail("bob@example.com")
                 .withPhone("91234567")
+                .withTutorialGroup("T02")
                 .build();
         Path importPath = createImportFileWithSinglePerson(incomingPerson);
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
