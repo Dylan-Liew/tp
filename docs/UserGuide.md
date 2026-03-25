@@ -43,7 +43,7 @@ Action | Format
 --------|------------------
 **Help** | `help`
 **List** | `list`
-**Add** | `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`<br><br>e.g. `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01`
+**Add** | `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`<br><br>e.g. `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01`
 **Edit** | `edit INDEX [n/NAME] [id/NUS_ID] [role/ROLE] [soc/SOC_USERNAME] [gh/GITHUB_USERNAME] [e/EMAIL] [p/PHONE] [t/TUTORIAL_GROUP] [tag/TAG]...`<br><br>e.g. `edit 2 p/98765432 e/johndoe@example.com`
 **Find** | `find a/KEYWORD [MORE_KEYWORDS]...`<br>`find n/KEYWORD [MORE_NAME_KEYWORDS]...`<br>`find id/NUS_ID [MORE_NUS_IDS]...`<br><br>e.g. `find n/jane n/eunice id/A0123456B`
 **Delete** | `delete INDEX`<br>`delete INDEX [MORE_INDEXES]...`<br>`delete id/NUS_ID`<br><br>e.g. `delete 1 3 5`
@@ -65,7 +65,7 @@ Action | Format
 * `...` means the field can be repeated.
 * Parameters can be in any order.
 * For commands without parameters (`help`, `list`, `exit`, `clear`), extra text is ignored.
-* e.g. `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01 tag/mentor`
+* e.g. `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01 tag/mentor`
 </div>
 
 ### Viewing help : `help`
@@ -89,8 +89,8 @@ All required fields must be valid (See [Fields and accepted formats](#fields-and
 Format: `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`
 
 Examples:
-* `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99 e/david@u.nus.edu p/97654321 t/T05`
-* `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01 tag/python-experienced`
+* `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99 e/david@u.nus.edu p/97654321 t/05`
+* `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01 tag/python-experienced`
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
 Add is rejected if unique fields conflict with an existing person (e.g. same NUS ID / SoC username / GitHub username / email).
@@ -113,7 +113,7 @@ Format: `edit INDEX [n/NAME] [id/NUS_ID] [role/ROLE] [soc/SOC_USERNAME] [gh/GITH
 Examples:
 * `edit 1 p/91234567 e/johndoe@example.com`
 * `edit 2 n/Betsy Crower tag/`
-* `edit 3 id/A0654321B role/student soc/betsy3 gh/betsycrowe t/T07`
+* `edit 3 id/A0654321B role/student soc/betsy3 gh/betsycrowe t/07`
 
 ### Finding students / tutors : `find`
 
@@ -256,7 +256,7 @@ Use this section as a quick checklist for `add` and `edit`.
 * Must be `01` to `99`.
 * Case sensitivity: not applicable (numeric only).
 * Valid: `t/01`
-* Invalid: `t/T01`
+* Invalid: `t/100`
 
 <a id="field-tag"></a>
 **`tag/TAG`**
