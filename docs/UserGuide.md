@@ -253,10 +253,10 @@ Use this section as a quick checklist for `add` and `edit`.
 
 <a id="field-tutorial-group"></a>
 **`t/TUTORIAL_GROUP`**
-* Must be `T01` to `T99`.
-* Case sensitivity: case-sensitive (`T` must be uppercase).
-* Valid: `t/T01`
-* Invalid: `t/t01`
+* Must be `01` to `99`.
+* Case sensitivity: not applicable (numeric only).
+* Valid: `t/01`
+* Invalid: `t/T01`
 
 <a id="field-tag"></a>
 **`tag/TAG`**
@@ -280,14 +280,14 @@ Use this section as a quick checklist for `add` and `edit`.
 
 ## FAQ
 
-**Q**: How do I transfer my data to another computer?
+**Q**: How do I transfer my data to another computer?<br>
 **A**: Install CMS on the other computer, launch once, then replace the new `data/CMS.json` with your old one.
 
-**Q**: Where are my preferences saved?
+**Q**: Where are my preferences saved?<br>
 **A**: Preferences are saved in `preferences.json` in your CMS working directory.
 
-**Q**: Can I undo `delete` or `clear`?
+**Q**: Can I undo `delete` or `clear`?<br>
 **A**: No. There is currently no undo feature, so keep backups of `data/CMS.json` if needed.
 
-**Q**: Why is my `find` command not returning results?
+**Q**: Why is my `find` command not returning results?<br>
 **A**: Check your prefixes and input format (`a/`, `n/`, `id/`), and verify that full-word matching rules are met for name searches.
