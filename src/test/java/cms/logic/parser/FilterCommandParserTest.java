@@ -44,6 +44,13 @@ public class FilterCommandParserTest {
     }
 
     @Test
+    public void parse_tutorialGroupWithoutLeadingZero_success() {
+        FilterCommand expectedCommand =
+                new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(), Set.of(new TutorialGroup("01"))));
+        assertParseSuccess(parser, " t/1", expectedCommand);
+    }
+
+    @Test
     public void parse_tagThenTutorialGroup_success() {
         FilterCommand expectedCommand =
                 new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(new Tag("friend")),
@@ -95,6 +102,12 @@ public class FilterCommandParserTest {
     @Test
     public void parse_zeroTutorialGroup_throwsParseException() {
         assertParseFailure(parser, " t/00",
+                FilterCommandParser.MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_threeDigitTutorialGroup_throwsParseException() {
+        assertParseFailure(parser, " t/001",
                 FilterCommandParser.MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
     }
 

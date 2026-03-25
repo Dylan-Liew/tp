@@ -19,8 +19,8 @@ import cms.model.tag.Tag;
  */
 public class FilterCommandParser implements Parser<FilterCommand> {
     static final String MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS =
-            "Tutorial group filter should be a number between 01 and 99.";
-    private static final String FILTER_TUTORIAL_GROUP_REGEX = "0[1-9]|[1-9][0-9]";
+            "Tutorial group filter should be a number between 1 and 99 (leading zeros are allowed).";
+    private static final String FILTER_TUTORIAL_GROUP_REGEX = "0?[1-9]|[1-9][0-9]";
 
     @Override
     public FilterCommand parse(String args) throws ParseException {
@@ -62,13 +62,17 @@ public class FilterCommandParser implements Parser<FilterCommand> {
 
     /**
      * Parses tutorial group input for the filter command.
-     * Filter users enter groups as 01-99.
+     * Filter users enter groups as 1-99. Single-digit groups are normalised to
+     * two digits to match the stored tutorial-group format.
      */
     private TutorialGroup parseFilterTutorialGroup(String rawTutorialGroup) throws ParseException {
         String trimmedTutorialGroup = rawTutorialGroup.trim();
         if (!trimmedTutorialGroup.matches(FILTER_TUTORIAL_GROUP_REGEX)) {
             throw new ParseException(MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
         }
-        return ParserUtil.parseTutorialGroup(trimmedTutorialGroup);
+        String normalisedTutorialGroup = trimmedTutorialGroup.length() == 1
+                ? "0" + trimmedTutorialGroup
+                : trimmedTutorialGroup;
+        return ParserUtil.parseTutorialGroup(normalisedTutorialGroup);
     }
 }
