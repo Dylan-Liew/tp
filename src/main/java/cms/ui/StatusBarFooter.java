@@ -25,9 +25,15 @@ public class StatusBarFooter extends UiPart<Region> {
     public StatusBarFooter(ObservableList<Person> personList) {
         super(FXML);
         saveLocationStatus.setText("CS2103T Course Manager");
-        totalPersonsStatus.textProperty().bind(Bindings.createStringBinding(
-                () -> personList.size() + (personList.size() == 1 ? " person listed" : " persons listed"),
-                personList));
+        totalPersonsStatus.textProperty()
+                .bind(Bindings.createStringBinding(() -> formatListedPersonCount(personList.size()), personList));
+    }
+
+    /**
+     * Returns the footer text for the number of currently listed persons.
+     */
+    private static String formatListedPersonCount(int personCount) {
+        return personCount == 1 ? "1 person listed" : personCount + " persons listed";
     }
 
 }

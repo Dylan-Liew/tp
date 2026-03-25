@@ -45,6 +45,9 @@ public class PersonDetailPanel extends UiPart<Region> {
     @FXML
     private FlowPane tags;
 
+    /**
+     * Creates an empty detail panel that updates when a person is selected.
+     */
     public PersonDetailPanel() {
         super(FXML);
         showPerson(null);
@@ -91,6 +94,9 @@ public class PersonDetailPanel extends UiPart<Region> {
                 });
     }
 
+    /**
+     * Opens the given URI with the local desktop integration when available.
+     */
     private void openUri(String uriText) {
         if (!Desktop.isDesktopSupported()) {
             return;
