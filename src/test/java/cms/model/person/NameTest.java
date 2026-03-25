@@ -1,6 +1,8 @@
 package cms.model.person;
 
 import static cms.testutil.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,28 +16,27 @@ public class NameTest {
     }
 
     @Test
-    public void constructor_invalidName_throwsIllegalArgumentException() {
-        String invalidName = "";
-        assertThrows(IllegalArgumentException.class, () -> new Name(invalidName));
-    }
-
-    @Test
-    public void isValidName() {
+    public void isValidName_canonicalInput() {
         // null name
         assertThrows(NullPointerException.class, () -> Name.isValidName(null));
 
         // invalid name
         assertFalse(Name.isValidName("")); // empty string
         assertFalse(Name.isValidName(" ")); // spaces only
-        assertFalse(Name.isValidName("^")); // only non-alphanumeric characters
-        assertFalse(Name.isValidName("peter*")); // contains non-alphanumeric characters
+        assertFalse(Name.isValidName("---")); // no alphabetic character
+        assertFalse(Name.isValidName("peter*")); // contains unsupported characters
+        assertFalse(Name.isValidName("John2 Doe")); // numbers are not allowed
+        assertFalse(Name.isValidName("Ravi s/o Kumar")); // slash is not allowed
+        assertFalse(Name.isValidName("a".repeat(Name.MAX_LENGTH + 1))); // too long
 
         // valid name
-        assertTrue(Name.isValidName("peter jack")); // alphabets only
-        assertTrue(Name.isValidName("12345")); // numbers only
-        assertTrue(Name.isValidName("peter the 2nd")); // alphanumeric characters
+        assertTrue(Name.isValidName("peter jack")); // alphabetic and spaces
+        assertTrue(Name.isValidName("O'Brien")); // apostrophe
+        assertTrue(Name.isValidName("Jane-Lim")); // hyphen
+        assertTrue(Name.isValidName("Dr. Tan")); // period
         assertTrue(Name.isValidName("Capital Tan")); // with capital letters
-        assertTrue(Name.isValidName("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(Name.isValidName("a".repeat(Name.MAX_LENGTH))); // length boundary
+        assertTrue(Name.isValidName("David Roger Jackson Ray Junior")); // long names
     }
 
     @Test
@@ -56,5 +57,38 @@ public class NameTest {
 
         // different values -> returns false
         assertFalse(name.equals(new Name("Other Valid Name")));
+    }
+
+    @Test
+    public void constructor_acceptsValidInputs() {
+        // valid names
+        assertDoesNotThrow(() -> new Name("John Doe"));
+        assertDoesNotThrow(() -> new Name("John D."));
+        assertDoesNotThrow(() -> new Name(" John   Doe ")); // should collapse spaces
+    }
+
+    @Test
+    public void constructor_rejectsInvalidInputs() {
+        // invalid names
+        assertThrows(IllegalArgumentException.class, () -> new Name(""));
+        assertThrows(IllegalArgumentException.class, () -> new Name("---"));
+        assertThrows(IllegalArgumentException.class, () -> new Name("/"));
+        assertThrows(IllegalArgumentException.class, () -> new Name("Ravi s/o Kumar"));
+        assertThrows(IllegalArgumentException.class, () -> new Name("John2 Doe"));
+        assertThrows(IllegalArgumentException.class, () -> new Name("John@Doe"));
+        assertThrows(IllegalArgumentException.class, () -> new Name("John$Doe"));
+        assertThrows(IllegalArgumentException.class, () -> new Name("a".repeat(Name.MAX_LENGTH + 1)));
+        assertThrows(IllegalArgumentException.class, () -> new Name(" ")); // blank
+    }
+
+    @Test
+    public void canonicalisation_trimsAndCollapsesInternalSpaces() {
+        Name n = new Name("  John   Doe  ");
+        assertEquals("John Doe", n.fullName);
+    }
+
+    @Test
+    public void canonicalise_null_returnsNull() {
+        assertEquals(null, Name.canonicalise(null));
     }
 }

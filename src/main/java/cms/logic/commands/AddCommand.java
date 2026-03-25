@@ -1,9 +1,14 @@
 package cms.logic.commands;
 
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
+import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
+import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
+import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
+import static cms.logic.parser.CliSyntax.PREFIX_TUTORIALGROUP;
 import static java.util.Objects.requireNonNull;
 
 import cms.commons.util.ToStringBuilder;
@@ -11,6 +16,8 @@ import cms.logic.Messages;
 import cms.logic.commands.exceptions.CommandException;
 import cms.model.Model;
 import cms.model.person.Person;
+import cms.model.person.exceptions.DuplicatePersonException;
+import cms.model.person.exceptions.DuplicatePersonFieldException;
 
 /**
  * Adds a person to the address book.
@@ -22,15 +29,25 @@ public class AddCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the system. "
             + "Parameters: "
             + PREFIX_NAME + "NAME "
-            + PREFIX_PHONE + "PHONE "
+            + PREFIX_NUSID + "NUSID "
+            + PREFIX_ROLE + "ROLE "
+            + PREFIX_SOCUSERNAME + "SOC_USERNAME "
+            + PREFIX_GITHUBUSERNAME + "GITHUB_USERNAME "
             + PREFIX_EMAIL + "EMAIL "
+            + PREFIX_PHONE + "PHONE "
+            + PREFIX_TUTORIALGROUP + "TUTORIAL_GROUP "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
-            + PREFIX_PHONE + "98765432 "
+            + PREFIX_NUSID + "A1234567E "
+            + PREFIX_ROLE + "student "
+            + PREFIX_SOCUSERNAME + "johndoe "
+            + PREFIX_GITHUBUSERNAME + "johndoe "
             + PREFIX_EMAIL + "johnd@example.com "
-            + PREFIX_TAG + "friends "
-            + PREFIX_TAG + "owesMoney";
+            + PREFIX_PHONE + "98765432 "
+            + PREFIX_TUTORIALGROUP + "01 "
+            + PREFIX_TAG + "struggling "
+            + PREFIX_TAG + "python-experienced ";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the system";
@@ -50,16 +67,13 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (model.hasPerson(toAdd)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        try {
+            model.addPerson(toAdd);
+        } catch (DuplicatePersonException | DuplicatePersonFieldException e) {
+            throw new CommandException(e.getMessage());
         }
 
-        if (model.hasPersonWithConflictingField(toAdd)) {
-            throw new CommandException(MESSAGE_DUPLICATE_FIELDS);
-        }
-
-        model.addPerson(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd, model.isMasked())));
     }
 
     @Override

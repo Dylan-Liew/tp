@@ -9,9 +9,8 @@ import static java.util.Objects.requireNonNull;
  */
 public class Phone {
 
-
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should only contain numbers, and it should be at least 3 digits long";
+        "Phone numbers should only contain numbers, and it should be at least 3 digits long";
     public static final String VALIDATION_REGEX = "\\d{3,}";
     public final String value;
 
@@ -22,8 +21,19 @@ public class Phone {
      */
     public Phone(String phone) {
         requireNonNull(phone);
-        checkArgument(isValidPhone(phone), MESSAGE_CONSTRAINTS);
-        value = phone;
+        String canonical = canonicalise(phone);
+        checkArgument(isValidPhone(canonical), MESSAGE_CONSTRAINTS);
+        value = canonical;
+    }
+
+    /**
+     * Canonicalises the phone number by trimming leading and trailing spaces.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.trim();
     }
 
     /**

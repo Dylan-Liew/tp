@@ -9,7 +9,7 @@
       "githubUsername": "valid-p",
       "address": "4th street",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": []
     },
     {
@@ -21,7 +21,7 @@
       "githubUsername": "p-winv",
       "address": "4th street",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": []
     }
   ]

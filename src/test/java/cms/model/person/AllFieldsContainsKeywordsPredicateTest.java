@@ -74,7 +74,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
         AllFieldsContainsKeywordsPredicate pRole = new AllFieldsContainsKeywordsPredicate(Arrays.asList("STUDENT"));
         assertTrue(pRole.test(person));
 
-        // tutorial equalsIgnoreCase
+        // tutorial numeric match
         AllFieldsContainsKeywordsPredicate pTut = new AllFieldsContainsKeywordsPredicate(Arrays.asList("10"));
         assertTrue(pTut.test(person));
 
@@ -135,7 +135,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
     public void onlyTutorialMatches_returnsTrue() {
         Person person = new PersonBuilder().withTutorialGroup("10").build();
         AllFieldsContainsKeywordsPredicate p = new AllFieldsContainsKeywordsPredicate(
-                Collections.singletonList("10"));
+            Collections.singletonList("10"));
         assertTrue(p.test(person));
     }
 
@@ -189,7 +189,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
                 boolean nulGithub, boolean nulRole, boolean nulTutorial) {
             super(new Name("X"), new Phone("11111111"), new Email("x@x.com"), new NusId("A0000001B"),
                     new SocUsername("socuser"), new GithubUsername("ghuser"), Role.STUDENT,
-                    new TutorialGroup("01"), Collections.emptySet());
+                    new TutorialGroup("1"), Collections.emptySet());
             this.nulNusId = nulNusId;
             this.nulPhone = nulPhone;
             this.nulEmail = nulEmail;
@@ -288,7 +288,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
     public void tutorialNull_branchHandled() {
         Person p = new PartialPerson(false, false, false, false, false, false, true);
         AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
-                Collections.singletonList("01"));
+                Collections.singletonList("2"));
         assertFalse(pred.test(p));
     }
 

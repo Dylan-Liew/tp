@@ -9,8 +9,9 @@ import static java.util.Objects.requireNonNull;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tags names should be alphanumeric";
-    public static final String VALIDATION_REGEX = "\\p{Alnum}+";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Tags must be alphanumeric or hyphenated, with no spaces, and cannot start or end with a hyphen.";
+    public static final String VALIDATION_REGEX = "\\p{Alnum}+(?:-\\p{Alnum}+)*";
 
     public final String tagName;
 
@@ -21,8 +22,19 @@ public class Tag {
      */
     public Tag(String tagName) {
         requireNonNull(tagName);
-        checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
-        this.tagName = tagName;
+        String canonical = canonicalise(tagName);
+        checkArgument(isValidTagName(canonical), MESSAGE_CONSTRAINTS);
+        this.tagName = canonical;
+    }
+
+    /**
+     * Canonicalises the tag: trims spaces and converts to lowercase.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.trim().toLowerCase();
     }
 
     /**

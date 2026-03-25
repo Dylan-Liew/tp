@@ -10,9 +10,9 @@ import static java.util.Objects.requireNonNull;
 public class TutorialGroup {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Tutorial group should be a number between 01 and 99.";
-    public static final String VALIDATION_REGEX = "0[1-9]|[1-9][0-9]";
-    public final String value;
+        "Tutorial group should be a number between 1 and 99 (leading zeros are allowed).";
+    public static final String VALIDATION_REGEX = "0*[1-9][0-9]?";
+    public final int value;
 
     /**
      * Constructs a {@code TutorialGroup}.
@@ -21,8 +21,20 @@ public class TutorialGroup {
      */
     public TutorialGroup(String tutorialGroup) {
         requireNonNull(tutorialGroup);
-        checkArgument(isValidTutorialGroup(tutorialGroup), MESSAGE_CONSTRAINTS);
-        value = tutorialGroup;
+        String canonical = canonicalise(tutorialGroup);
+        checkArgument(isValidTutorialGroup(canonical), MESSAGE_CONSTRAINTS);
+        value = Integer.parseInt(canonical);
+    }
+
+    /**
+     * Canonicalises the tutorial group by trimming spaces and removing leading zeros.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        String trimmed = input.trim();
+        return trimmed.replaceFirst("^0+(?!$)", "");
     }
 
     /**
@@ -34,7 +46,7 @@ public class TutorialGroup {
 
     @Override
     public String toString() {
-        return value;
+        return String.valueOf(value);
     }
 
     @Override
@@ -49,12 +61,11 @@ public class TutorialGroup {
         }
 
         TutorialGroup otherTutorialGroup = (TutorialGroup) other;
-        return value.equals(otherTutorialGroup.value);
+        return value == otherTutorialGroup.value;
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return Integer.hashCode(value);
     }
 }
-

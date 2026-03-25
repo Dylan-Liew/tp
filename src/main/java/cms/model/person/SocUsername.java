@@ -11,7 +11,7 @@ public class SocUsername {
 
     public static final String MESSAGE_CONSTRAINTS =
             "SOC username must be 5-8 characters (or a valid NUS-ID form), using only lowercase letters, "
-                    + "digits, and hyphens, and cannot start or end with a hyphen.";
+                + "digits, and hyphens, and cannot start or end with a hyphen.";
     public static final String VALIDATION_REGEX = "^(?=.{5,8}$)(?!-)[a-z0-9-]+(?<!-)$|"
             + NusId.VALIDATION_REGEX; // Either 5-8 chars or valid NUS ID
     public final String value;
@@ -23,8 +23,19 @@ public class SocUsername {
      */
     public SocUsername(String socUsername) {
         requireNonNull(socUsername);
-        checkArgument(isValidSocUsername(socUsername), MESSAGE_CONSTRAINTS);
-        value = socUsername;
+        String canonical = canonicalise(socUsername);
+        checkArgument(isValidSocUsername(canonical), MESSAGE_CONSTRAINTS);
+        value = canonical;
+    }
+
+    /**
+     * Canonicalises the soc username: trims spaces and converts to lowercase.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.trim().toLowerCase();
     }
 
     /**

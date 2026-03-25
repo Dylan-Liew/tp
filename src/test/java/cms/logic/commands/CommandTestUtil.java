@@ -47,8 +47,8 @@ public class CommandTestUtil {
     public static final String VALID_GITHUBUSERNAME_BOB = "bobchoo";
     public static final String VALID_ROLE_AMY = "student";
     public static final String VALID_ROLE_BOB = "tutor";
-    public static final String VALID_TUTORIALGROUP_AMY = "01";
-    public static final String VALID_TUTORIALGROUP_BOB = "02";
+    public static final String VALID_TUTORIALGROUP_AMY = "1";
+    public static final String VALID_TUTORIALGROUP_BOB = "2";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;

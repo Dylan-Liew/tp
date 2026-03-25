@@ -103,6 +103,12 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseName_validValueWithMultipleInternalSpaces_returnsCanonicalizedName() throws Exception {
+        Name expectedName = new Name("Rachel Walker");
+        assertEquals(expectedName, ParserUtil.parseName("Rachel   Walker"));
+    }
+
+    @Test
     public void parsePhone_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parsePhone((String) null));
     }

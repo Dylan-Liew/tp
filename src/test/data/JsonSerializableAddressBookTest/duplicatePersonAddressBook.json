@@ -9,7 +9,7 @@
       "githubUsername": "alice-p",
       "address": "123, Jurong West Ave 6, #08-111",
       "role": "student",
-      "tutorialGroup": "01",
+      "tutorialGroup": "1",
       "tags": [
         "friends"
       ]
@@ -23,7 +23,7 @@
       "githubUsername": "alice-p2",
       "address": "4th street",
       "role": "student",
-      "tutorialGroup": "01",
+      "tutorialGroup": "1",
       "tags": []
     }
   ]

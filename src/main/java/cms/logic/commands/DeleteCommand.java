@@ -98,15 +98,17 @@ public class DeleteCommand extends Command {
 
         if (deletedPersons.size() == 1) {
             return new CommandResult(
-                    String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(deletedPersons.get(0))));
+                    String.format(MESSAGE_DELETE_PERSON_SUCCESS,
+                            Messages.format(deletedPersons.get(0), model.isMasked())));
         }
 
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, formatDeletedPersons(deletedPersons)));
+        return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS,
+                formatDeletedPersons(deletedPersons, model.isMasked())));
     }
 
-    private String formatDeletedPersons(List<Person> deletedPersons) {
+    private String formatDeletedPersons(List<Person> deletedPersons, boolean isMasked) {
         return deletedPersons.stream()
-                .map(Messages::format)
+                .map(person -> Messages.format(person, isMasked))
                 .collect(Collectors.joining("\n"));
     }
 

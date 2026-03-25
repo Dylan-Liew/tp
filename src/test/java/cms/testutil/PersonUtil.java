@@ -41,7 +41,7 @@ public class PersonUtil {
         sb.append(PREFIX_GITHUBUSERNAME + person.getGithubUsername().value + " ");
         sb.append(PREFIX_PHONE + person.getPhone().value + " ");
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
-        sb.append(PREFIX_TUTORIALGROUP + person.getTutorialGroup().value + " ");
+        sb.append(PREFIX_TUTORIALGROUP).append(person.getTutorialGroup().value).append(" ");
         person.getTags().stream().forEach(
                 s -> sb.append(PREFIX_TAG + s.tagName + " ")
         );

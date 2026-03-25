@@ -89,8 +89,8 @@ All required fields must be valid (See [Fields and accepted formats](#fields-and
 Format: `add n/NAME id/NUS_ID role/ROLE soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`
 
 Examples:
-* `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99 e/david@u.nus.edu p/97654321 t/T05`
-* `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/T01 tag/python-experienced`
+* `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99 e/david@u.nus.edu p/97654321 t/5`
+* `add n/John Doe id/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01 tag/python-experienced`
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
 Add is rejected if unique fields conflict with an existing person (e.g. same NUS ID / SoC username / GitHub username / email).
@@ -253,10 +253,9 @@ Use this section as a quick checklist for `add` and `edit`.
 
 <a id="field-tutorial-group"></a>
 **`t/TUTORIAL_GROUP`**
-* Must be `T01` to `T99`.
-* Case sensitivity: case-sensitive (`T` must be uppercase).
-* Valid: `t/T01`
-* Invalid: `t/t01`
+* Must be an integer from 1 to 99.
+* Valid: `t/01`
+* Invalid: `t/0`
 
 <a id="field-tag"></a>
 **`tag/TAG`**

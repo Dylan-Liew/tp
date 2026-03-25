@@ -11,7 +11,10 @@ import cms.logic.Messages;
 import cms.model.Model;
 import cms.model.ModelManager;
 import cms.model.UserPrefs;
+import cms.model.person.FieldConflict;
 import cms.model.person.Person;
+import cms.model.person.exceptions.DuplicatePersonException;
+import cms.model.person.exceptions.DuplicatePersonFieldException;
 import cms.testutil.PersonBuilder;
 
 /**
@@ -45,8 +48,9 @@ public class AddCommandIntegrationTest {
     @Test
     public void execute_duplicatePerson_throwsCommandException() {
         Person personInList = model.getAddressBook().getPersonList().get(0);
+        String expectedMessage = DuplicatePersonException.buildMessage(personInList);
         assertCommandFailure(new AddCommand(personInList), model,
-                AddCommand.MESSAGE_DUPLICATE_PERSON);
+            expectedMessage);
     }
 
     @Test
@@ -56,8 +60,11 @@ public class AddCommandIntegrationTest {
                 .withNusId("A7654321Z")
                 .build();
 
+        String expectedMessage = DuplicatePersonFieldException
+            .buildMessage(new FieldConflict(FieldConflict.Type.EMAIL, personInList));
+
         assertCommandFailure(new AddCommand(editedPerson), model,
-                AddCommand.MESSAGE_DUPLICATE_FIELDS);
+            expectedMessage);
     }
 
 }

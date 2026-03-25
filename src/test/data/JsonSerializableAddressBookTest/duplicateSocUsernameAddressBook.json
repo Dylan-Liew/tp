@@ -9,7 +9,7 @@
       "githubUsername": "janedoe",
       "address": "123, Test Street",
       "role": "student",
-      "tutorialGroup": "01",
+      "tutorialGroup": "1",
       "tags": []
     },
     {
@@ -21,7 +21,7 @@
       "githubUsername": "john-doe",
       "address": "456, Example Avenue",
       "role": "student",
-      "tutorialGroup": "02",
+      "tutorialGroup": "2",
       "tags": []
     }
   ]

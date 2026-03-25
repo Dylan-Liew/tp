@@ -11,8 +11,8 @@ public class GithubUsername {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Github username must be 1-39 characters, using only alphanumeric characters or hyphens, "
-                    + "and cannot start or end with a hyphen.";
-    public static final String VALIDATION_REGEX = "^(?=.{1,39}$)(?!-)[a-zA-Z0-9-]+(?<!-)$";
+                + "cannot start or end with a hyphen, and cannot contain consecutive hyphens.";
+    public static final String VALIDATION_REGEX = "^(?=.{1,39}$)(?!-)(?!.*--)[a-zA-Z0-9-]+(?<!-)$";
     public final String value;
 
     /**

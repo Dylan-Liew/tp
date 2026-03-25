@@ -47,21 +47,21 @@ public class TypicalPersons {
             .withEmail("cornelia@example.com")
             .withNusId("A0234503E").withSocUsername("danielm").withGithubUsername("daniel-m")
             .withTags("friends").build();
-    public static final Person ELLE = new PersonBuilder().withName("Elle Meyer").withPhone("9482224")
+    public static final Person ELLE = new PersonBuilder().withName("Elle Meyer").withPhone("94822244")
             .withEmail("werner@example.com")
             .withNusId("A0234504F").withSocUsername("ellem").withGithubUsername("elle-m").build();
-    public static final Person FIONA = new PersonBuilder().withName("Fiona Kunz").withPhone("9482427")
+    public static final Person FIONA = new PersonBuilder().withName("Fiona Kunz").withPhone("94824277")
             .withEmail("lydia@example.com")
             .withNusId("A0234505G").withSocUsername("fionak").withGithubUsername("fiona-k").build();
-    public static final Person GEORGE = new PersonBuilder().withName("George Best").withPhone("9482442")
+    public static final Person GEORGE = new PersonBuilder().withName("George Best").withPhone("94824422")
             .withEmail("anna@example.com")
             .withNusId("A0234506H").withSocUsername("georgeb").withGithubUsername("george-b").build();
 
     // Manually added
-    public static final Person HOON = new PersonBuilder().withName("Hoon Meier").withPhone("8482424")
+    public static final Person HOON = new PersonBuilder().withName("Hoon Meier").withPhone("84824244")
             .withEmail("stefan@example.com")
             .withNusId("A0234507I").withSocUsername("hoonm").withGithubUsername("hoon-m").build();
-    public static final Person IDA = new PersonBuilder().withName("Ida Mueller").withPhone("8482131")
+    public static final Person IDA = new PersonBuilder().withName("Ida Mueller").withPhone("84821311")
             .withEmail("hans@example.com")
             .withNusId("A0234508J").withSocUsername("idaml").withGithubUsername("ida-m").build();
 
