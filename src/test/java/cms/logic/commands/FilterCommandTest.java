@@ -93,7 +93,7 @@ public class FilterCommandTest {
     }
 
     @Test
-    public void execute_repeatedTags_requiresAllTags_success() {
+    public void execute_repeatedTagsRequiresAllTags_success() {
         Model localModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model localExpectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Person dualTaggedPerson = new PersonBuilder().withName("Hannah Dualtag")
@@ -109,12 +109,13 @@ public class FilterCommandTest {
         FilterCommand command = new FilterCommand(predicate);
 
         localExpectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, localModel, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2), localExpectedModel);
+        assertCommandSuccess(command, localModel,
+                String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2), localExpectedModel);
         assertEquals(Arrays.asList(BENSON, dualTaggedPerson), localModel.getFilteredPersonList());
     }
 
     @Test
-    public void execute_repeatedTutorialGroups_matchesAnyTutorialGroup_success() {
+    public void execute_repeatedTutorialGroupsRejected_success() {
         TagTutorialGroupMatchesPredicate predicate =
                 new TagTutorialGroupMatchesPredicate(Set.of(),
                         Set.of(new TutorialGroup("T01"), new TutorialGroup("T02")));
