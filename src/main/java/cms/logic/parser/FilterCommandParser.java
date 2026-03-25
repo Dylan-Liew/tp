@@ -18,6 +18,9 @@ import cms.model.tag.Tag;
  * Parses input arguments and creates a new {@code FilterCommand} object.
  */
 public class FilterCommandParser implements Parser<FilterCommand> {
+    static final String MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS =
+            "Tutorial group filter should be a number between 01 and 99.";
+    private static final String FILTER_TUTORIAL_GROUP_REGEX = "0[1-9]|[1-9][0-9]";
 
     @Override
     public FilterCommand parse(String args) throws ParseException {
@@ -52,8 +55,20 @@ public class FilterCommandParser implements Parser<FilterCommand> {
     private Set<TutorialGroup> parseTutorialGroups(List<String> rawTutorialGroups) throws ParseException {
         Set<TutorialGroup> parsedTutorialGroups = new LinkedHashSet<>();
         for (String rawTutorialGroup : rawTutorialGroups) {
-            parsedTutorialGroups.add(ParserUtil.parseTutorialGroup(rawTutorialGroup));
+            parsedTutorialGroups.add(parseFilterTutorialGroup(rawTutorialGroup));
         }
         return parsedTutorialGroups;
+    }
+
+    /**
+     * Parses tutorial group input for the filter command.
+     * Filter users enter groups as 01-99, which map to stored values such as T01-T99.
+     */
+    private TutorialGroup parseFilterTutorialGroup(String rawTutorialGroup) throws ParseException {
+        String trimmedTutorialGroup = rawTutorialGroup.trim();
+        if (!trimmedTutorialGroup.matches(FILTER_TUTORIAL_GROUP_REGEX)) {
+            throw new ParseException(MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
+        }
+        return ParserUtil.parseTutorialGroup("T" + trimmedTutorialGroup);
     }
 }

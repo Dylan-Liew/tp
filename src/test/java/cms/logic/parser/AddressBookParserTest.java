@@ -92,7 +92,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_filter() throws Exception {
         FilterCommand command = (FilterCommand) parser.parseCommand(
-                FilterCommand.COMMAND_WORD + " tag/friends t/T01");
+                FilterCommand.COMMAND_WORD + " tag/friends t/01");
         assertEquals(new FilterCommand(
                 new TagTutorialGroupMatchesPredicate(java.util.Set.of(new Tag("friends")),
                         java.util.Set.of(new TutorialGroup("T01")))),

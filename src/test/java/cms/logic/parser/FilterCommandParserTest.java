@@ -40,7 +40,7 @@ public class FilterCommandParserTest {
     public void parse_tutorialGroupOnly_success() {
         FilterCommand expectedCommand =
                 new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(), Set.of(new TutorialGroup("T01"))));
-        assertParseSuccess(parser, " t/T01", expectedCommand);
+        assertParseSuccess(parser, " t/01", expectedCommand);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class FilterCommandParserTest {
         FilterCommand expectedCommand =
                 new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(new Tag("friend")),
                         Set.of(new TutorialGroup("T01"))));
-        assertParseSuccess(parser, " tag/friend t/T01", expectedCommand);
+        assertParseSuccess(parser, " tag/friend t/01", expectedCommand);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class FilterCommandParserTest {
         FilterCommand expectedCommand =
                 new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(new Tag("friend")),
                         Set.of(new TutorialGroup("T01"))));
-        assertParseSuccess(parser, " t/T01 tag/friend", expectedCommand);
+        assertParseSuccess(parser, " t/01 tag/friend", expectedCommand);
     }
 
     @Test
@@ -64,13 +64,20 @@ public class FilterCommandParserTest {
         FilterCommand expectedCommand =
                 new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(new Tag("friend"), new Tag("husband")),
                         Set.of(new TutorialGroup("T01"))));
-        assertParseSuccess(parser, " tag/friend tag/husband t/T01", expectedCommand);
+        assertParseSuccess(parser, " tag/friend tag/husband t/01", expectedCommand);
     }
 
     @Test
     public void parse_duplicateTutorialGroup_throwsParseException() {
-        assertParseFailure(parser, " t/T01 t/T02",
+        assertParseFailure(parser, " t/01 t/02",
                 cms.logic.Messages.getErrorMessageForDuplicatePrefixes(CliSyntax.PREFIX_TUTORIALGROUP));
+    }
+
+    @Test
+    public void parse_upperBoundTutorialGroup_success() {
+        FilterCommand expectedCommand =
+                new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(), Set.of(new TutorialGroup("T99"))));
+        assertParseSuccess(parser, " t/99", expectedCommand);
     }
 
     @Test
@@ -81,8 +88,14 @@ public class FilterCommandParserTest {
 
     @Test
     public void parse_invalidTutorialGroup_throwsParseException() {
-        assertParseFailure(parser, " t/t01",
-                cms.model.person.TutorialGroup.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " t/T01",
+                FilterCommandParser.MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_zeroTutorialGroup_throwsParseException() {
+        assertParseFailure(parser, " t/00",
+                FilterCommandParser.MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
     }
 
     @Test
@@ -94,7 +107,7 @@ public class FilterCommandParserTest {
     @Test
     public void parse_blankTutorialGroup_throwsParseException() {
         assertParseFailure(parser, " t/",
-                cms.model.person.TutorialGroup.MESSAGE_CONSTRAINTS);
+                FilterCommandParser.MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
     }
 
     @Test

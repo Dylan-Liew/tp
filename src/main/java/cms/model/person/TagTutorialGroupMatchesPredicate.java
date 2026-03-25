@@ -41,7 +41,7 @@ public class TagTutorialGroupMatchesPredicate implements Predicate<Person> {
 
         boolean matchesTutorialGroups = tutorialGroups.isEmpty()
                 || tutorialGroups.stream()
-                .anyMatch(filterGroup -> person.getTutorialGroup().value.equalsIgnoreCase(filterGroup.value));
+                .anyMatch(filterGroup -> filterGroup.equals(person.getTutorialGroup()));
 
         return matchesTags && matchesTutorialGroups;
     }

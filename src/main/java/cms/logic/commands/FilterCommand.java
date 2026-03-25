@@ -18,11 +18,11 @@ public class FilterCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Filters persons by tag, tutorial group, or both.\n"
-            + "Parameters: [tag/TAG]... [t/TUTORIAL_GROUP]...\n"
+            + "Parameters: [tag/TAG]... [t/TUTORIAL_GROUP_NUMBER]...\n"
             + "Examples: " + COMMAND_WORD + " tag/friend, "
-            + COMMAND_WORD + " t/T01, "
-            + COMMAND_WORD + " tag/friend t/T01, "
-            + COMMAND_WORD + " t/T01 tag/friend";
+            + COMMAND_WORD + " t/01, "
+            + COMMAND_WORD + " tag/friend t/01, "
+            + COMMAND_WORD + " t/01 tag/friend";
 
     private final Predicate<Person> predicate;
 
