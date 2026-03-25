@@ -91,6 +91,13 @@ public class LogicManagerTest {
         assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredPersonList().remove(0));
     }
 
+    @Test
+    public void isMasked_reflectsModelPreference() {
+        assertEquals(false, logic.isMasked());
+        model.setMasked(true);
+        assertEquals(true, logic.isMasked());
+    }
+
     /**
      * Executes the command and confirms that
      * - no exceptions are thrown <br>

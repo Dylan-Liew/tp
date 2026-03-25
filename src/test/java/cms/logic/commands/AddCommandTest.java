@@ -131,6 +131,16 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean isMasked() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setMasked(boolean isMasked) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void addPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }
@@ -205,6 +215,11 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+
+        @Override
+        public boolean isMasked() {
+            return false;
+        }
 
         @Override
         public boolean hasPerson(Person person) {

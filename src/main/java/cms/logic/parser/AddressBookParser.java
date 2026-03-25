@@ -17,6 +17,8 @@ import cms.logic.commands.ExitCommand;
 import cms.logic.commands.FindCommand;
 import cms.logic.commands.HelpCommand;
 import cms.logic.commands.ListCommand;
+import cms.logic.commands.MaskCommand;
+import cms.logic.commands.UnmaskCommand;
 import cms.logic.parser.exceptions.ParseException;
 
 /**
@@ -70,6 +72,12 @@ public class AddressBookParser {
 
         case ListCommand.COMMAND_WORD:
             return new ListCommand();
+
+        case MaskCommand.COMMAND_WORD:
+            return new MaskCommand();
+
+        case UnmaskCommand.COMMAND_WORD:
+            return new UnmaskCommand();
 
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();

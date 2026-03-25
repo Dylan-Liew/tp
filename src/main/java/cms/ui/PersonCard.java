@@ -2,6 +2,7 @@ package cms.ui;
 
 import java.util.Comparator;
 
+import cms.commons.util.MaskingUtil;
 import cms.model.person.Person;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -54,16 +55,20 @@ public class PersonCard extends UiPart<Region> {
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
      */
-    public PersonCard(Person person, int displayedIndex) {
+    public PersonCard(Person person, int displayedIndex, boolean isMasked) {
         super(FXML);
         this.person = person;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
-        phone.setText(person.getPhone().value);
-        email.setText(person.getEmail().value);
+        phone.setText(isMasked ? MaskingUtil.maskPhone(person.getPhone()) : person.getPhone().value);
+        email.setText(isMasked ? MaskingUtil.maskEmail(person.getEmail()) : person.getEmail().value);
         nusId.setText(person.getNusId().value);
-        socUsername.setText(person.getSocUsername().value);
-        githubUsername.setText(person.getGithubUsername().value);
+        socUsername.setText(isMasked
+                ? MaskingUtil.maskSocUsername(person.getSocUsername())
+                : person.getSocUsername().value);
+        githubUsername.setText(isMasked
+                ? MaskingUtil.maskGithubUsername(person.getGithubUsername())
+                : person.getGithubUsername().value);
         role.setText(person.getRole().value);
         tutorialGroup.setText(person.getTutorialGroup().value);
         person.getTags().stream()

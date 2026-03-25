@@ -73,6 +73,13 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void setMasked_updatesMaskPreference() {
+        assertFalse(modelManager.isMasked());
+        modelManager.setMasked(true);
+        assertTrue(modelManager.isMasked());
+    }
+
+    @Test
     public void hasPerson_nullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> modelManager.hasPerson(null));
     }
