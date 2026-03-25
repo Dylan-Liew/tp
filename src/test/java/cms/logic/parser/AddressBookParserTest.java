@@ -20,6 +20,7 @@ import cms.logic.commands.DeleteCommand;
 import cms.logic.commands.EditCommand;
 import cms.logic.commands.EditCommand.EditPersonDescriptor;
 import cms.logic.commands.ExitCommand;
+import cms.logic.commands.FilterCommand;
 import cms.logic.commands.FindCommand;
 import cms.logic.commands.HelpCommand;
 import cms.logic.commands.ListCommand;
@@ -29,6 +30,9 @@ import cms.model.person.CombinedFindPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
 import cms.model.person.NusIdContainsKeywordsPredicate;
 import cms.model.person.Person;
+import cms.model.person.TagTutorialGroupMatchesPredicate;
+import cms.model.person.TutorialGroup;
+import cms.model.tag.Tag;
 import cms.testutil.EditPersonDescriptorBuilder;
 import cms.testutil.PersonBuilder;
 import cms.testutil.PersonUtil;
@@ -83,6 +87,16 @@ public class AddressBookParserTest {
                         new NameContainsKeywordsPredicate(keywords),
                         new NusIdContainsKeywordsPredicate(java.util.Collections.emptyList())
                 )), command);
+    }
+
+    @Test
+    public void parseCommand_filter() throws Exception {
+        FilterCommand command = (FilterCommand) parser.parseCommand(
+                FilterCommand.COMMAND_WORD + " tag/friends t/T01");
+        assertEquals(new FilterCommand(
+                new TagTutorialGroupMatchesPredicate(java.util.Set.of(new Tag("friends")),
+                        java.util.Set.of(new TutorialGroup("T01")))),
+                command);
     }
 
     @Test
