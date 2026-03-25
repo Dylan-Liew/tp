@@ -23,6 +23,7 @@ import cms.logic.commands.ExitCommand;
 import cms.logic.commands.ExportCommand;
 import cms.logic.commands.FindCommand;
 import cms.logic.commands.HelpCommand;
+import cms.logic.commands.ImportCommand;
 import cms.logic.commands.ListCommand;
 import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.AllFieldsContainsKeywordsPredicate;
@@ -83,6 +84,18 @@ public class AddressBookParserTest {
         ExportCommand commandQuoted = (ExportCommand) parser.parseCommand(
             ExportCommand.COMMAND_WORD + " \"" + quotedPathWithWhitespace + "\"");
         assertEquals(new ExportCommand(java.nio.file.Path.of(quotedPathWithWhitespace)), commandQuoted);
+    }
+
+    @Test
+    public void parseCommand_import() throws Exception {
+        String path = "data/import.json";
+        ImportCommand command = (ImportCommand) parser.parseCommand(ImportCommand.COMMAND_WORD + " " + path);
+        assertEquals(new ImportCommand(java.nio.file.Path.of(path)), command);
+
+        String quotedPathWithWhitespace = "C:/Users/Josh/My Documents/import.json";
+        ImportCommand commandQuoted = (ImportCommand) parser.parseCommand(
+                ImportCommand.COMMAND_WORD + " \"" + quotedPathWithWhitespace + "\"");
+        assertEquals(new ImportCommand(java.nio.file.Path.of(quotedPathWithWhitespace)), commandQuoted);
     }
 
     @Test

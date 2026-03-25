@@ -19,17 +19,21 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import cms.commons.exceptions.DataLoadingException;
 import cms.logic.commands.AddCommand;
 import cms.logic.commands.CommandResult;
 import cms.logic.commands.ExportCommand;
+import cms.logic.commands.ImportCommand;
 import cms.logic.commands.ListCommand;
 import cms.logic.commands.exceptions.CommandException;
 import cms.logic.parser.exceptions.ParseException;
+import cms.model.AddressBook;
 import cms.model.Model;
 import cms.model.ModelManager;
 import cms.model.ReadOnlyAddressBook;
@@ -130,6 +134,72 @@ public class LogicManagerTest {
 
         assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, exportPath), result.getFeedbackToUser());
         assertTrue(Files.exists(exportPath));
+    }
+
+    @Test
+    public void execute_importCommand_readsFromSpecifiedPath() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
+                + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
+                + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY;
+        logic.execute(addCommand);
+
+        Path exportPath = temporaryFolder.resolve("exports").resolve("importSource.json");
+        logic.execute(ExportCommand.COMMAND_WORD + " \"" + exportPath + "\"");
+
+        model.setAddressBook(new AddressBook());
+        assertEquals(0, model.getFilteredPersonList().size());
+
+        String importCommand = ImportCommand.COMMAND_WORD + " \"" + exportPath + "\"";
+        CommandResult result = logic.execute(importCommand);
+
+        assertEquals(String.format(ImportCommand.MESSAGE_SUCCESS, exportPath), result.getFeedbackToUser());
+        assertEquals(1, model.getFilteredPersonList().size());
+    }
+
+    @Test
+    public void execute_importCommandEmptyFile_throwsCommandException() {
+        Path prefPath = temporaryFolder.resolve("addressBook.json");
+
+        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(prefPath) {
+            @Override
+            public Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException {
+                return Optional.empty();
+            }
+        };
+
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("ExceptionUserPrefs.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        logic = new LogicManager(model, storage);
+
+        Path importPath = temporaryFolder.resolve("imports").resolve("empty.json");
+        String importCommand = ImportCommand.COMMAND_WORD + " \"" + importPath + "\"";
+
+        assertCommandFailure(importCommand, CommandException.class,
+                "Import file is empty or not a valid address book data file.");
+    }
+
+    @Test
+    public void execute_importCommandInvalidData_throwsCommandException() {
+        Path prefPath = temporaryFolder.resolve("addressBook.json");
+
+        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(prefPath) {
+            @Override
+            public Optional<ReadOnlyAddressBook> readAddressBook(Path filePath) throws DataLoadingException {
+                throw new DataLoadingException(new IOException("invalid data"));
+            }
+        };
+
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("ExceptionUserPrefs.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        logic = new LogicManager(model, storage);
+
+        Path importPath = temporaryFolder.resolve("imports").resolve("invalid.json");
+        String importCommand = ImportCommand.COMMAND_WORD + " \"" + importPath + "\"";
+
+        assertCommandFailure(importCommand, CommandException.class,
+                "Import file contains invalid address book data.");
     }
 
     @Test
