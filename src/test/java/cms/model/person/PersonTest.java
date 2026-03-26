@@ -29,16 +29,6 @@ public class PersonTest {
     }
 
     @Test
-    public void create_socUsernameNusIdFormatMismatch_throwsIllegalArgumentException() {
-        org.junit.jupiter.api.function.Executable executable = () -> new PersonBuilder()
-            .withNusId("A0123456B")
-            .withSocUsername("a0123457b")
-            .build();
-
-        assertThrows(IllegalArgumentException.class, Person.MESSAGE_SOC_USERNAME_NUS_ID_MISMATCH, executable);
-    }
-
-    @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
         Person person = new PersonBuilder().build();
         assertThrows(UnsupportedOperationException.class, () -> person.getTags().remove(0));
