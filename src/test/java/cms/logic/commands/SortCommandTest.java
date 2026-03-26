@@ -27,7 +27,7 @@ public class SortCommandTest {
                 .withEmail("sort-command-a@test.com")
                 .withSocUsername("sortcmd1")
                 .withGithubUsername("sortcmd-gh-1")
-                .withTutorialGroup("T10")
+                .withTutorialGroup("10")
                 .build();
         Person tutorialGroupTwo = new PersonBuilder()
                 .withName("Sort Command Beta")
@@ -35,7 +35,7 @@ public class SortCommandTest {
                 .withEmail("sort-command-b@test.com")
                 .withSocUsername("sortcmd2")
                 .withGithubUsername("sortcmd-gh-2")
-                .withTutorialGroup("T02")
+                .withTutorialGroup("02")
                 .build();
 
         AddressBook addressBook = new AddressBook();

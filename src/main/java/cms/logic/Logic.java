@@ -50,4 +50,9 @@ public interface Logic {
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /**
+     * Returns whether sensitive fields should be masked in displays.
+     */
+    boolean isMasked();
 }

@@ -27,7 +27,7 @@ public class PersonBuilder {
     public static final String DEFAULT_SOCUSERNAME = "amybee";
     public static final String DEFAULT_GITHUBUSERNAME = "amybee";
     public static final Role DEFAULT_ROLE = Role.STUDENT;
-    public static final String DEFAULT_TUTORIALGROUP = "T01";
+    public static final String DEFAULT_TUTORIALGROUP = "1";
 
     private Name name;
     private Phone phone;

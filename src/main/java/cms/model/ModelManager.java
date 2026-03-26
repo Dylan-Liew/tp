@@ -75,6 +75,16 @@ public class ModelManager implements Model {
         userPrefs.setAddressBookFilePath(addressBookFilePath);
     }
 
+    @Override
+    public boolean isMasked() {
+        return userPrefs.isMasked();
+    }
+
+    @Override
+    public void setMasked(boolean isMasked) {
+        userPrefs.setMasked(isMasked);
+    }
+
     // =========== AddressBook ================================================================================
 
     @Override

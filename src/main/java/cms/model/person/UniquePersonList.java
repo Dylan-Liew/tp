@@ -56,8 +56,9 @@ public class UniquePersonList implements Iterable<Person> {
      */
     public void add(Person toAdd) {
         requireNonNull(toAdd);
-        if (contains(toAdd)) {
-            throw new DuplicatePersonException();
+        Person conflictingPerson = findPersonWithSameIdentity(toAdd);
+        if (conflictingPerson != null) {
+            throw new DuplicatePersonException(conflictingPerson);
         }
         ensureNoFieldConflict(toAdd, null);
         internalList.add(toAdd);
@@ -77,8 +78,11 @@ public class UniquePersonList implements Iterable<Person> {
             throw new PersonNotFoundException();
         }
 
-        if (!target.isSamePerson(editedPerson) && contains(editedPerson)) {
-            throw new DuplicatePersonException();
+        if (!target.isSamePerson(editedPerson)) {
+            Person duplicatePerson = findPersonWithSameIdentity(editedPerson);
+            if (duplicatePerson != null) {
+                throw new DuplicatePersonException(duplicatePerson);
+            }
         }
 
         ensureNoFieldConflict(editedPerson, target);
@@ -114,12 +118,11 @@ public class UniquePersonList implements Iterable<Person> {
 
     /**
      * Sorts the internal list by tutorial group number in ascending order.
-     * TutorialGroup values are in the format "Txx" where xx is 01..99, so
-     * lexicographical ordering matches numeric ordering.
+     * TutorialGroup values are stored as integers, so numeric ordering is used.
      */
     public void sortByTutorialGroup() {
         FXCollections.sort(internalList, (first, second) ->
-                first.getTutorialGroup().value.compareTo(second.getTutorialGroup().value));
+                Integer.compare(first.getTutorialGroup().value, second.getTutorialGroup().value));
     }
 
     /**
@@ -171,8 +174,7 @@ public class UniquePersonList implements Iterable<Person> {
         for (int i = 0; i < persons.size() - 1; i++) {
             for (int j = i + 1; j < persons.size(); j++) {
                 if (persons.get(i).isSamePerson(persons.get(j))) {
-                    throw new DuplicatePersonException(persons.get(i).toString()
-                            + " and " + persons.get(j).toString());
+                    throw new DuplicatePersonException(persons.get(j));
                 }
 
                 FieldConflict conflict = persons.get(i).findConflictingField(persons.get(j));
@@ -205,6 +207,19 @@ public class UniquePersonList implements Iterable<Person> {
                 throw new DuplicatePersonFieldException(conflict);
             }
         }
+    }
+
+    /**
+     * Returns the person in the list with the same identity as {@code personToCheck}, if any.
+     */
+    private Person findPersonWithSameIdentity(Person personToCheck) {
+        for (Person existingPerson : internalList) {
+            if (existingPerson.isSamePerson(personToCheck)) {
+                return existingPerson;
+            }
+        }
+
+        return null;
     }
 
 }

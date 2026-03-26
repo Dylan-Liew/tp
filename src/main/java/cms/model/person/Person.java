@@ -111,15 +111,15 @@ public class Person {
         }
 
         if (email.equals(otherPerson.email)) {
-            return new FieldConflict("email", otherPerson.email.toString());
+            return new FieldConflict(FieldConflict.Type.EMAIL, otherPerson);
         }
 
         if (socUsername.equals(otherPerson.socUsername)) {
-            return new FieldConflict("SOC username", otherPerson.socUsername.toString());
+            return new FieldConflict(FieldConflict.Type.SOC_USERNAME, otherPerson);
         }
 
         if (githubUsername.equals(otherPerson.githubUsername)) {
-            return new FieldConflict("GitHub username", otherPerson.githubUsername.toString());
+            return new FieldConflict(FieldConflict.Type.GITHUB_USERNAME, otherPerson);
         }
 
         return null;

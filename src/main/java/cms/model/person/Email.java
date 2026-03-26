@@ -40,8 +40,19 @@ public class Email {
      */
     public Email(String email) {
         requireNonNull(email);
-        checkArgument(isValidEmail(email), MESSAGE_CONSTRAINTS);
-        value = email;
+        String canonical = canonicalise(email);
+        checkArgument(isValidEmail(canonical), MESSAGE_CONSTRAINTS);
+        value = canonical;
+    }
+
+    /**
+     * Canonicalises the email: trims spaces and converts to lowercase.
+     */
+    public static String canonicalise(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.trim().toLowerCase();
     }
 
     /**

@@ -10,7 +10,7 @@
       "githubUsername": "amybee",
       "address": "123, Jurong West Ave 6, #08-111",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": [
         "friends"
       ]
@@ -24,7 +24,7 @@
       "githubUsername": "benson-m",
       "address": "311, Clementi Ave 2, #02-25",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": [
         "owesMoney",
         "friends"
@@ -39,7 +39,7 @@
       "githubUsername": "carl-kurz",
       "address": "wall street",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": []
     },
     {
@@ -51,45 +51,45 @@
       "githubUsername": "daniel-m",
       "address": "10th street",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": [
         "friends"
       ]
     },
     {
       "name": "Elle Meyer",
-      "phone": "9482224",
+      "phone": "94822244",
       "email": "werner@example.com",
       "nusId": "A0234504F",
       "socUsername": "ellem",
       "githubUsername": "elle-m",
       "address": "michegan ave",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": []
     },
     {
       "name": "Fiona Kunz",
-      "phone": "9482427",
+      "phone": "94824277",
       "email": "lydia@example.com",
       "nusId": "A0234505G",
       "socUsername": "fionak",
       "githubUsername": "fiona-k",
       "address": "little tokyo",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": []
     },
     {
       "name": "George Best",
-      "phone": "9482442",
+      "phone": "94824422",
       "email": "anna@example.com",
       "nusId": "A0234506H",
       "socUsername": "georgeb",
       "githubUsername": "george-b",
       "address": "4th street",
       "role": "student",
-      "tutorialGroup": "T01",
+      "tutorialGroup": "1",
       "tags": []
     }
   ]

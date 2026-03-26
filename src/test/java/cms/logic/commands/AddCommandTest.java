@@ -21,7 +21,10 @@ import cms.model.AddressBook;
 import cms.model.Model;
 import cms.model.ReadOnlyAddressBook;
 import cms.model.ReadOnlyUserPrefs;
+import cms.model.person.FieldConflict;
 import cms.model.person.Person;
+import cms.model.person.exceptions.DuplicatePersonException;
+import cms.model.person.exceptions.DuplicatePersonFieldException;
 import cms.testutil.PersonBuilder;
 import javafx.collections.ObservableList;
 
@@ -50,7 +53,8 @@ public class AddCommandTest {
         AddCommand addCommand = new AddCommand(validPerson);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+        String expectedMessage = DuplicatePersonException.buildMessage(validPerson);
+        assertThrows(CommandException.class, expectedMessage, () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -62,7 +66,9 @@ public class AddCommandTest {
         AddCommand addCommand = new AddCommand(editedPerson);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
-        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_FIELDS, () -> addCommand.execute(modelStub));
+        String expectedMessage = DuplicatePersonFieldException.buildMessage(
+            new FieldConflict(FieldConflict.Type.EMAIL, validPerson));
+        assertThrows(CommandException.class, expectedMessage, () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -127,6 +133,16 @@ public class AddCommandTest {
 
         @Override
         public void setAddressBookFilePath(Path addressBookFilePath) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean isMasked() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setMasked(boolean isMasked) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -203,6 +219,20 @@ public class AddCommandTest {
             requireNonNull(person);
             return this.person.findConflictingField(person) != null;
         }
+
+        @Override
+        public void addPerson(Person person) {
+            requireNonNull(person);
+            if (this.person.isSamePerson(person)) {
+                throw new DuplicatePersonException(this.person);
+            }
+
+            if (person.findConflictingField(this.person) != null) {
+                throw new DuplicatePersonFieldException(person.findConflictingField(this.person));
+            }
+
+            throw new AssertionError("This method should not be called for non-conflicting persons.");
+        }
     }
 
     /**
@@ -210,6 +240,11 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+
+        @Override
+        public boolean isMasked() {
+            return false;
+        }
 
         @Override
         public boolean hasPerson(Person person) {

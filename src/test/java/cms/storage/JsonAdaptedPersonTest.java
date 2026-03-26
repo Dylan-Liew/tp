@@ -60,6 +60,14 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_nameWithExtraSpaces_returnsCanonicalizedPerson() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson("  " + VALID_NAME + "   ", VALID_PHONE, VALID_EMAIL,
+                VALID_NUSID, VALID_SOCUSERNAME, VALID_GITHUBUSERNAME,
+                VALID_ROLE, VALID_TUTORIALGROUP, VALID_TAGS);
+        assertEquals(BENSON, person.toModelType());
+    }
+
+    @Test
     public void toModelType_invalidPhone_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, INVALID_PHONE, VALID_EMAIL, VALID_NUSID,

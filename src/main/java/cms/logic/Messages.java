@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import cms.commons.util.MaskingUtil;
 import cms.logic.parser.Prefix;
 import cms.model.person.Person;
 
@@ -35,18 +36,31 @@ public class Messages {
      * Formats the {@code person} for display to the user.
      */
     public static String format(Person person) {
+        return format(person, false);
+    }
+
+    /**
+     * Formats the {@code person} for display to the user, optionally masking sensitive fields.
+     */
+    public static String format(Person person, boolean isMasked) {
+        String phone = isMasked ? MaskingUtil.maskPhone(person.getPhone()) : person.getPhone().toString();
+        String email = isMasked ? MaskingUtil.maskEmail(person.getEmail()) : person.getEmail().toString();
+        String socUsername = isMasked ? MaskingUtil.maskSocUsername(person.getSocUsername())
+                : person.getSocUsername().toString();
+        String githubUsername = isMasked ? MaskingUtil.maskGithubUsername(person.getGithubUsername())
+                : person.getGithubUsername().toString();
         final StringBuilder builder = new StringBuilder();
         builder.append(person.getName())
                 .append("; Phone: ")
-                .append(person.getPhone())
+                .append(phone)
                 .append("; Email: ")
-                .append(person.getEmail())
+                .append(email)
                 .append("; NUS ID: ")
                 .append(person.getNusId())
                 .append("; SoC Username: ")
-                .append(person.getSocUsername())
+                .append(socUsername)
                 .append("; GitHub Username: ")
-                .append(person.getGithubUsername())
+                .append(githubUsername)
                 .append("; Role: ")
                 .append(person.getRole())
                 .append("; Tutorial Group: ")

@@ -33,7 +33,7 @@ public class AllFieldsContainsKeywordsPredicate implements Predicate<Person> {
             boolean matchesRole = person.getRole() != null
                     && person.getRole().value.equalsIgnoreCase(keyword);
             boolean matchesTutorial = person.getTutorialGroup() != null
-                    && person.getTutorialGroup().value.equalsIgnoreCase(keyword);
+                    && person.getTutorialGroup().toString().contains(keyword);
             boolean matchesTag = person.getTags().stream()
                     .anyMatch(tag -> tag.tagName.equalsIgnoreCase(keyword));
 

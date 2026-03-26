@@ -23,7 +23,9 @@ import cms.logic.commands.ExitCommand;
 import cms.logic.commands.FindCommand;
 import cms.logic.commands.HelpCommand;
 import cms.logic.commands.ListCommand;
+import cms.logic.commands.MaskCommand;
 import cms.logic.commands.SortCommand;
+import cms.logic.commands.UnmaskCommand;
 import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.CombinedFindPredicate;
@@ -102,6 +104,18 @@ public class AddressBookParserTest {
     public void parseCommand_sort() throws Exception {
         assertTrue(parser.parseCommand(SortCommand.COMMAND_WORD) instanceof SortCommand);
         assertTrue(parser.parseCommand(SortCommand.COMMAND_WORD + " 3") instanceof SortCommand);
+    }
+
+    @Test
+    public void parseCommand_mask() throws Exception {
+        assertTrue(parser.parseCommand(MaskCommand.COMMAND_WORD) instanceof MaskCommand);
+        assertTrue(parser.parseCommand(MaskCommand.COMMAND_WORD + " 3") instanceof MaskCommand);
+    }
+
+    @Test
+    public void parseCommand_unmask() throws Exception {
+        assertTrue(parser.parseCommand(UnmaskCommand.COMMAND_WORD) instanceof UnmaskCommand);
+        assertTrue(parser.parseCommand(UnmaskCommand.COMMAND_WORD + " 3") instanceof UnmaskCommand);
     }
 
     @Test

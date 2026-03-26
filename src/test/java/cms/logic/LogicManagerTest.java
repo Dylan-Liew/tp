@@ -83,7 +83,7 @@ public class LogicManagerTest {
                 .withEmail("logic-sort-a@test.com")
                 .withSocUsername("logic1")
                 .withGithubUsername("logic-gh-1")
-                .withTutorialGroup("T10")
+                .withTutorialGroup("10")
                 .build();
         Person tutorialGroupTwo = new PersonBuilder()
                 .withName("Logic Sort Beta")
@@ -91,7 +91,7 @@ public class LogicManagerTest {
                 .withEmail("logic-sort-b@test.com")
                 .withSocUsername("logic2")
                 .withGithubUsername("logic-gh-2")
-                .withTutorialGroup("T02")
+                .withTutorialGroup("02")
                 .build();
 
         model.addPerson(tutorialGroupTen);
@@ -118,6 +118,13 @@ public class LogicManagerTest {
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredPersonList().remove(0));
+    }
+
+    @Test
+    public void isMasked_reflectsModelPreference() {
+        assertEquals(false, logic.isMasked());
+        model.setMasked(true);
+        assertEquals(true, logic.isMasked());
     }
 
     /**
