@@ -1,10 +1,10 @@
 package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static cms.logic.parser.CliSyntax.PREFIX_KEEP;
-
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cms.logic.commands.ImportCommand;
 import cms.logic.commands.ImportCommand.KeepPolicy;
@@ -15,6 +15,9 @@ import cms.logic.parser.exceptions.ParseException;
  */
 public class ImportCommandParser implements Parser<ImportCommand> {
 
+    private static final Pattern PATH_AND_OPTION_PATTERN = Pattern.compile(
+            "^\\s*(\"(?:[^\"\\\\]|\\\\.)*\"|\\S+)(?:\\s+(\\S+))?\\s*$");
+
     public static final String MESSAGE_INVALID_FILE_PATH = "File path is invalid: %1$s\n"
         + "Format: " + ImportCommand.MESSAGE_USAGE;
     public static final String MESSAGE_FILE_EXTENSION_REQUIRED = "File path must end with .json\n"
@@ -24,15 +27,15 @@ public class ImportCommandParser implements Parser<ImportCommand> {
 
     @Override
     public ImportCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_KEEP);
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_KEEP);
-
-        String trimmedPath = argMultimap.getPreamble().trim();
-        if (trimmedPath.isEmpty()) {
+        Matcher matcher = PATH_AND_OPTION_PATTERN.matcher(args);
+        if (!matcher.matches()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
         }
 
-        String pathString = removeMatchingSurroundingQuotes(trimmedPath);
+        String rawPathToken = matcher.group(1);
+        String rawKeepToken = matcher.group(2);
+
+        String pathString = removeMatchingSurroundingQuotes(rawPathToken);
         if (pathString == null) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
         }
@@ -48,20 +51,20 @@ public class ImportCommandParser implements Parser<ImportCommand> {
             throw new ParseException(MESSAGE_FILE_EXTENSION_REQUIRED);
         }
 
-        KeepPolicy keepPolicy = parseKeepPolicy(argMultimap.getValue(PREFIX_KEEP).orElse(null));
+        KeepPolicy keepPolicy = parseKeepPolicy(rawKeepToken);
         return new ImportCommand(importFilePath, keepPolicy);
     }
 
-    private KeepPolicy parseKeepPolicy(String keepValue) throws ParseException {
-        if (keepValue == null) {
+    private KeepPolicy parseKeepPolicy(String keepToken) throws ParseException {
+        if (keepToken == null) {
             return null;
         }
 
-        String normalizedKeepValue = keepValue.trim().toLowerCase();
-        if (normalizedKeepValue.equals("current")) {
+        String normalizedKeepToken = keepToken.trim().toLowerCase();
+        if (normalizedKeepToken.equals("keep/current")) {
             return KeepPolicy.CURRENT;
         }
-        if (normalizedKeepValue.equals("incoming")) {
+        if (normalizedKeepToken.equals("keep/incoming")) {
             return KeepPolicy.INCOMING;
         }
         throw new ParseException(MESSAGE_INVALID_KEEP);

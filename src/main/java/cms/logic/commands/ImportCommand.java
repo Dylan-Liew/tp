@@ -15,14 +15,20 @@ public class ImportCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports address book data from a JSON file.\n"
             + "Parameters: FILE_PATH (must be a .json file) [keep/POLICY]\n"
-            + "When current data is non-empty, keep/ is required.\n"
-            + "POLICY: current | incoming\n"
+            + "Behavior: Imports new data and merges with existing data (if any).\n"
+            + "When existing data would conflict with imported data:\n"
+            + "  - If keep/POLICY is omitted and data exists: ERROR (user must choose strategy)\n"
+            + "  - keep/current: keep existing, skip conflicting imports\n"
+            + "  - keep/incoming: replace conflicts with imported data\n"
             + "Examples: " + COMMAND_WORD + " data/addressbook.json\n"
-            + "          " + COMMAND_WORD + " data/addressbook.json keep/incoming\n"
-            + "          " + COMMAND_WORD + " data/addressbook.json keep/current";
+            + "          " + COMMAND_WORD + " data/addressbook.json keep/current\n"
+            + "          " + COMMAND_WORD + " data/addressbook.json keep/incoming";
 
     public static final String MESSAGE_SUCCESS = "Address book imported from: %s";
-    public static final String MESSAGE_KEEP_CURRENT_SUCCESS = "Current data kept; incoming data ignored from: %s";
+    public static final String MESSAGE_KEEP_CURRENT_SUCCESS =
+            "Address book merged from: %s (conflicts resolved with keep/current)";
+    public static final String MESSAGE_KEEP_INCOMING_SUCCESS =
+            "Address book merged from: %s (conflicts resolved with keep/incoming)";
 
     /** Resolution policy when importing into a non-empty address book. */
     public enum KeepPolicy {

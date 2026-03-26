@@ -39,6 +39,20 @@ public class ImportCommandParserTest {
     }
 
     @Test
+    public void parse_pathContainingKeepSegmentWithKeepIncoming_success() {
+        String path = "keep/data.json";
+        assertParseSuccess(parser, path + " keep/incoming",
+                new ImportCommand(Path.of(path), KeepPolicy.INCOMING));
+    }
+
+    @Test
+    public void parse_quotedPathContainingKeepSegmentWithKeepCurrent_success() {
+        String path = "C:/Users/Josh/keep/data.json";
+        assertParseSuccess(parser, "\"" + path + "\" keep/current",
+                new ImportCommand(Path.of(path), KeepPolicy.CURRENT));
+    }
+
+    @Test
     public void parse_validQuotedPathWithWhitespace_success() {
         String path = "C:/Users/Josh/My Documents/import.json";
         assertParseSuccess(parser, "\"" + path + "\"", new ImportCommand(Path.of(path)));
@@ -57,6 +71,12 @@ public class ImportCommandParserTest {
     @Test
     public void parse_invalidKeep_failure() {
         assertParseFailure(parser, "data/import.json keep/other", ImportCommandParser.MESSAGE_INVALID_KEEP);
+    }
+
+    @Test
+    public void parse_tooManyArguments_failure() {
+        assertParseFailure(parser, "data/import.json keep/current keep/incoming",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportCommand.MESSAGE_USAGE));
     }
 
     @Test

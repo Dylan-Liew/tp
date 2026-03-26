@@ -183,7 +183,7 @@ public class LogicManagerTest {
         String importCommand = ImportCommand.COMMAND_WORD + " \"" + importPath + "\"";
 
         assertCommandFailure(importCommand, CommandException.class,
-                "Import file is empty or not a valid address book data file.");
+            "Import file is empty or not a valid Course Management System data file.");
     }
 
     @Test
@@ -206,7 +206,7 @@ public class LogicManagerTest {
         String importCommand = ImportCommand.COMMAND_WORD + " \"" + importPath + "\"";
 
         assertCommandFailure(importCommand, CommandException.class,
-                "Import file contains invalid address book data.");
+            "Import file contains invalid Course Management System data.");
     }
 
     @Test
@@ -240,7 +240,11 @@ public class LogicManagerTest {
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
         Person expectedCurrentPerson = new PersonBuilder(AMY).withTags().build();
 
-        Person incomingPerson = new PersonBuilder()
+        Person conflictingIncomingPerson = new PersonBuilder(AMY)
+                .withName("Amy Updated")
+                .withPhone("99990000")
+                .build();
+        Person nonConflictingIncomingPerson = new PersonBuilder()
                 .withName(VALID_NAME_BOB)
                 .withNusId(VALID_NUSID_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB)
@@ -249,7 +253,7 @@ public class LogicManagerTest {
                 .withPhone(VALID_PHONE_BOB)
                 .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
                 .build();
-        Path importPath = createImportFileWithSinglePerson(incomingPerson);
+        Path importPath = createImportFileWithPersons(conflictingIncomingPerson, nonConflictingIncomingPerson);
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
 
         String importCommand = buildImportCommand(normalizedImportPath, "keep/current");
@@ -257,17 +261,22 @@ public class LogicManagerTest {
 
         assertEquals(String.format(ImportCommand.MESSAGE_KEEP_CURRENT_SUCCESS, normalizedImportPath),
             result.getFeedbackToUser());
-        assertEquals(1, model.getFilteredPersonList().size());
-        assertEquals(expectedCurrentPerson, model.getFilteredPersonList().get(0));
+        assertEquals(2, model.getFilteredPersonList().size());
+        assertTrue(model.getFilteredPersonList().contains(expectedCurrentPerson));
+        assertTrue(model.getFilteredPersonList().contains(nonConflictingIncomingPerson));
     }
 
     @Test
-    public void execute_importCommandKeepIncoming_replacesExistingData() throws Exception {
+    public void execute_importCommandKeepIncoming_replacesConflictsAndAddsNonConflicts() throws Exception {
         logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
 
-        Person incomingPerson = new PersonBuilder()
+        Person conflictingIncomingPerson = new PersonBuilder(AMY)
+                .withName("Amy Updated")
+                .withPhone("99990000")
+                .build();
+        Person nonConflictingIncomingPerson = new PersonBuilder()
                 .withName(VALID_NAME_BOB)
                 .withNusId(VALID_NUSID_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB)
@@ -276,15 +285,17 @@ public class LogicManagerTest {
                 .withPhone(VALID_PHONE_BOB)
                 .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
                 .build();
-        Path importPath = createImportFileWithSinglePerson(incomingPerson);
+        Path importPath = createImportFileWithPersons(conflictingIncomingPerson, nonConflictingIncomingPerson);
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
 
         String importCommand = buildImportCommand(normalizedImportPath, "keep/incoming");
         CommandResult result = logic.execute(importCommand);
 
-        assertEquals(String.format(ImportCommand.MESSAGE_SUCCESS, normalizedImportPath), result.getFeedbackToUser());
-        assertEquals(1, model.getFilteredPersonList().size());
-        assertEquals(incomingPerson, model.getFilteredPersonList().get(0));
+        assertEquals(String.format(ImportCommand.MESSAGE_KEEP_INCOMING_SUCCESS, normalizedImportPath),
+                result.getFeedbackToUser());
+        assertEquals(2, model.getFilteredPersonList().size());
+        assertTrue(model.getFilteredPersonList().contains(conflictingIncomingPerson));
+        assertTrue(model.getFilteredPersonList().contains(nonConflictingIncomingPerson));
     }
 
     @Test
@@ -385,10 +396,17 @@ public class LogicManagerTest {
     }
 
     private Path createImportFileWithSinglePerson(Person person) throws IOException {
-        AddressBook incomingAddressBook = new AddressBook();
-        incomingAddressBook.addPerson(person);
+        return createImportFileWithPersons(person);
+    }
 
-        Path importPath = temporaryFolder.resolve("imports").resolve(person.getNusId() + ".json");
+    private Path createImportFileWithPersons(Person... persons) throws IOException {
+        AddressBook incomingAddressBook = new AddressBook();
+        for (Person person : persons) {
+            incomingAddressBook.addPerson(person);
+        }
+
+        String fileName = persons.length > 0 ? persons[0].getNusId().toString() : "import";
+        Path importPath = temporaryFolder.resolve("imports").resolve(fileName + ".json");
         new JsonAddressBookStorage(importPath).saveAddressBook(incomingAddressBook, importPath);
         return importPath;
     }
