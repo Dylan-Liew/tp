@@ -420,14 +420,14 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `add n/John Doe id/A0123456X role/student soc/johnd gh/john-gh p/91234567 
+   1. Test case: `add n/John Doe id/A0123456X role/student soc/johnd gh/john-gh p/91234567
       e/john@example.com t/T01`<br>
       Expected: New contact is added to the list. Details of the added contact shown in the status message.
 
-   1. Test case: `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99 
+   1. Test case: `add n/David Tan id/A0211111C role/student soc/david1 gh/davidtan99
       e/david@u.nus.edu p/97654321 t/T05` twice<br>
-      Expected: If a person with the same NUS ID / SoC username / GitHub username / email already exists, 
-      the app shows an error message indicating 
+      Expected: If a person with the same NUS ID / SoC username / GitHub username / email already exists,
+      the app shows an error message indicating
       a duplicate NUS ID. No person is added. Status bar remains the same.
 
    1. Other incorrect add commands to try: `add`, `add n/`<br>

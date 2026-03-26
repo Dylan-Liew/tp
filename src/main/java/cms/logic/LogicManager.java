@@ -63,7 +63,7 @@ public class LogicManager implements Logic {
 
         CommandResult commandResult;
         Command command = addressBookParser.parseCommand(commandText);
-        
+
         // Special handling for file I/O operations
         if (command instanceof ImportCommand) {
             commandResult = executeImportCommand((ImportCommand) command);
