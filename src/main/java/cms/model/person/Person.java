@@ -17,7 +17,7 @@ import cms.model.tag.Tag;
  */
 public class Person {
     public static final String MESSAGE_SOC_USERNAME_NUS_ID_MISMATCH =
-            "SOC username that are in NUS ID format must match the person's NUS ID.";
+            "SOC usernames that are in NUS ID format must match the person's NUS ID.";
 
     // Identity fields
     private final Name name;
