@@ -56,14 +56,10 @@ public abstract class Person {
             GithubUsername githubUsername, Role role, TutorialGroup tutorialGroup, Set<Tag> tags) {
         requireNonNull(role);
 
-        switch (role) {
-        case STUDENT:
+        if (role == Role.STUDENT) {
             return new Student(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);
-        case TUTOR:
-            return new Tutor(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);
-        default:
-            throw new IllegalArgumentException("Unsupported role: " + role);
         }
+        return new Tutor(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);
     }
 
     /**
