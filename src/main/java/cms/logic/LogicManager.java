@@ -96,9 +96,9 @@ public class LogicManager implements Logic {
         try {
             importedAddressBook = storage.readAddressBook(importFilePath)
                     .orElseThrow(() -> new CommandException(
-                            "Import file is empty or not a valid address book data file."));
+                            "Import file is empty or not a valid Course Management System data file."));
         } catch (DataLoadingException dle) {
-            throw new CommandException("Import file contains invalid address book data.", dle);
+            throw new CommandException("Import file contains invalid Course Management System data.", dle);
         }
 
         boolean hasCurrentData = !model.getAddressBook().getPersonList().isEmpty();
