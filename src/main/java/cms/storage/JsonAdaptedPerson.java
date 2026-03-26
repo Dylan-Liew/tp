@@ -161,13 +161,9 @@ class JsonAdaptedPerson {
         final TutorialGroup modelTutorialGroup = new TutorialGroup(tutorialGroup);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        try {
-            return Person.create(modelName, modelPhone, modelEmail, modelNusId,
-                    modelSocUsername, modelGithubUsername,
-                    modelRole, modelTutorialGroup, modelTags);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalValueException(e.getMessage(), e);
-        }
+        return Person.create(modelName, modelPhone, modelEmail, modelNusId,
+                modelSocUsername, modelGithubUsername,
+                modelRole, modelTutorialGroup, modelTags);
     }
 
 }

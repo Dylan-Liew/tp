@@ -67,13 +67,8 @@ public class AddCommandParser implements Parser<AddCommand> {
         TutorialGroup tutorialGroup = ParserUtil.parseTutorialGroup(argMultimap.getValue(PREFIX_TUTORIALGROUP).get());
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        Person person;
-        try {
-            person = Person.create(name, phone, email, nusId, socUsername,
-                    githubUsername, role, tutorialGroup, tagList);
-        } catch (IllegalArgumentException e) {
-            throw new ParseException(e.getMessage(), e);
-        }
+        Person person = Person.create(name, phone, email, nusId, socUsername,
+                githubUsername, role, tutorialGroup, tagList);
 
         return new AddCommand(person);
     }
