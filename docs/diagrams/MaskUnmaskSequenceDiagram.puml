@@ -1,0 +1,66 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":MaskCommand" as MaskCommand LOGIC_COLOR
+participant ":UnmaskCommand" as UnmaskCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("mask")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("mask")
+activate AddressBookParser
+AddressBookParser --> LogicManager : MaskCommand
+deactivate AddressBookParser
+
+LogicManager -> MaskCommand : execute(m)
+activate MaskCommand
+MaskCommand -> Model : setMasked(true)
+activate Model
+Model --> MaskCommand
+deactivate Model
+create CommandResult
+MaskCommand -> CommandResult
+activate CommandResult
+CommandResult --> MaskCommand
+deactivate CommandResult
+MaskCommand --> LogicManager : r
+deactivate MaskCommand
+[<-- LogicManager
+deactivate LogicManager
+
+== ==
+
+[-> LogicManager : execute("unmask")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("unmask")
+activate AddressBookParser
+AddressBookParser --> LogicManager : UnmaskCommand
+deactivate AddressBookParser
+
+LogicManager -> UnmaskCommand : execute(m)
+activate UnmaskCommand
+UnmaskCommand -> Model : setMasked(false)
+activate Model
+Model --> UnmaskCommand
+deactivate Model
+create CommandResult
+UnmaskCommand -> CommandResult
+activate CommandResult
+CommandResult --> UnmaskCommand
+deactivate CommandResult
+UnmaskCommand --> LogicManager : r
+deactivate UnmaskCommand
+[<-- LogicManager
+deactivate LogicManager
+@enduml
