@@ -189,7 +189,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
                 boolean nulGithub, boolean nulRole, boolean nulTutorial) {
             super(new Name("X"), new Phone("11111111"), new Email("x@x.com"), new NusId("A0000001B"),
                 new SocUsername("socuser"), new GithubUsername("ghuser"),
-                    new TutorialGroup("1"), Collections.emptySet());
+                new TutorialGroup("1"), Collections.emptySet());
             this.nulNusId = nulNusId;
             this.nulPhone = nulPhone;
             this.nulEmail = nulEmail;
@@ -307,4 +307,3 @@ public class AllFieldsContainsKeywordsPredicateTest {
         assertFalse(pred.test(person));
     }
 }
-

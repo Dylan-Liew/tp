@@ -37,10 +37,9 @@ public abstract class Person {
          * @throws InvalidPersonException if any model-level person invariant is violated
      */
     public Person(Name name, Phone phone, Email email, NusId nusId, SocUsername socUsername,
-            GithubUsername githubUsername, Role role,
-            TutorialGroup tutorialGroup, Set<Tag> tags) {
+            GithubUsername githubUsername, TutorialGroup tutorialGroup, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);
-        validateSocUsernameNusIdConsistency(nusId, socUsername); {
+        validateSocUsernameNusIdConsistency(nusId, socUsername);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -56,7 +55,7 @@ public abstract class Person {
      */
     public static Person create(Name name, Phone phone, Email email, NusId nusId, SocUsername socUsername,
             GithubUsername githubUsername, Role role, TutorialGroup tutorialGroup, Set<Tag> tags) {
-        requireNonNull(role);
+        Objects.requireNonNull(role);
 
         if (role == Role.STUDENT) {
             return new Student(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);

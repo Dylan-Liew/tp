@@ -78,7 +78,6 @@ public class AddCommandParser implements Parser<AddCommand> {
         } catch (InvalidPersonException e) {
             throw new ParseException(e.getMessage(), e);
         }
-        
         return new AddCommand(person);
     }
 
