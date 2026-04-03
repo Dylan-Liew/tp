@@ -80,7 +80,7 @@ public class HelpCommand extends Command {
     }
 
     static String getAllHelpMessages() {
-        String header = "Available commands (use /help COMMAND for full usage):";
+        String header = "Available commands (use help COMMAND for full usage):";
         return HELP_MESSAGES.values().stream()
                 .map(HelpCommand::toOneLineHelp)
                 .collect(Collectors.joining("\n", header + "\n", ""));
