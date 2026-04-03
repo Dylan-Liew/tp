@@ -47,6 +47,8 @@ Action | Format
 **Edit** | `edit INDEX [n/NAME] [id/NUS_ID] [role/ROLE] [soc/SOC_USERNAME] [gh/GITHUB_USERNAME] [e/EMAIL] [p/PHONE] [t/TUTORIAL_GROUP] [tag/TAG]...`<br><br>e.g. `edit 2 p/98765432 e/johndoe@example.com`
 **Find** | `find a/KEYWORD [MORE_KEYWORDS]...`<br>`find n/KEYWORD [MORE_NAME_KEYWORDS]...`<br>`find id/NUS_ID [MORE_NUS_IDS]...`<br><br>e.g. `find n/jane n/eunice id/A0123456B`
 **Delete** | `delete INDEX`<br>`delete INDEX [MORE_INDEXES]...`<br>`delete id/NUS_ID`<br><br>e.g. `delete 1 3 5`
+**Import** | `import FILE_PATH [keep/current|keep/incoming]`<br><br>e.g. `import data/addressbook.json keep/current`
+**Export** | `export FILE_PATH`<br><br>e.g. `export "C:\\Users\\Josh\\Documents\\backup.json"`
 **Clear** | `clear`
 **Exit** | `exit`
 
@@ -155,6 +157,41 @@ Examples:
 * `delete 2`
 * `delete 1 3 5`
 * `delete id/A0234567B`
+
+### Importing records from a JSON file : `import`
+
+Imports records from a `.json` file into CMS.
+
+Format: `import FILE_PATH [keep/current|keep/incoming]`
+
+* `FILE_PATH` must point to a `.json` file.
+* File paths with spaces are supported, e.g. `C:/Users/Test/My Data/import.json`.
+* Quoted file paths are also supported, e.g. `"C:/Users/Test/My Data/import.json"`.
+* If the file data has no conflicts with current data, import proceeds normally.
+* Platform path separators are accepted (for example `/` and `\`).
+* If conflicts exist and the app already has data:
+   * No keep option: command is rejected and you must specify a keep policy.
+   * `keep/current`: keeps existing records and skips conflicting incoming records.
+   * `keep/incoming`: incoming records replace conflicting existing records.
+
+Examples:
+* `import data/addressbook.json`
+* `import data/addressbook.json keep/current`
+* `import data/addressbook.json keep/incoming`
+
+### Exporting records to a JSON file : `export`
+
+Exports current CMS data to a `.json` file.
+
+Format: `export FILE_PATH`
+
+* `FILE_PATH` must end with `.json`.
+* File paths with spaces are supported, e.g. `C:/Users/Test/My Data/import.json`.
+* Quoted file paths are also supported, e.g. `"C:/Users/Test/My Data/import.json"`.
+
+Examples:
+* `export data/backup.json`
+* `export "C:/Users/Test/My Documents/backup.json"`
 
 ### Purging all records : `clear`
 
