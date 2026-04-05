@@ -152,14 +152,14 @@ public class LogicManagerTest {
     public void execute_tagCommandAdd_success() throws Exception {
         Person firstPerson = new PersonBuilder()
                 .withName("Tag Logic Alpha")
-                .withNusId("A1888881B")
+                .withNusMatric("A1888881W")
                 .withEmail("tag-logic-a@test.com")
                 .withSocUsername("taglogi1")
                 .withGithubUsername("tag-logic-1")
                 .build();
         Person secondPerson = new PersonBuilder()
                 .withName("Tag Logic Beta")
-                .withNusId("A1888882C")
+                .withNusMatric("A1888882U")
                 .withEmail("tag-logic-b@test.com")
                 .withSocUsername("taglogi2")
                 .withGithubUsername("tag-logic-2")
@@ -176,7 +176,7 @@ public class LogicManagerTest {
 
         String commandText = TagCommand.COMMAND_WORD + " add n/1 2 tag/tag1 tag2";
         String expectedMessage = "tag1, tag2 has been added to "
-                + "1, Tag Logic Alpha, A1888881B; 2, Tag Logic Beta, A1888882C";
+            + "1, Tag Logic Alpha, A1888881W; 2, Tag Logic Beta, A1888882U";
 
         assertCommandSuccess(commandText, expectedMessage, expectedModel);
     }

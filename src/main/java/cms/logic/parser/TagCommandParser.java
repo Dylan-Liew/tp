@@ -1,8 +1,8 @@
 package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import cms.commons.core.index.Index;
 import cms.logic.commands.TagCommand;
 import cms.logic.commands.TagCommand.Action;
 import cms.logic.parser.exceptions.ParseException;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.tag.Tag;
 
 /**
@@ -35,15 +35,15 @@ public class TagCommandParser implements Parser<TagCommand> {
             String remainingArgs = splitArgs[1];
 
             ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                    " " + remainingArgs, PREFIX_NAME, PREFIX_NUSID, PREFIX_TAG);
+                    " " + remainingArgs, PREFIX_NAME, PREFIX_MATRIC, PREFIX_TAG);
 
             if (!argMultimap.getPreamble().isEmpty()) {
                 throw new ParseException(TagCommand.MESSAGE_USAGE);
             }
 
             boolean hasIndexTargets = !argMultimap.getAllValues(PREFIX_NAME).isEmpty();
-            boolean hasNusIdTargets = !argMultimap.getAllValues(PREFIX_NUSID).isEmpty();
-            if (hasIndexTargets == hasNusIdTargets) {
+            boolean hasNusMatricTargets = !argMultimap.getAllValues(PREFIX_MATRIC).isEmpty();
+            if (hasIndexTargets == hasNusMatricTargets) {
                 throw new ParseException(TagCommand.MESSAGE_USAGE);
             }
 
@@ -57,8 +57,9 @@ public class TagCommandParser implements Parser<TagCommand> {
                 return new TagCommand(action, indexes, tags);
             }
 
-            List<NusId> nusIds = ParserUtil.parseNusIds(splitValues(argMultimap.getAllValues(PREFIX_NUSID)));
-            return TagCommand.byNusIds(action, nusIds, tags);
+            List<NusMatric> nusMatrics = ParserUtil.parseNusMatrics(
+                    splitValues(argMultimap.getAllValues(PREFIX_MATRIC)));
+            return TagCommand.byNusMatrics(action, nusMatrics, tags);
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE), pe);
         }
