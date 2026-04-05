@@ -27,7 +27,7 @@
 
         <HBox styleClass="detail-row" spacing="24">
             <Label styleClass="detail-label" text="NUS ID"/>
-            <Label fx:id="nusId" styleClass="detail-value" text="A0000000X"/>
+            <Label fx:id="nusId" styleClass="detail-value" text="A0000000Y"/>
         </HBox>
         <HBox styleClass="detail-row" spacing="24">
             <Label styleClass="detail-label" text="SOC USER"/>

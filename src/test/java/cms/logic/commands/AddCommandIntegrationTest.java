@@ -31,7 +31,7 @@ public class AddCommandIntegrationTest {
 
     @Test
     public void execute_newPerson_success() {
-        Person validPerson = new PersonBuilder().withNusId("A7654321Z")
+        Person validPerson = new PersonBuilder().withNusId("A7654321J")
                 .withEmail("newperson@example.com")
                 .withSocUsername("newsoc1")
                 .withGithubUsername("newpersongh")
@@ -57,7 +57,7 @@ public class AddCommandIntegrationTest {
     public void execute_duplicateFields_throwsCommandException() {
         Person personInList = model.getAddressBook().getPersonList().get(0);
         Person editedPerson = new PersonBuilder(personInList)
-                .withNusId("A7654321Z")
+                .withNusId("A7654321J")
                 .build();
 
         String expectedMessage = DuplicatePersonFieldException

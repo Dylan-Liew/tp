@@ -22,7 +22,7 @@ public class FindCommand extends Command {
             + "Parameters: a/KEYWORD [MORE_KEYWORDS]... | n/NAME [MORE_NAMES]... | id/NUS_ID [MORE_IDS]... "
             + "(multiple prefixes allowed; no prefix treats input as name search)\n"
             + "Examples: " + COMMAND_WORD + " a/Alice Bob, " + COMMAND_WORD + " n/Alice Bob, "
-            + COMMAND_WORD + " id/A0234567B, " + COMMAND_WORD + " a/Alice n/Bob id/A0123456B";
+            + COMMAND_WORD + " id/A0234567X, " + COMMAND_WORD + " a/Alice n/Bob id/A0123456J";
 
     private final Predicate<Person> predicate;
 

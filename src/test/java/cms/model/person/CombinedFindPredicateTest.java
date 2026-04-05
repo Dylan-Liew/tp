@@ -20,7 +20,7 @@ public class CombinedFindPredicateTest {
         NameContainsKeywordsPredicate name =
                 new NameContainsKeywordsPredicate(Collections.singletonList("Bob"));
         NusIdContainsKeywordsPredicate id =
-                new NusIdContainsKeywordsPredicate(Collections.singletonList("A0000001B"));
+                new NusIdContainsKeywordsPredicate(Collections.singletonList("A0000001X"));
 
         CombinedFindPredicate combined = new CombinedFindPredicate(all, name, id);
 
@@ -33,11 +33,11 @@ public class CombinedFindPredicateTest {
         assertTrue(combined.test(p2));
 
         // Person matching 'id' predicate
-        Person p3 = new PersonBuilder().withNusId("A0000001B").build();
+        Person p3 = new PersonBuilder().withNusId("A0000001X").build();
         assertTrue(combined.test(p3));
 
         // Person matching none
-        Person p4 = new PersonBuilder().withName("Charlie").withNusId("A9999999Z").build();
+        Person p4 = new PersonBuilder().withName("Charlie").withNusId("A9999999W").build();
         assertFalse(combined.test(p4));
     }
 

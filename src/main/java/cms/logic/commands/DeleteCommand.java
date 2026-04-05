@@ -30,7 +30,7 @@ public class DeleteCommand extends Command {
             + ": Deletes one or more persons by their displayed index or NUS ID.\n"
             + "Parameters: INDEX [MORE_INDEXES]... or id/NUS_ID [MORE_NUS_IDS]...\n"
             + "Examples: " + COMMAND_WORD + " 1, " + COMMAND_WORD + " 1 2 3, "
-            + COMMAND_WORD + " id/A1234567B, " + COMMAND_WORD + " id/A1234567B A2345678C";
+            + COMMAND_WORD + " id/A1234567X, " + COMMAND_WORD + " id/A1234567X A2345678L";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted persons:\n%1$s";

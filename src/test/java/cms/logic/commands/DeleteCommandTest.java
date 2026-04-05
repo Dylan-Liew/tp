@@ -121,7 +121,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_invalidNusIdUnfilteredList_throwsCommandException() {
-        DeleteCommand deleteCommand = DeleteCommand.byNusId(new NusId("A9999999Z"));
+        DeleteCommand deleteCommand = DeleteCommand.byNusId(new NusId("A9999999W"));
 
         assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_INVALID_NUS_ID);
     }
@@ -191,8 +191,8 @@ public class DeleteCommandTest {
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
         // same nus id values -> returns true
-        DeleteCommand deleteFirstNusIdCommand = DeleteCommand.byNusId(new NusId("A0000001B"));
-        DeleteCommand deleteFirstNusIdCommandCopy = DeleteCommand.byNusId(new NusId("A0000001B"));
+        DeleteCommand deleteFirstNusIdCommand = DeleteCommand.byNusId(new NusId("A0000001X"));
+        DeleteCommand deleteFirstNusIdCommandCopy = DeleteCommand.byNusId(new NusId("A0000001X"));
         assertTrue(deleteFirstNusIdCommand.equals(deleteFirstNusIdCommandCopy));
 
         // different types -> returns false
@@ -223,7 +223,7 @@ public class DeleteCommandTest {
         String multiExpected = DeleteCommand.class.getCanonicalName() + "{targetIndexes=" + targetIndexes + "}";
         assertEquals(multiExpected, multiDeleteCommand.toString());
 
-        NusId targetNusId = new NusId("A0000001B");
+        NusId targetNusId = new NusId("A0000001X");
         DeleteCommand deleteByNusIdCommand = DeleteCommand.byNusId(targetNusId);
         String nusIdExpected = DeleteCommand.class.getCanonicalName() + "{targetNusId=" + targetNusId + "}";
         assertEquals(nusIdExpected, deleteByNusIdCommand.toString());

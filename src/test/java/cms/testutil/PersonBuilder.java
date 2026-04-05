@@ -23,7 +23,7 @@ public class PersonBuilder {
     public static final String DEFAULT_NAME = "Amy Bee";
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
-    public static final String DEFAULT_NUSID = "A0000001B";
+    public static final String DEFAULT_NUSID = "A0000001X";
     public static final String DEFAULT_SOCUSERNAME = "amybee";
     public static final String DEFAULT_GITHUBUSERNAME = "amybee";
     public static final Role DEFAULT_ROLE = Role.STUDENT;

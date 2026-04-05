@@ -75,8 +75,8 @@ public class ParserUtilTest {
 
     @Test
     public void parseNusIds_validInput_success() throws Exception {
-        assertEquals(List.of(new NusId("A0123456B"), new NusId("A0234567C")),
-                ParserUtil.parseNusIds(List.of("A0123456B", "A0234567C")));
+        assertEquals(List.of(new NusId("A0123456J"), new NusId("A0234567X")),
+                ParserUtil.parseNusIds(List.of("A0123456J", "A0234567X")));
     }
 
     @Test

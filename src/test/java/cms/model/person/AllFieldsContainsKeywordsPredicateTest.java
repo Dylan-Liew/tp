@@ -37,7 +37,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
                 .withName("Alice Pauline")
                 .withPhone("91234567")
                 .withEmail("alice@example.com")
-                .withNusId("A0123456X")
+                .withNusId("A0123456J")
                 .withSocUsername("alice")
                 .withGithubUsername("alicegit")
                 .withRole("student")
@@ -50,7 +50,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
         assertTrue(pName.test(person));
 
         // nus id equalsIgnoreCase
-        AllFieldsContainsKeywordsPredicate pNus = new AllFieldsContainsKeywordsPredicate(Arrays.asList("a0123456x"));
+        AllFieldsContainsKeywordsPredicate pNus = new AllFieldsContainsKeywordsPredicate(Arrays.asList("a0123456j"));
         assertTrue(pNus.test(person));
 
         // phone contains
@@ -85,9 +85,9 @@ public class AllFieldsContainsKeywordsPredicateTest {
 
     @Test
     public void onlyNusIdMatches_returnsTrue() {
-        Person person = new PersonBuilder().withNusId("A0123456X").build();
+        Person person = new PersonBuilder().withNusId("A0123456J").build();
         AllFieldsContainsKeywordsPredicate p = new AllFieldsContainsKeywordsPredicate(
-                Collections.singletonList("a0123456x"));
+                Collections.singletonList("a0123456j"));
         assertTrue(p.test(person));
     }
 
@@ -187,7 +187,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
 
         PartialPerson(boolean nulNusId, boolean nulPhone, boolean nulEmail, boolean nulSoc,
                 boolean nulGithub, boolean nulRole, boolean nulTutorial) {
-            super(new Name("X"), new Phone("11111111"), new Email("x@x.com"), new NusId("A0000001B"),
+            super(new Name("X"), new Phone("11111111"), new Email("x@x.com"), new NusId("A0000001X"),
                 new SocUsername("socuser"), new GithubUsername("ghuser"),
                 new TutorialGroup("1"), Collections.emptySet());
             this.nulNusId = nulNusId;
@@ -239,7 +239,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
     public void nusIdNull_branchHandled() {
         Person p = new PartialPerson(true, false, false, false, false, false, false);
         AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
-                Collections.singletonList("A0000001B"));
+                Collections.singletonList("A0000001X"));
         // nusId getter returns null, so predicate should not match nusId; overall should be false
         assertFalse(pred.test(p));
     }

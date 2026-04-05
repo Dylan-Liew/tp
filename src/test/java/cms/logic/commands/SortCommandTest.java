@@ -32,7 +32,7 @@ public class SortCommandTest {
     public void execute_sortByTutorialGroup_sortsByTutorialGroup() {
         Person tutorialGroupTen = new PersonBuilder()
                 .withName("Sort Command Alpha")
-                .withNusId("A1111111B")
+                .withNusId("A1111111M")
                 .withEmail("sort-command-a@test.com")
                 .withSocUsername("sortcmd1")
                 .withGithubUsername("sortcmd-gh-1")
@@ -40,7 +40,7 @@ public class SortCommandTest {
                 .build();
         Person tutorialGroupTwo = new PersonBuilder()
                 .withName("Sort Command Beta")
-                .withNusId("A1111112C")
+                .withNusId("A1111112L")
                 .withEmail("sort-command-b@test.com")
                 .withSocUsername("sortcmd2")
                 .withGithubUsername("sortcmd-gh-2")
@@ -65,7 +65,7 @@ public class SortCommandTest {
     public void execute_sortByName_sortsByName() {
         Person zed = new PersonBuilder()
                 .withName("Zed Sort")
-                .withNusId("A1111113D")
+                .withNusId("A1111113J")
                 .withEmail("sort-command-c@test.com")
                 .withSocUsername("sortcmd3")
                 .withGithubUsername("sortcmd-gh-3")
@@ -73,7 +73,7 @@ public class SortCommandTest {
                 .build();
         Person amy = new PersonBuilder()
                 .withName("Amy Sort")
-                .withNusId("A1111114E")
+                .withNusId("A1111114H")
                 .withEmail("sort-command-d@test.com")
                 .withSocUsername("sortcmd4")
                 .withGithubUsername("sortcmd-gh-4")

@@ -38,10 +38,10 @@ public class FindCommandParserTest {
         FindCommand expectedMulti = new FindCommand(
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(
-                                Arrays.asList("john", "A0234504F")),
+                                Arrays.asList("john", "A0234504N")),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
                         new NusIdContainsKeywordsPredicate(Collections.emptyList())));
-        assertParseSuccess(parser, " a/john A0234504F", expectedMulti);
+        assertParseSuccess(parser, " a/john A0234504N", expectedMulti);
     }
 
     @Test
@@ -62,8 +62,8 @@ public class FindCommandParserTest {
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
                         new NusIdContainsKeywordsPredicate(
-                                Arrays.asList("A0234502D", "A0234505G"))));
-        assertParseSuccess(parser, " id/A0234502D A0234505G", expected);
+                                Arrays.asList("A0234502U", "A0234505M"))));
+        assertParseSuccess(parser, " id/A0234502U A0234505M", expected);
     }
 
     @Test
@@ -75,9 +75,9 @@ public class FindCommandParserTest {
                         new NameContainsKeywordsPredicate(
                                 Arrays.asList("tan", "lim")),
                         new NusIdContainsKeywordsPredicate(
-                                Arrays.asList("A12345678B", "A0211111C"))));
+                                Arrays.asList("A1234567X", "A0211111L"))));
         assertParseSuccess(parser,
-                " a/john david n/tan lim id/a12345678b a0211111c",
+                " a/john david n/tan lim id/a1234567x a0211111l",
                 expected);
     }
 
@@ -118,8 +118,8 @@ public class FindCommandParserTest {
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G"))));
-        assertParseSuccess(parser, " id/a0234502d a0234505g", expected);
+                        new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502U", "A0234505M"))));
+        assertParseSuccess(parser, " id/a0234502u a0234505m", expected);
     }
 
     @Test

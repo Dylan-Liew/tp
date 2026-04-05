@@ -40,7 +40,7 @@ public class AddCommand extends Command {
             + "If role is omitted, it defaults to student.\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
-            + PREFIX_NUSID + "A1234567E "
+            + PREFIX_NUSID + "A1234567X "
             + PREFIX_ROLE + "student "
             + PREFIX_SOCUSERNAME + "johndoe "
             + PREFIX_GITHUBUSERNAME + "johndoe "

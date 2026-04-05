@@ -10,9 +10,16 @@ import static java.util.Objects.requireNonNull;
 public class NusId {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "NUS ID must be in the format A#######X or U#######X where # is a digit "
-                + "and X is a letter (e.g., A0234567B or U0234567B).";
-    public static final String VALIDATION_REGEX = "[AU]\\d{7}[A-Z]";
+            "NUS ID must be in the format A#######X or U######X with a valid checksum, where # is a digit "
+                + "and X is a letter (e.g., A0234567X or U023456W). Legacy U####### input is also accepted "
+                + "and canonicalised to U######X (e.g., U0906931 is accepted and canonicalised to U096931E).";
+    public static final String VALIDATION_REGEX = "(A\\d{7}|U\\d{6})[A-Z]";
+    private static final String LEGACY_U_NUSNET_REGEX = "U\\d{7}";
+
+    private static final String CHECK_DIGIT_TABLE = "YXWURNMLJHEAB";
+    private static final int[] A_WEIGHTS = {1, 1, 1, 1, 1, 1};
+    private static final int[] U_WEIGHTS = {0, 1, 3, 1, 2, 7};
+
     public final String value;
 
     /**
@@ -34,7 +41,23 @@ public class NusId {
         if (input == null) {
             return null;
         }
-        return input.trim().toUpperCase();
+        String canonical = input.trim().toUpperCase();
+
+        if (canonical.matches(LEGACY_U_NUSNET_REGEX)) {
+            return canonicaliseLegacyUNusnet(canonical);
+        }
+
+        return canonical;
+    }
+
+    /**
+     * Canonicalises the legacy U-prefix NUSNET form to the standard U-prefix form.
+     */
+    private static String canonicaliseLegacyUNusnet(String legacyUNusnet) {
+        // Legacy U-prefix NUSNET form has 7 digits; drop the 3rd digit to get U + 6 digits.
+        String matricWithoutCheckDigit = legacyUNusnet.substring(0, 3) + legacyUNusnet.substring(4);
+        char checkDigit = computeCheckDigit('U', matricWithoutCheckDigit.substring(1));
+        return matricWithoutCheckDigit + checkDigit;
     }
 
     /**
@@ -44,7 +67,32 @@ public class NusId {
         if (test == null) {
             return false;
         }
-        return canonicalise(test).matches(VALIDATION_REGEX);
+        String canonical = canonicalise(test);
+        if (!canonical.matches(VALIDATION_REGEX)) {
+            return false;
+        }
+
+        return hasValidChecksum(canonical);
+    }
+
+    private static boolean hasValidChecksum(String canonical) {
+        char prefix = canonical.charAt(0);
+        char expectedCheckDigit = computeCheckDigit(prefix, canonical.substring(1, canonical.length() - 1));
+        char actualCheckDigit = canonical.charAt(canonical.length() - 1);
+        return expectedCheckDigit == actualCheckDigit;
+    }
+
+    private static char computeCheckDigit(char prefix, String numericPart) {
+        int[] weights = prefix == 'A' ? A_WEIGHTS : U_WEIGHTS;
+        String digits = numericPart.substring(numericPart.length() - 6);
+
+        int sum = 0;
+        for (int i = 0; i < 6; i++) {
+            int digit = digits.charAt(i) - '0';
+            sum += weights[i] * digit;
+        }
+
+        return CHECK_DIGIT_TABLE.charAt(sum % CHECK_DIGIT_TABLE.length());
     }
 
     @Override

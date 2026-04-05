@@ -31,16 +31,16 @@ public class SocUsernameTest {
         // valid canonical forms
         assertTrue(SocUsername.isValidSocUsername("tan8888"));
         assertTrue(SocUsername.isValidSocUsername("u1999999"));
-        assertTrue(SocUsername.isValidSocUsername("a0234567b"));
+        assertTrue(SocUsername.isValidSocUsername("a0234567x"));
     }
 
     @Test
     public void isValidSocUsername_nonCanonicalInput() {
         // valid after canonicalisation
         assertTrue(SocUsername.isValidSocUsername("  Tan8888  "));
-        assertTrue(SocUsername.isValidSocUsername("  A0234567B  "));
+        assertTrue(SocUsername.isValidSocUsername("  A0234567X  "));
         assertTrue(SocUsername.isValidSocUsername("u1999999")); // accepted by current regex
-        assertTrue(SocUsername.isValidSocUsername("a0234567b")); // valid NUS-ID form (case-insensitive)
+        assertTrue(SocUsername.isValidSocUsername("a0234567x")); // valid NUS-ID form (case-insensitive)
     }
 
     @Test
@@ -52,7 +52,7 @@ public class SocUsernameTest {
         assertDoesNotThrow(() -> new SocUsername("tanga"));
         assertDoesNotThrow(() -> new SocUsername("tang8888"));
         assertDoesNotThrow(() -> new SocUsername("u1999999"));
-        assertDoesNotThrow(() -> new SocUsername("A0234567B")); // canonicalised to lowercase NUS-ID form
+        assertDoesNotThrow(() -> new SocUsername("A0234567X")); // canonicalised to lowercase NUS-ID form
     }
 
     @Test

@@ -19,9 +19,9 @@ import cms.testutil.PersonBuilder;
 
 public class PersonTest {
 
-    private static final String NUSID_FOR_SOC_USERNAME_MATCH_TEST = "A1234567B";
-    private static final String SOCUSERNAME_MATCHING_NUSID_FOR_TEST = "A1234567b";
-    private static final String SOCUSERNAME_MISMATCHING_NUSID_FOR_TEST = "a7654321b";
+    private static final String NUSID_FOR_SOC_USERNAME_MATCH_TEST = "A1234567X";
+    private static final String SOCUSERNAME_MATCHING_NUSID_FOR_TEST = "A1234567x";
+    private static final String SOCUSERNAME_MISMATCHING_NUSID_FOR_TEST = "a7654321j";
 
     @Test
     public void create_returnsCorrectSubtypeForRole() {
@@ -55,7 +55,7 @@ public class PersonTest {
                 .build();
 
         assertEquals(NUSID_FOR_SOC_USERNAME_MATCH_TEST, person.getNusId().value);
-        assertEquals("a1234567b", person.getSocUsername().value); // canonicalised to lowercase
+        assertEquals("a1234567x", person.getSocUsername().value); // canonicalised to lowercase
     }
 
     @Test
@@ -80,7 +80,7 @@ public class PersonTest {
         assertTrue(BOB.isSamePerson(editedBob));
 
         // NUS ID has different value, all other attributes same -> returns false
-        editedBob = new PersonBuilder(BOB).withNusId("A1111111A").build();
+        editedBob = new PersonBuilder(BOB).withNusId("A1111111M").build();
         assertFalse(BOB.isSamePerson(editedBob));
     }
 
@@ -115,7 +115,7 @@ public class PersonTest {
         assertFalse(ALICE.equals(editedAlice));
 
         // different nusId -> returns false
-        editedAlice = new PersonBuilder(ALICE).withNusId("A1234567B").build();
+        editedAlice = new PersonBuilder(ALICE).withNusId("A1234567X").build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different soc username -> returns false

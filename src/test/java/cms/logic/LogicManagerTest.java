@@ -93,7 +93,7 @@ public class LogicManagerTest {
     public void execute_sortCommandByTutorialGroup_success() throws Exception {
         Person tutorialGroupTen = new PersonBuilder()
                 .withName("Logic Sort Alpha")
-                .withNusId("A1999991B")
+                .withNusId("A1999991L")
                 .withEmail("logic-sort-a@test.com")
                 .withSocUsername("logic1")
                 .withGithubUsername("logic-gh-1")
@@ -101,7 +101,7 @@ public class LogicManagerTest {
                 .build();
         Person tutorialGroupTwo = new PersonBuilder()
                 .withName("Logic Sort Beta")
-                .withNusId("A1999992C")
+                .withNusId("A1999992J")
                 .withEmail("logic-sort-b@test.com")
                 .withSocUsername("logic2")
                 .withGithubUsername("logic-gh-2")
@@ -122,7 +122,7 @@ public class LogicManagerTest {
     public void execute_sortCommandByName_success() throws Exception {
         Person zed = new PersonBuilder()
                 .withName("Zed Logic")
-                .withNusId("A1999993D")
+                .withNusId("A1999993H")
                 .withEmail("logic-sort-c@test.com")
                 .withSocUsername("logic3")
                 .withGithubUsername("logic-gh-3")
