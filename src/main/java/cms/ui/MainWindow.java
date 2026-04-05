@@ -170,10 +170,11 @@ public class MainWindow extends UiPart<Stage> {
      * Rebuilds the person list panel and wires its selection to the detail panel.
      */
     private void refreshPersonListPanel() {
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList(), logic.isMasked());
+        boolean isMasked = logic.isMasked();
+        personListPanel = new PersonListPanel(logic.getFilteredPersonList(), isMasked);
         personListPanel.selectedPersonProperty().addListener((observable, oldValue, newValue) ->
-                personDetailPanel.showPerson(newValue));
-        personDetailPanel.showPerson(personListPanel.selectedPersonProperty().get());
+                personDetailPanel.showPerson(newValue, isMasked));
+        personDetailPanel.showPerson(personListPanel.selectedPersonProperty().get(), isMasked);
 
         personListPanelPlaceholder.getChildren().setAll(personListPanel.getRoot());
     }

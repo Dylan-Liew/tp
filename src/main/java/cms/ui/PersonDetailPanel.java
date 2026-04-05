@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Comparator;
 
+import cms.commons.util.MaskingUtil;
 import cms.model.person.Person;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -50,13 +51,13 @@ public class PersonDetailPanel extends UiPart<Region> {
      */
     public PersonDetailPanel() {
         super(FXML);
-        showPerson(null);
+        showPerson(null, false);
     }
 
     /**
-     * Updates the panel to show the selected person.
+     * Updates the panel to show the selected person, optionally masking sensitive fields.
      */
-    public void showPerson(Person person) {
+    public void showPerson(Person person, boolean isMasked) {
         boolean hasPerson = person != null;
         emptyStateLabel.setVisible(!hasPerson);
         emptyStateLabel.setManaged(!hasPerson);
@@ -71,14 +72,24 @@ public class PersonDetailPanel extends UiPart<Region> {
         role.setText(person.getRole().value.toUpperCase());
         tutorialGroup.setText(String.valueOf(person.getTutorialGroup().value));
         nusId.setText(person.getNusId().value);
-        socUsername.setText(person.getSocUsername().value);
-        String githubUrl = "https://github.com/" + person.getGithubUsername().value;
-        githubUsername.setText(githubUrl);
-        githubUsername.setOnAction(event -> openUri(githubUrl));
-        String emailAddress = person.getEmail().value;
-        email.setText(emailAddress);
-        email.setOnAction(event -> openUri("mailto:" + emailAddress));
-        phone.setText(person.getPhone().value);
+
+        if (isMasked) {
+            socUsername.setText(MaskingUtil.maskSocUsername(person.getSocUsername()));
+            githubUsername.setText(MaskingUtil.maskGithubUsername(person.getGithubUsername()));
+            githubUsername.setOnAction(null);
+            email.setText(MaskingUtil.maskEmail(person.getEmail()));
+            email.setOnAction(null);
+            phone.setText(MaskingUtil.maskPhone(person.getPhone()));
+        } else {
+            socUsername.setText(person.getSocUsername().value);
+            String githubUrl = "https://github.com/" + person.getGithubUsername().value;
+            githubUsername.setText(githubUrl);
+            githubUsername.setOnAction(event -> openUri(githubUrl));
+            String emailAddress = person.getEmail().value;
+            email.setText(emailAddress);
+            email.setOnAction(event -> openUri("mailto:" + emailAddress));
+            phone.setText(person.getPhone().value);
+        }
 
         role.getStyleClass().removeAll(ROLE_STUDENT_STYLE_CLASS, ROLE_TUTOR_STYLE_CLASS);
         role.getStyleClass().add(person.getRole().value.equals("student")
