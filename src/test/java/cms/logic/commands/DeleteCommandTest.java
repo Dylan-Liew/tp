@@ -21,7 +21,7 @@ import cms.logic.Messages;
 import cms.model.Model;
 import cms.model.ModelManager;
 import cms.model.UserPrefs;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 
 /**
@@ -87,9 +87,9 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_validNusIdUnfilteredList_success() {
+    public void execute_validNusMatricUnfilteredList_success() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = DeleteCommand.byNusId(personToDelete.getNusId());
+        DeleteCommand deleteCommand = DeleteCommand.byNusMatric(personToDelete.getNusMatric());
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.format(personToDelete));
@@ -101,11 +101,11 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_validNusIdsUnfilteredList_success() {
+    public void execute_validNusMatricsUnfilteredList_success() {
         Person firstPersonToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person thirdPersonToDelete = model.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = DeleteCommand.byNusIds(
-                List.of(firstPersonToDelete.getNusId(), thirdPersonToDelete.getNusId()));
+        DeleteCommand deleteCommand = DeleteCommand.byNusMatrics(
+                List.of(firstPersonToDelete.getNusMatric(), thirdPersonToDelete.getNusMatric()));
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(firstPersonToDelete);
@@ -120,17 +120,17 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_invalidNusIdUnfilteredList_throwsCommandException() {
-        DeleteCommand deleteCommand = DeleteCommand.byNusId(new NusId("A9999999Z"));
+    public void execute_invalidNusMatricUnfilteredList_throwsCommandException() {
+        DeleteCommand deleteCommand = DeleteCommand.byNusMatric(new NusMatric("A9999999W"));
 
-        assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_INVALID_NUS_ID);
+        assertCommandFailure(deleteCommand, model, DeleteCommand.MESSAGE_INVALID_NUS_MATRIC);
     }
 
     @Test
-    public void execute_duplicateNusIdsUnfilteredList_deletesPersonOnce() {
+    public void execute_duplicateNusMatricsUnfilteredList_deletesPersonOnce() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = DeleteCommand.byNusIds(
-                List.of(personToDelete.getNusId(), personToDelete.getNusId()));
+        DeleteCommand deleteCommand = DeleteCommand.byNusMatrics(
+                List.of(personToDelete.getNusMatric(), personToDelete.getNusMatric()));
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
@@ -190,10 +190,10 @@ public class DeleteCommandTest {
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
-        // same nus id values -> returns true
-        DeleteCommand deleteFirstNusIdCommand = DeleteCommand.byNusId(new NusId("A0000001B"));
-        DeleteCommand deleteFirstNusIdCommandCopy = DeleteCommand.byNusId(new NusId("A0000001B"));
-        assertTrue(deleteFirstNusIdCommand.equals(deleteFirstNusIdCommandCopy));
+        // same nus matric values -> returns true
+        DeleteCommand deleteFirstNusMatricCommand = DeleteCommand.byNusMatric(new NusMatric("A0000001X"));
+        DeleteCommand deleteFirstNusMatricCommandCopy = DeleteCommand.byNusMatric(new NusMatric("A0000001X"));
+        assertTrue(deleteFirstNusMatricCommand.equals(deleteFirstNusMatricCommandCopy));
 
         // different types -> returns false
         assertFalse(deleteFirstCommand.equals(1));
@@ -208,7 +208,7 @@ public class DeleteCommandTest {
         assertFalse(deleteFirstCommand.equals(deleteMultipleIndexesCommand));
 
         // different target type -> returns false
-        assertFalse(deleteFirstCommand.equals(deleteFirstNusIdCommand));
+        assertFalse(deleteFirstCommand.equals(deleteFirstNusMatricCommand));
     }
 
     @Test
@@ -223,10 +223,10 @@ public class DeleteCommandTest {
         String multiExpected = DeleteCommand.class.getCanonicalName() + "{targetIndexes=" + targetIndexes + "}";
         assertEquals(multiExpected, multiDeleteCommand.toString());
 
-        NusId targetNusId = new NusId("A0000001B");
-        DeleteCommand deleteByNusIdCommand = DeleteCommand.byNusId(targetNusId);
-        String nusIdExpected = DeleteCommand.class.getCanonicalName() + "{targetNusId=" + targetNusId + "}";
-        assertEquals(nusIdExpected, deleteByNusIdCommand.toString());
+        NusMatric targetNusMatric = new NusMatric("A0000001X");
+        DeleteCommand deleteByNusMatricCommand = DeleteCommand.byNusMatric(targetNusMatric);
+        String nusMatricExpected = DeleteCommand.class.getCanonicalName() + "{targetNusMatric=" + targetNusMatric + "}";
+        assertEquals(nusMatricExpected, deleteByNusMatricCommand.toString());
     }
 
     /**

@@ -2,10 +2,10 @@ package cms.logic.commands;
 
 import static cms.logic.commands.CommandTestUtil.DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.DESC_BOB;
-import static cms.logic.commands.CommandTestUtil.INVALID_SOCUSERNAME_NUSID_MISMATCH;
+import static cms.logic.commands.CommandTestUtil.INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH;
 import static cms.logic.commands.CommandTestUtil.VALID_GITHUBUSERNAME_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static cms.logic.commands.CommandTestUtil.VALID_NUSID_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSMATRIC_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_SOCUSERNAME_BOB;
@@ -158,7 +158,7 @@ public class EditCommandTest {
         Index targetIndex = INDEX_FIRST_PERSON;
         Person personToEdit = model.getFilteredPersonList().get(targetIndex.getZeroBased());
         Person editedPerson = new PersonBuilder(personToEdit)
-                .withNusId(VALID_NUSID_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB)
                 .withRole(VALID_ROLE_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB)
                 .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
@@ -166,7 +166,7 @@ public class EditCommandTest {
                 .build();
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withNusId(VALID_NUSID_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB)
                 .withRole(VALID_ROLE_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB)
                 .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
@@ -188,14 +188,14 @@ public class EditCommandTest {
         Person personToEdit = model.getFilteredPersonList().get(targetIndex.getZeroBased());
         Person editedPerson = new PersonBuilder(personToEdit)
                 .withName(VALID_NAME_BOB)
-                .withNusId(VALID_NUSID_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB)
                 .withPhone(VALID_PHONE_BOB)
                 .withRole(VALID_ROLE_BOB)
                 .build();
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
                 .withName(VALID_NAME_BOB)
-                .withNusId(VALID_NUSID_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB)
                 .withPhone(VALID_PHONE_BOB)
                 .withRole(VALID_ROLE_BOB)
                 .build();
@@ -210,13 +210,13 @@ public class EditCommandTest {
     }
 
     @Test
-    public void execute_socUsernameNusIdMismatch_failure() {
+    public void execute_socUsernameNusMatricMismatch_failure() {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-            .withSocUsername(INVALID_SOCUSERNAME_NUSID_MISMATCH)
+            .withSocUsername(INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH)
             .build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
-        assertCommandFailure(editCommand, model, Person.MESSAGE_SOC_USERNAME_NUS_ID_MISMATCH);
+        assertCommandFailure(editCommand, model, Person.MESSAGE_SOC_USERNAME_NUS_MATRIC_MISMATCH);
     }
 
     @Test

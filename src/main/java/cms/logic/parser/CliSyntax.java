@@ -8,7 +8,7 @@ public class CliSyntax {
     /* Prefix definitions */
     public static final Prefix PREFIX_ALL = new Prefix("a/");
     public static final Prefix PREFIX_NAME = new Prefix("n/");
-    public static final Prefix PREFIX_NUSID = new Prefix("id/");
+    public static final Prefix PREFIX_MATRIC = new Prefix("m/");
     public static final Prefix PREFIX_ROLE = new Prefix("role/");
     public static final Prefix PREFIX_SOCUSERNAME = new Prefix("soc/");
     public static final Prefix PREFIX_GITHUBUSERNAME = new Prefix("gh/");

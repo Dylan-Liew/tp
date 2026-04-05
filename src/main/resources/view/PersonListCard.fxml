@@ -22,8 +22,8 @@
             <VBox alignment="CENTER_LEFT" spacing="4" HBox.hgrow="ALWAYS">
                 <Label fx:id="name" text="\$first" styleClass="card-name"/>
                 <TextFlow>
-                    <Text styleClass="card-secondary-label" text="NUS ID: "/>
-                    <Text fx:id="nusIdValue" styleClass="card-secondary" text="\$nusId"/>
+                    <Text styleClass="card-secondary-label" text="NUS Matric: "/>
+                    <Text fx:id="nusMatricValue" styleClass="card-secondary" text="\$nusMatric"/>
                 </TextFlow>
             </VBox>
             <Label fx:id="role" styleClass="card-role-badge" text="\$role"/>

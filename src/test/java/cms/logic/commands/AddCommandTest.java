@@ -61,7 +61,7 @@ public class AddCommandTest {
     public void execute_duplicateFields_throwsCommandException() {
         Person validPerson = new PersonBuilder().build();
         Person editedPerson = new PersonBuilder(validPerson)
-                .withNusId("A7654321Z")
+                .withNusMatric("A7654321J")
                 .build();
         AddCommand addCommand = new AddCommand(editedPerson);
         ModelStub modelStub = new ModelStubWithPerson(validPerson);

@@ -17,12 +17,12 @@ import cms.commons.util.ToStringBuilder;
 import cms.logic.Messages;
 import cms.logic.commands.exceptions.CommandException;
 import cms.model.Model;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.tag.Tag;
 
 /**
- * Adds or removes one or more tags from one or more persons identified by index or NUS ID.
+ * Adds or removes one or more tags from one or more persons identified by index or NUS Matric.
  */
 public class TagCommand extends Command {
 
@@ -32,26 +32,26 @@ public class TagCommand extends Command {
     public static final String ACTION_DELETE = "delete";
 
     public static final String MESSAGE_EMPTY_INDEX_LIST = "At least one person index must be provided.";
-    public static final String MESSAGE_EMPTY_NUS_ID_LIST = "At least one NUS ID must be provided.";
+    public static final String MESSAGE_EMPTY_NUS_MATRIC_LIST = "At least one NUS Matric must be provided.";
     public static final String MESSAGE_EMPTY_TAG_LIST = "At least one tag must be provided.";
-    public static final String MESSAGE_INVALID_NUS_ID = "One or more NUS IDs do not match any person.";
+    public static final String MESSAGE_INVALID_NUS_MATRIC = "One or more NUS Matrics do not match any person.";
     public static final String MESSAGE_ADD_NO_CHANGES = "All specified tags already exist on the targeted persons.";
     public static final String MESSAGE_DELETE_NO_CHANGES = "No specified tags were removed from the targeted persons.";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds or removes tags from one or more persons.\n"
             + "Parameters: "
             + ACTION_ADD + " n/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]... or "
-            + ACTION_ADD + " id/NUS_ID [MORE_NUS_IDS]... tag/TAG [MORE_TAGS]...\n"
+            + ACTION_ADD + " m/NUS_MATRIC [MORE_NUS_MATRICS]... tag/TAG [MORE_TAGS]...\n"
             + "            "
             + ACTION_DELETE + " n/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]... or "
-            + ACTION_DELETE + " id/NUS_ID [MORE_NUS_IDS]... tag/TAG [MORE_TAGS]...\n"
+            + ACTION_DELETE + " m/NUS_MATRIC [MORE_NUS_MATRICS]... tag/TAG [MORE_TAGS]...\n"
             + "Examples: " + COMMAND_WORD + " " + ACTION_ADD + " n/1 2 tag/friend tutor, "
-            + COMMAND_WORD + " " + ACTION_DELETE + " id/A1234567B A2345678C tag/friend";
+            + COMMAND_WORD + " " + ACTION_DELETE + " m/A1234567X A2345678J tag/friend";
 
     private final Action action;
     private final TargetType targetType;
     private final List<Index> targetIndexes;
-    private final List<NusId> targetNusIds;
+    private final List<NusMatric> targetNusMatrics;
     private final List<Tag> targetTags;
 
     /**
@@ -64,7 +64,7 @@ public class TagCommand extends Command {
 
     private enum TargetType {
         INDEX,
-        NUS_ID
+        NUS_MATRIC
     }
 
     /**
@@ -75,32 +75,32 @@ public class TagCommand extends Command {
     }
 
     private TagCommand(Action action, TargetType targetType, List<Index> targetIndexes,
-            List<NusId> targetNusIds, List<Tag> targetTags) {
+            List<NusMatric> targetNusMatrics, List<Tag> targetTags) {
         requireNonNull(action);
         requireNonNull(targetType);
         requireNonNull(targetIndexes);
-        requireNonNull(targetNusIds);
+        requireNonNull(targetNusMatrics);
         requireNonNull(targetTags);
 
         if (targetType == TargetType.INDEX) {
             checkArgument(!targetIndexes.isEmpty(), MESSAGE_EMPTY_INDEX_LIST);
         } else {
-            checkArgument(!targetNusIds.isEmpty(), MESSAGE_EMPTY_NUS_ID_LIST);
+            checkArgument(!targetNusMatrics.isEmpty(), MESSAGE_EMPTY_NUS_MATRIC_LIST);
         }
         checkArgument(!targetTags.isEmpty(), MESSAGE_EMPTY_TAG_LIST);
 
         this.action = action;
         this.targetType = targetType;
         this.targetIndexes = List.copyOf(targetIndexes);
-        this.targetNusIds = List.copyOf(targetNusIds);
+        this.targetNusMatrics = List.copyOf(targetNusMatrics);
         this.targetTags = List.copyOf(targetTags);
     }
 
     /**
      * Creates a {@code TagCommand} targeting one or more persons by NUS ID.
      */
-    public static TagCommand byNusIds(Action action, List<NusId> targetNusIds, List<Tag> targetTags) {
-        return new TagCommand(action, TargetType.NUS_ID, List.of(), targetNusIds, targetTags);
+    public static TagCommand byNusMatrics(Action action, List<NusMatric> targetNusMatrics, List<Tag> targetTags) {
+        return new TagCommand(action, TargetType.NUS_MATRIC, List.of(), targetNusMatrics, targetTags);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class TagCommand extends Command {
 
         List<Person> targetedPersons = targetType == TargetType.INDEX
                 ? getPersonsByIndex(model)
-                : getPersonsByNusId(model);
+                : getPersonsByNusMatric(model);
 
         return action == Action.ADD
                 ? executeAdd(model, targetedPersons)
@@ -195,21 +195,21 @@ public class TagCommand extends Command {
         return persons;
     }
 
-    private List<Person> getPersonsByNusId(Model model) throws CommandException {
+    private List<Person> getPersonsByNusMatric(Model model) throws CommandException {
         List<Person> personsInAddressBook = model.getAddressBook().getPersonList();
         List<Person> persons = new ArrayList<>();
-        Set<NusId> seenNusIds = new LinkedHashSet<>();
+        Set<NusMatric> seenNusMatrics = new LinkedHashSet<>();
 
-        for (NusId targetNusId : targetNusIds) {
-            if (!seenNusIds.add(targetNusId)) {
+        for (NusMatric targetNusMatric : targetNusMatrics) {
+            if (!seenNusMatrics.add(targetNusMatric)) {
                 continue;
             }
 
             Optional<Person> matchingPerson = personsInAddressBook.stream()
-                    .filter(person -> person.getNusId().equals(targetNusId))
+                    .filter(person -> person.getNusMatric().equals(targetNusMatric))
                     .findFirst();
             if (matchingPerson.isEmpty()) {
-                throw new CommandException(MESSAGE_INVALID_NUS_ID);
+                throw new CommandException(MESSAGE_INVALID_NUS_MATRIC);
             }
 
             persons.add(matchingPerson.get());
@@ -221,7 +221,7 @@ public class TagCommand extends Command {
     private Person createUpdatedPerson(Person personToEdit, Set<Tag> updatedTags) throws CommandException {
         try {
             return Person.create(personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(),
-                    personToEdit.getNusId(), personToEdit.getSocUsername(), personToEdit.getGithubUsername(),
+                    personToEdit.getNusMatric(), personToEdit.getSocUsername(), personToEdit.getGithubUsername(),
                     personToEdit.getRole(), personToEdit.getTutorialGroup(), updatedTags);
         } catch (IllegalArgumentException e) {
             throw new CommandException(e.getMessage(), e);
@@ -256,7 +256,7 @@ public class TagCommand extends Command {
         if (oneBasedIndex == 0) {
             oneBasedIndex = findOneBasedIndex(model.getAddressBook().getPersonList(), person);
         }
-        return oneBasedIndex + ", " + person.getName() + ", " + person.getNusId();
+        return oneBasedIndex + ", " + person.getName() + ", " + person.getNusMatric();
     }
 
     private int findOneBasedIndex(List<Person> persons, Person person) {
@@ -283,7 +283,7 @@ public class TagCommand extends Command {
         return action == otherTagCommand.action
                 && targetType == otherTagCommand.targetType
                 && targetIndexes.equals(otherTagCommand.targetIndexes)
-                && targetNusIds.equals(otherTagCommand.targetNusIds)
+                && targetNusMatrics.equals(otherTagCommand.targetNusMatrics)
                 && targetTags.equals(otherTagCommand.targetTags);
     }
 
@@ -293,7 +293,7 @@ public class TagCommand extends Command {
                 .add("action", action)
                 .add("targetType", targetType)
                 .add("targetIndexes", targetIndexes)
-                .add("targetNusIds", targetNusIds)
+                .add("targetNusMatrics", targetNusMatrics)
                 .add("targetTags", targetTags)
                 .toString();
     }

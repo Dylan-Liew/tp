@@ -14,7 +14,7 @@ Class UserPrefs
 
 Class UniquePersonList
 Class Person
-Class NusId
+Class NusMatric
 Class SocUsername
 Class GithubUsername
 Class Role
@@ -44,7 +44,7 @@ UniquePersonList --> "~* all" Person
 Person *--> Name
 Person *--> Phone
 Person *--> Email
-Person *--> NusId
+Person *--> NusMatric
 Person *--> SocUsername
 Person *--> GithubUsername
 Person *--> Role

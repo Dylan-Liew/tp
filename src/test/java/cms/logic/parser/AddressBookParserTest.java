@@ -35,7 +35,7 @@ import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.CombinedFindPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
-import cms.model.person.NusIdContainsKeywordsPredicate;
+import cms.model.person.NusMatricContainsKeywordsPredicate;
 import cms.model.person.Person;
 import cms.model.person.TagTutorialGroupMatchesPredicate;
 import cms.model.person.TutorialGroup;
@@ -124,7 +124,7 @@ public class AddressBookParserTest {
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(java.util.Collections.emptyList()),
                         new NameContainsKeywordsPredicate(keywords),
-                        new NusIdContainsKeywordsPredicate(java.util.Collections.emptyList())
+                        new NusMatricContainsKeywordsPredicate(java.util.Collections.emptyList())
                 )), command);
     }
 

@@ -7,19 +7,19 @@ import cms.commons.util.StringUtil;
 import cms.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Name} or {@code NusId} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code Name} or {@code NusMatric} matches any of the keywords given.
  */
-public class NameOrNusIdContainsKeywordsPredicate implements Predicate<Person> {
+public class NameOrNusMatricContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> nameKeywords;
     private final List<String> idKeywords;
 
     /**
-     * Constructs a {@code NameOrNusIdContainsKeywordsPredicate}.
+     * Constructs a {@code NameOrNusMatricContainsKeywordsPredicate}.
      *
      * @param nameKeywords list of name keywords (case-insensitive match)
-     * @param idKeywords list of NUS ID keywords (case-insensitive match)
+     * @param idKeywords list of NUS Matric keywords (case-insensitive match)
      */
-    public NameOrNusIdContainsKeywordsPredicate(List<String> nameKeywords, List<String> idKeywords) {
+    public NameOrNusMatricContainsKeywordsPredicate(List<String> nameKeywords, List<String> idKeywords) {
         this.nameKeywords = (nameKeywords == null) ? List.of() : nameKeywords;
         this.idKeywords = (idKeywords == null) ? List.of() : idKeywords;
     }
@@ -30,7 +30,8 @@ public class NameOrNusIdContainsKeywordsPredicate implements Predicate<Person> {
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
 
         boolean idMatches = idKeywords.stream()
-                .anyMatch(keyword -> person.getNusId() != null && person.getNusId().value.equalsIgnoreCase(keyword));
+                .anyMatch(keyword -> person.getNusMatric() != null
+                        && person.getNusMatric().value.equalsIgnoreCase(keyword));
 
         return nameMatches || idMatches;
     }
@@ -40,10 +41,10 @@ public class NameOrNusIdContainsKeywordsPredicate implements Predicate<Person> {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof NameOrNusIdContainsKeywordsPredicate)) {
+        if (!(other instanceof NameOrNusMatricContainsKeywordsPredicate)) {
             return false;
         }
-        NameOrNusIdContainsKeywordsPredicate otherPredicate = (NameOrNusIdContainsKeywordsPredicate) other;
+        NameOrNusMatricContainsKeywordsPredicate otherPredicate = (NameOrNusMatricContainsKeywordsPredicate) other;
         return nameKeywords.equals(otherPredicate.nameKeywords) && idKeywords.equals(otherPredicate.idKeywords);
     }
 

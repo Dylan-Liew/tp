@@ -17,13 +17,13 @@ import cms.model.tag.Tag;
  * immutable.
  */
 public abstract class Person {
-    public static final String MESSAGE_SOC_USERNAME_NUS_ID_MISMATCH =
-            "SOC usernames that are in NUS ID format must match the person's NUS ID.";
+    public static final String MESSAGE_SOC_USERNAME_NUS_MATRIC_MISMATCH =
+            "SOC usernames that are in NUS Matric format must match the person's NUS Matric.";
     // Identity fields
     private final Name name;
     private final Phone phone;
     private final Email email;
-    private final NusId nusId;
+    private final NusMatric nusMatric;
     private final SocUsername socUsername;
     private final GithubUsername githubUsername;
 
@@ -36,14 +36,14 @@ public abstract class Person {
          *
          * @throws InvalidPersonException if any model-level person invariant is violated
      */
-    public Person(Name name, Phone phone, Email email, NusId nusId, SocUsername socUsername,
+    public Person(Name name, Phone phone, Email email, NusMatric nusMatric, SocUsername socUsername,
             GithubUsername githubUsername, TutorialGroup tutorialGroup, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);
-        validateSocUsernameNusIdConsistency(nusId, socUsername);
+        requireAllNonNull(name, phone, email, nusMatric, socUsername, githubUsername, tutorialGroup, tags);
+        validateSocUsernameNusMatricConsistency(nusMatric, socUsername);
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.nusId = nusId;
+        this.nusMatric = nusMatric;
         this.socUsername = socUsername;
         this.githubUsername = githubUsername;
         this.tutorialGroup = tutorialGroup;
@@ -53,23 +53,23 @@ public abstract class Person {
     /**
      * Creates a role-specific person instance.
      */
-    public static Person create(Name name, Phone phone, Email email, NusId nusId, SocUsername socUsername,
+    public static Person create(Name name, Phone phone, Email email, NusMatric nusMatric, SocUsername socUsername,
             GithubUsername githubUsername, Role role, TutorialGroup tutorialGroup, Set<Tag> tags) {
         Objects.requireNonNull(role);
 
         if (role == Role.STUDENT) {
-            return new Student(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);
+            return new Student(name, phone, email, nusMatric, socUsername, githubUsername, tutorialGroup, tags);
         }
-        return new Tutor(name, phone, email, nusId, socUsername, githubUsername, tutorialGroup, tags);
+        return new Tutor(name, phone, email, nusMatric, socUsername, githubUsername, tutorialGroup, tags);
     }
 
     /**
-     * Ensures that if SOC username uses NUS ID format, it matches this person's NUS ID.
+     * Ensures that if SOC username uses NUS Matric format, it matches this person's NUS Matric.
      */
-    private static void validateSocUsernameNusIdConsistency(NusId nusId, SocUsername socUsername) {
-        if (NusId.isValidNusId(socUsername.value)
-                && !NusId.canonicalise(socUsername.value).equals(nusId.value)) {
-            throw new InvalidPersonException(MESSAGE_SOC_USERNAME_NUS_ID_MISMATCH);
+    private static void validateSocUsernameNusMatricConsistency(NusMatric nusMatric, SocUsername socUsername) {
+        if (NusMatric.isValidNusMatric(socUsername.value)
+                && !NusMatric.canonicalise(socUsername.value).equals(nusMatric.value)) {
+            throw new InvalidPersonException(MESSAGE_SOC_USERNAME_NUS_MATRIC_MISMATCH);
         }
     }
 
@@ -85,8 +85,8 @@ public abstract class Person {
         return email;
     }
 
-    public NusId getNusId() {
-        return nusId;
+    public NusMatric getNusMatric() {
+        return nusMatric;
     }
 
     public SocUsername getSocUsername() {
@@ -113,7 +113,7 @@ public abstract class Person {
     }
 
     /**
-     * Returns true if both persons have the same NUS ID.
+     * Returns true if both persons have the same NUS Matric.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -122,7 +122,7 @@ public abstract class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getNusId().equals(getNusId());
+                && otherPerson.getNusMatric().equals(getNusMatric());
     }
 
     /**
@@ -167,7 +167,7 @@ public abstract class Person {
         return name.equals(otherPerson.name)
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
-                && nusId.equals(otherPerson.nusId)
+                && nusMatric.equals(otherPerson.nusMatric)
                 && socUsername.equals(otherPerson.socUsername)
                 && githubUsername.equals(otherPerson.githubUsername)
                 && getRole().equals(otherPerson.getRole())
@@ -178,7 +178,7 @@ public abstract class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, nusId, socUsername, githubUsername, getRole(), tutorialGroup, tags);
+        return Objects.hash(name, phone, email, nusMatric, socUsername, githubUsername, getRole(), tutorialGroup, tags);
     }
 
     @Override
@@ -187,7 +187,7 @@ public abstract class Person {
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
-                .add("nusId", nusId)
+                .add("nusMatric", nusMatric)
                 .add("socUsername", socUsername)
                 .add("githubUsername", githubUsername)
                 .add("role", getRole())

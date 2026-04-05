@@ -2,8 +2,8 @@ package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static cms.logic.parser.CliSyntax.PREFIX_ALL;
+import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import cms.logic.commands.FindCommand;
 import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
-import cms.model.person.NusIdContainsKeywordsPredicate;
+import cms.model.person.NusMatricContainsKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -35,14 +35,14 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // Tokenize for required prefixes
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_ALL, PREFIX_NAME, PREFIX_NUSID);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_ALL, PREFIX_NAME, PREFIX_MATRIC);
 
         boolean hasAll = argMultimap.getValue(PREFIX_ALL).isPresent();
         boolean hasName = argMultimap.getValue(PREFIX_NAME).isPresent();
-        boolean hasNusId = argMultimap.getValue(PREFIX_NUSID).isPresent();
+        boolean hasNusMatric = argMultimap.getValue(PREFIX_MATRIC).isPresent();
 
         // require at least one prefix to be present and no preamble
-        if (!(hasAll || hasName || hasNusId) || !argMultimap.getPreamble().isEmpty()) {
+        if (!(hasAll || hasName || hasNusMatric) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
@@ -65,8 +65,8 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         List<String> idKeywords = new ArrayList<>();
-        if (hasNusId) {
-            idKeywords = argMultimap.getAllValues(PREFIX_NUSID).stream()
+        if (hasNusMatric) {
+            idKeywords = argMultimap.getAllValues(PREFIX_MATRIC).stream()
                     .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
                     .filter(s -> !s.isEmpty())
                     .map(String::toUpperCase)
@@ -75,7 +75,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         AllFieldsContainsKeywordsPredicate allPredicate = new AllFieldsContainsKeywordsPredicate(allKeywords);
         NameContainsKeywordsPredicate namePredicate = new NameContainsKeywordsPredicate(nameKeywords);
-        NusIdContainsKeywordsPredicate idPredicate = new NusIdContainsKeywordsPredicate(idKeywords);
+        NusMatricContainsKeywordsPredicate idPredicate = new NusMatricContainsKeywordsPredicate(idKeywords);
 
         // Combined predicate: matches if any prefix-predicate matches
         return new FindCommand(new cms.model.person.CombinedFindPredicate(allPredicate, namePredicate, idPredicate));

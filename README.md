@@ -14,7 +14,7 @@
 * For the detailed documentation of this project, see the **[CS2103T Course Manager Product Website](https://ay2526s2-cs2103t-f10-2.github.io/tp/)**.
 * Core features include:
   * **List** all students and tutors in the system
-  * **Add** new students or tutors with fields such as NUS ID, SoC username, GitHub, email, phone, tutorial group, and tags
+  * **Add** new students or tutors with fields such as NUS Matric, SoC username, GitHub, email, phone, tutorial group, and tags
   * **Delete** existing student or tutor records by index
   * **Find** contacts by name (with plans to extend to other fields)
   * **Tag** students with custom labels (e.g., `struggling`, `needs-help`) for flexible annotation

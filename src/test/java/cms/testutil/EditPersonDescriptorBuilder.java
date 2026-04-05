@@ -8,7 +8,7 @@ import cms.logic.commands.EditCommand.EditPersonDescriptor;
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.person.Phone;
 import cms.model.person.Role;
@@ -39,7 +39,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setName(person.getName());
         descriptor.setPhone(person.getPhone());
         descriptor.setEmail(person.getEmail());
-        descriptor.setNusId(person.getNusId());
+        descriptor.setNusMatric(person.getNusMatric());
         descriptor.setRole(person.getRole());
         descriptor.setSocUsername(person.getSocUsername());
         descriptor.setGithubUsername(person.getGithubUsername());
@@ -72,10 +72,10 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code NusId} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code NusMatric} of the {@code EditPersonDescriptor} that we are building.
      */
-    public EditPersonDescriptorBuilder withNusId(String nusId) {
-        descriptor.setNusId(new NusId(nusId));
+    public EditPersonDescriptorBuilder withNusMatric(String nusMatric) {
+        descriptor.setNusMatric(new NusMatric(nusMatric));
         return this;
     }
 

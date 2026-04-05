@@ -2,7 +2,7 @@ package cms.model.person;
 
 import static cms.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static cms.logic.commands.CommandTestUtil.VALID_NUSID_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSMATRIC_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static cms.testutil.Assert.assertThrows;
@@ -19,9 +19,9 @@ import cms.testutil.PersonBuilder;
 
 public class PersonTest {
 
-    private static final String NUSID_FOR_SOC_USERNAME_MATCH_TEST = "A1234567B";
-    private static final String SOCUSERNAME_MATCHING_NUSID_FOR_TEST = "A1234567b";
-    private static final String SOCUSERNAME_MISMATCHING_NUSID_FOR_TEST = "a7654321b";
+    private static final String NUSMATRIC_FOR_SOC_USERNAME_MATCH_TEST = "A1234567X";
+    private static final String SOCUSERNAME_MATCHING_NUSMATRIC_FOR_TEST = "A1234567x";
+    private static final String SOCUSERNAME_MISMATCHING_NUSMATRIC_FOR_TEST = "a7654321j";
 
     @Test
     public void create_returnsCorrectSubtypeForRole() {
@@ -39,23 +39,23 @@ public class PersonTest {
     }
 
     @Test
-    public void constructor_socUsernameInNusIdFormatMismatch_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, Person.MESSAGE_SOC_USERNAME_NUS_ID_MISMATCH, () ->
+    public void constructor_socUsernameInNusMatricFormatMismatch_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, Person.MESSAGE_SOC_USERNAME_NUS_MATRIC_MISMATCH, () ->
             new PersonBuilder()
-                .withNusId(NUSID_FOR_SOC_USERNAME_MATCH_TEST)
-                .withSocUsername(SOCUSERNAME_MISMATCHING_NUSID_FOR_TEST)
+                .withNusMatric(NUSMATRIC_FOR_SOC_USERNAME_MATCH_TEST)
+                .withSocUsername(SOCUSERNAME_MISMATCHING_NUSMATRIC_FOR_TEST)
                 .build());
     }
 
     @Test
-    public void constructor_socUsernameInNusIdFormatMatch_success() {
+    public void constructor_socUsernameInNusMatricFormatMatch_success() {
         Person person = new PersonBuilder()
-                .withNusId(NUSID_FOR_SOC_USERNAME_MATCH_TEST)
-                .withSocUsername(SOCUSERNAME_MATCHING_NUSID_FOR_TEST)
+                .withNusMatric(NUSMATRIC_FOR_SOC_USERNAME_MATCH_TEST)
+                .withSocUsername(SOCUSERNAME_MATCHING_NUSMATRIC_FOR_TEST)
                 .build();
 
-        assertEquals(NUSID_FOR_SOC_USERNAME_MATCH_TEST, person.getNusId().value);
-        assertEquals("a1234567b", person.getSocUsername().value); // canonicalised to lowercase
+        assertEquals(NUSMATRIC_FOR_SOC_USERNAME_MATCH_TEST, person.getNusMatric().value);
+        assertEquals("a1234567x", person.getSocUsername().value); // canonicalised to lowercase
     }
 
     @Test
@@ -66,21 +66,21 @@ public class PersonTest {
         // null -> returns false
         assertFalse(ALICE.isSamePerson(null));
 
-        // same NUS ID, all other attributes different -> returns true
+        // same NUS Matric, all other attributes different -> returns true
         Person editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
                 .withTags(VALID_TAG_HUSBAND).withName(VALID_NAME_BOB).build();
         assertTrue(ALICE.isSamePerson(editedAlice));
 
-        // different NUS ID, all other attributes same -> returns false
-        editedAlice = new PersonBuilder(ALICE).withNusId(VALID_NUSID_BOB).build();
+        // different NUS Matric, all other attributes same -> returns false
+        editedAlice = new PersonBuilder(ALICE).withNusMatric(VALID_NUSMATRIC_BOB).build();
         assertFalse(ALICE.isSamePerson(editedAlice));
 
-        // name differs in case, NUS ID unchanged -> returns true
+        // name differs in case, NUS Matric unchanged -> returns true
         Person editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).build();
         assertTrue(BOB.isSamePerson(editedBob));
 
-        // NUS ID has different value, all other attributes same -> returns false
-        editedBob = new PersonBuilder(BOB).withNusId("A1111111A").build();
+        // NUS Matric has different value, all other attributes same -> returns false
+        editedBob = new PersonBuilder(BOB).withNusMatric("A1111111M").build();
         assertFalse(BOB.isSamePerson(editedBob));
     }
 
@@ -114,8 +114,8 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different nusId -> returns false
-        editedAlice = new PersonBuilder(ALICE).withNusId("A1234567B").build();
+        // different nusMatric -> returns false
+        editedAlice = new PersonBuilder(ALICE).withNusMatric("A1234567X").build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different soc username -> returns false
@@ -181,7 +181,7 @@ public class PersonTest {
     public void toStringMethod() {
         String expected = ALICE.getClass().getCanonicalName() + "{name=" + ALICE.getName()
             + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", nusId=" + ALICE.getNusId()
+                + ", email=" + ALICE.getEmail() + ", nusMatric=" + ALICE.getNusMatric()
                 + ", socUsername=" + ALICE.getSocUsername()
                 + ", githubUsername=" + ALICE.getGithubUsername()
                 + ", role=" + ALICE.getRole() + ", tutorialGroup=" + ALICE.getTutorialGroup()

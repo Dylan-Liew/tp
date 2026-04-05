@@ -5,23 +5,23 @@ import java.util.function.Predicate;
 import cms.commons.util.ToStringBuilder;
 
 /**
- * Composite predicate combining AllFields, Name, and NusId predicates with OR.
+ * Composite predicate combining AllFields, Name, and NusMatric predicates with OR.
  */
 public class CombinedFindPredicate implements Predicate<Person> {
     private final AllFieldsContainsKeywordsPredicate allPredicate;
     private final NameContainsKeywordsPredicate namePredicate;
-    private final NusIdContainsKeywordsPredicate idPredicate;
+    private final NusMatricContainsKeywordsPredicate idPredicate;
 
     /**
      * Constructs a {@code CombinedFindPredicate} that OR-combines three predicates.
      *
      * @param allPredicate predicate for the 'a/' (all fields) prefix
      * @param namePredicate predicate for the 'n/' (name) prefix
-     * @param idPredicate predicate for the 'id/' (NUS ID) prefix
+     * @param idPredicate predicate for the 'm/' (NUS Matric) prefix
      */
     public CombinedFindPredicate(AllFieldsContainsKeywordsPredicate allPredicate,
             NameContainsKeywordsPredicate namePredicate,
-            NusIdContainsKeywordsPredicate idPredicate) {
+            NusMatricContainsKeywordsPredicate idPredicate) {
         this.allPredicate = allPredicate;
         this.namePredicate = namePredicate;
         this.idPredicate = idPredicate;

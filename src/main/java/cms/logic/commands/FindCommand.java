@@ -18,11 +18,11 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Finds all persons by name, NUS ID, or any field (using the a/ prefix).\n"
-            + "Parameters: a/KEYWORD [MORE_KEYWORDS]... | n/NAME [MORE_NAMES]... | id/NUS_ID [MORE_IDS]... "
+            + ": Finds all persons by name, NUS Matric, or any field (using the a/ prefix).\n"
+            + "Parameters: a/KEYWORD [MORE_KEYWORDS]... | n/NAME [MORE_NAMES]... | m/NUS_MATRIC [MORE_IDS]... "
             + "(multiple prefixes allowed; no prefix treats input as name search)\n"
             + "Examples: " + COMMAND_WORD + " a/Alice Bob, " + COMMAND_WORD + " n/Alice Bob, "
-            + COMMAND_WORD + " id/A0234567B, " + COMMAND_WORD + " a/Alice n/Bob id/A0123456B";
+            + COMMAND_WORD + " m/A0234567X, " + COMMAND_WORD + " a/Alice n/Bob m/A0123456J";
 
     private final Predicate<Person> predicate;
 

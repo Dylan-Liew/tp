@@ -3,8 +3,8 @@ package cms.logic.parser;
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
+import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
 import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
 import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
@@ -38,7 +38,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                        PREFIX_NUSID, PREFIX_ROLE, PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME,
+                        PREFIX_MATRIC, PREFIX_ROLE, PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME,
                         PREFIX_TUTORIALGROUP, PREFIX_TAG);
 
         Index index;
@@ -50,7 +50,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                PREFIX_NUSID, PREFIX_ROLE, PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME,
+                PREFIX_MATRIC, PREFIX_ROLE, PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME,
                 PREFIX_TUTORIALGROUP);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
@@ -64,8 +64,8 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
-        if (argMultimap.getValue(PREFIX_NUSID).isPresent()) {
-            editPersonDescriptor.setNusId(ParserUtil.parseNusId(argMultimap.getValue(PREFIX_NUSID).get()));
+        if (argMultimap.getValue(PREFIX_MATRIC).isPresent()) {
+            editPersonDescriptor.setNusMatric(ParserUtil.parseNusMatric(argMultimap.getValue(PREFIX_MATRIC).get()));
         }
         if (argMultimap.getValue(PREFIX_ROLE).isPresent()) {
             editPersonDescriptor.setRole(ParserUtil.parseRole(argMultimap.getValue(PREFIX_ROLE).get()));

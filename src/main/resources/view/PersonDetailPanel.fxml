@@ -26,8 +26,8 @@
         <Label fx:id="tutorialGroup" styleClass="detail-tutorial-badge" text="T01"/>
 
         <HBox styleClass="detail-row" spacing="24">
-            <Label styleClass="detail-label" text="NUS ID"/>
-            <Label fx:id="nusId" styleClass="detail-value" text="A0000000X"/>
+            <Label styleClass="detail-label" text="NUS Matric"/>
+            <Label fx:id="nusMatric" styleClass="detail-value" text="A0000000Y"/>
         </HBox>
         <HBox styleClass="detail-row" spacing="24">
             <Label styleClass="detail-label" text="SOC USER"/>

@@ -9,7 +9,7 @@ import static cms.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static cms.logic.commands.CommandTestUtil.NAME_DESC_AMY;
-import static cms.logic.commands.CommandTestUtil.NUSID_DESC_AMY;
+import static cms.logic.commands.CommandTestUtil.NUSMATRIC_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
 import static cms.logic.commands.CommandTestUtil.ROLE_DESC_AMY;
@@ -20,7 +20,7 @@ import static cms.logic.commands.CommandTestUtil.TUTORIALGROUP_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_GITHUBUSERNAME_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_NAME_AMY;
-import static cms.logic.commands.CommandTestUtil.VALID_NUSID_AMY;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSMATRIC_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_ROLE_AMY;
@@ -153,9 +153,9 @@ public class EditCommandParserTest {
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
-        // nusId
-        userInput = targetIndex.getOneBased() + NUSID_DESC_AMY;
-        descriptor = new EditPersonDescriptorBuilder().withNusId(VALID_NUSID_AMY).build();
+        // nusMatric
+        userInput = targetIndex.getOneBased() + NUSMATRIC_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withNusMatric(VALID_NUSMATRIC_AMY).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 

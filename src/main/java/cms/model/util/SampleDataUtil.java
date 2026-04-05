@@ -9,7 +9,7 @@ import cms.model.ReadOnlyAddressBook;
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.person.Phone;
 import cms.model.person.Role;
@@ -26,7 +26,7 @@ public class SampleDataUtil {
             Person.create(new Name("Alex Yeoh"),
                        new Phone("87438807"),
                        new Email("alexyeoh@example.com"),
-                       new NusId("A0123456B"),
+                       new NusMatric("A0123456J"),
                        new SocUsername("alexyeoh"),
                        new GithubUsername("alexyeoh"),
                        Role.STUDENT,
@@ -35,7 +35,7 @@ public class SampleDataUtil {
             Person.create(new Name("Bernice Yu"),
                        new Phone("99272758"),
                        new Email("berniceyu@example.com"),
-                       new NusId("A0123457B"),
+                       new NusMatric("A0123457H"),
                        new SocUsername("bernice"),
                        new GithubUsername("berniceyu"),
                        Role.STUDENT,
@@ -44,7 +44,7 @@ public class SampleDataUtil {
             Person.create(new Name("Charlotte Oliveiro"),
                        new Phone("93210283"),
                        new Email("charlotte@example.com"),
-                       new NusId("A0123458B"),
+                       new NusMatric("A0123458E"),
                        new SocUsername("charlote"),
                        new GithubUsername("charlotte"),
                        Role.STUDENT,
@@ -53,7 +53,7 @@ public class SampleDataUtil {
             Person.create(new Name("David Li"),
                        new Phone("91031282"),
                        new Email("lidavid@example.com"),
-                       new NusId("A0123459B"),
+                       new NusMatric("A0123459A"),
                        new SocUsername("davidli"),
                        new GithubUsername("davidli"),
                        Role.STUDENT,
@@ -62,7 +62,7 @@ public class SampleDataUtil {
             Person.create(new Name("Irfan Ibrahim"),
                        new Phone("92492021"),
                        new Email("irfan@example.com"),
-                       new NusId("A0123460B"),
+                       new NusMatric("A0123460U"),
                        new SocUsername("irfan"),
                        new GithubUsername("irfan"),
                        Role.STUDENT,
@@ -71,7 +71,7 @@ public class SampleDataUtil {
             Person.create(new Name("Roy Balakrishnan"),
                        new Phone("92624417"),
                        new Email("royb@example.com"),
-                       new NusId("A0123461B"),
+                       new NusMatric("A0123461R"),
                        new SocUsername("roybal"),
                        new GithubUsername("royb"),
                        Role.STUDENT,

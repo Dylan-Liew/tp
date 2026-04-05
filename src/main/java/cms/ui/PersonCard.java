@@ -35,7 +35,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label tutorialGroup;
     @FXML
-    private Text nusIdValue;
+    private Text nusMatricValue;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -48,6 +48,6 @@ public class PersonCard extends UiPart<Region> {
         // The current list-card layout only surfaces summary fields, so masking has no effect here.
         role.setText(person.getRole().value.toUpperCase());
         tutorialGroup.setText(String.valueOf(person.getTutorialGroup().value));
-        nusIdValue.setText(person.getNusId().value);
+        nusMatricValue.setText(person.getNusMatric().value);
     }
 }

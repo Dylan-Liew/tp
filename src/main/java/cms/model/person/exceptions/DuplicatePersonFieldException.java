@@ -28,6 +28,6 @@ public class DuplicatePersonFieldException extends RuntimeException {
         requireNonNull(conflict);
         return String.format(DETAILED_MESSAGE_TEMPLATE,
                 conflict.getFieldName(), conflict.getFieldValue(),
-                conflict.getConflictingPerson().getName(), conflict.getConflictingPerson().getNusId());
+                conflict.getConflictingPerson().getName(), conflict.getConflictingPerson().getNusMatric());
     }
 }

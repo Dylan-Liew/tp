@@ -19,10 +19,10 @@ public class CombinedFindPredicateTest {
                 new AllFieldsContainsKeywordsPredicate(Collections.singletonList("Alice"));
         NameContainsKeywordsPredicate name =
                 new NameContainsKeywordsPredicate(Collections.singletonList("Bob"));
-        NusIdContainsKeywordsPredicate id =
-                new NusIdContainsKeywordsPredicate(Collections.singletonList("A0000001B"));
+        NusMatricContainsKeywordsPredicate matric =
+                new NusMatricContainsKeywordsPredicate(Collections.singletonList("A0000001X"));
 
-        CombinedFindPredicate combined = new CombinedFindPredicate(all, name, id);
+        CombinedFindPredicate combined = new CombinedFindPredicate(all, name, matric);
 
         // Person matching 'all' predicate (name contains Alice)
         Person p1 = new PersonBuilder().withName("Alice Pauline").build();
@@ -32,12 +32,12 @@ public class CombinedFindPredicateTest {
         Person p2 = new PersonBuilder().withName("Bob").build();
         assertTrue(combined.test(p2));
 
-        // Person matching 'id' predicate
-        Person p3 = new PersonBuilder().withNusId("A0000001B").build();
+        // Person matching 'matric' predicate
+        Person p3 = new PersonBuilder().withNusMatric("A0000001X").build();
         assertTrue(combined.test(p3));
 
         // Person matching none
-        Person p4 = new PersonBuilder().withName("Charlie").withNusId("A9999999Z").build();
+        Person p4 = new PersonBuilder().withName("Charlie").withNusMatric("A9999999W").build();
         assertFalse(combined.test(p4));
     }
 
@@ -46,7 +46,7 @@ public class CombinedFindPredicateTest {
         CombinedFindPredicate a = new CombinedFindPredicate(
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("x")),
                 new NameContainsKeywordsPredicate(Arrays.asList("y")),
-                new NusIdContainsKeywordsPredicate(Arrays.asList("Z")));
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("Z")));
 
         // reflexive
         assertTrue(a.equals(a));
@@ -58,14 +58,14 @@ public class CombinedFindPredicateTest {
         CombinedFindPredicate b = new CombinedFindPredicate(
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("x")),
                 new NameContainsKeywordsPredicate(Arrays.asList("y")),
-                new NusIdContainsKeywordsPredicate(Arrays.asList("Z")));
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("Z")));
         assertTrue(a.equals(b));
 
         // different content
         CombinedFindPredicate c = new CombinedFindPredicate(
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("other")),
                 new NameContainsKeywordsPredicate(Arrays.asList("y")),
-                new NusIdContainsKeywordsPredicate(Arrays.asList("Z")));
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("Z")));
         assertFalse(a.equals(c));
 
         // toString should mention predicate fields
@@ -79,23 +79,22 @@ public class CombinedFindPredicateTest {
         CombinedFindPredicate p1 = new CombinedFindPredicate(
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("x")),
                 new NameContainsKeywordsPredicate(Arrays.asList("y1")),
-                new NusIdContainsKeywordsPredicate(Arrays.asList("Z")));
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("Z")));
         CombinedFindPredicate p2 = new CombinedFindPredicate(
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("x")),
                 new NameContainsKeywordsPredicate(Arrays.asList("y2")),
-                new NusIdContainsKeywordsPredicate(Arrays.asList("Z")));
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("Z")));
         assertFalse(p1.equals(p2));
 
-        // same all and name, different id -> should be false
+        // same all and name, different matric -> should be false
         CombinedFindPredicate p3 = new CombinedFindPredicate(
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("x")),
                 new NameContainsKeywordsPredicate(Arrays.asList("y1")),
-                new NusIdContainsKeywordsPredicate(Arrays.asList("Z1")));
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("Z1")));
         CombinedFindPredicate p4 = new CombinedFindPredicate(
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("x")),
                 new NameContainsKeywordsPredicate(Arrays.asList("y1")),
-                new NusIdContainsKeywordsPredicate(Arrays.asList("Z2")));
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("Z2")));
         assertFalse(p3.equals(p4));
     }
 }
-

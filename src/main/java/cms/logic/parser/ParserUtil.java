@@ -14,7 +14,7 @@ import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Phone;
 import cms.model.person.Role;
 import cms.model.person.SocUsername;
@@ -63,21 +63,21 @@ public class ParserUtil {
     }
 
     /**
-     * Parses {@code Collection<String> nusIds} into a list of {@code NusId}s.
+     * Parses {@code Collection<String> nusMatrics} into a list of {@code NusMatric}s.
      *
-     * @throws ParseException if no NUS IDs are provided or if any provided NUS ID is invalid.
+     * @throws ParseException if no NUS Matrics are provided or if any provided NUS Matric is invalid.
      */
-    public static List<NusId> parseNusIds(Collection<String> nusIds) throws ParseException {
-        requireNonNull(nusIds);
-        if (nusIds.isEmpty()) {
-            throw new ParseException(NusId.MESSAGE_CONSTRAINTS);
+    public static List<NusMatric> parseNusMatrics(Collection<String> nusMatrics) throws ParseException {
+        requireNonNull(nusMatrics);
+        if (nusMatrics.isEmpty()) {
+            throw new ParseException(NusMatric.MESSAGE_CONSTRAINTS);
         }
 
-        List<NusId> parsedNusIds = new ArrayList<>();
-        for (String nusId : nusIds) {
-            parsedNusIds.add(parseNusId(nusId));
+        List<NusMatric> parsedNusMatrics = new ArrayList<>();
+        for (String nusMatric : nusMatrics) {
+            parsedNusMatrics.add(parseNusMatric(nusMatric));
         }
-        return parsedNusIds;
+        return parsedNusMatrics;
     }
 
     /**
@@ -153,18 +153,18 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code String nusId} into a {@code NusId}.
+     * Parses a {@code String nusMatric} into a {@code NusMatric}.
      * Leading and trailing whitespaces will be trimmed.
      *
-     * @throws ParseException if the given {@code nusId} is invalid.
+     * @throws ParseException if the given {@code nusMatric} is invalid.
      */
-    public static NusId parseNusId(String nusId) throws ParseException {
-        requireNonNull(nusId);
-        String trimmedNusId = nusId.trim();
-        if (!NusId.isValidNusId(trimmedNusId)) {
-            throw new ParseException(NusId.MESSAGE_CONSTRAINTS);
+    public static NusMatric parseNusMatric(String nusMatric) throws ParseException {
+        requireNonNull(nusMatric);
+        String trimmedNusMatric = nusMatric.trim();
+        if (!NusMatric.isValidNusMatric(trimmedNusMatric)) {
+            throw new ParseException(NusMatric.MESSAGE_CONSTRAINTS);
         }
-        return new NusId(trimmedNusId);
+        return new NusMatric(trimmedNusMatric);
     }
 
     /**

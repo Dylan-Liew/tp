@@ -59,7 +59,7 @@ public class UniquePersonListTest {
     @Test
     public void containsFieldConflict_personWithConflictingFieldInList_returnsTrue() {
         uniquePersonList.add(ALICE);
-        Person editedAlice = new PersonBuilder(ALICE).withNusId("A1234567C").build();
+        Person editedAlice = new PersonBuilder(ALICE).withNusMatric("A1234567X").build();
         assertTrue(uniquePersonList.containsFieldConflict(editedAlice));
     }
 
@@ -76,9 +76,9 @@ public class UniquePersonListTest {
 
     @Test
     public void add_personsRemainInInsertionOrderUntilExplicitSort() {
-        Person tutorialGroupTen = createSortTestPerson("Alice Sort", "A1234567B", "alice-sort@test.com",
+        Person tutorialGroupTen = createSortTestPerson("Alice Sort", "A1234567X", "alice-sort@test.com",
                 "asort1", "alice-sort-gh", "10");
-        Person tutorialGroupTwo = createSortTestPerson("Bob Sort", "A1234568C", "bob-sort@test.com",
+        Person tutorialGroupTwo = createSortTestPerson("Bob Sort", "A1234568W", "bob-sort@test.com",
                 "bsort1", "bob-sort-gh", "02");
 
         uniquePersonList.add(tutorialGroupTen);
@@ -91,7 +91,7 @@ public class UniquePersonListTest {
     @Test
     public void add_personWithConflictingEmail_throwsDuplicatePersonFieldException() {
         uniquePersonList.add(ALICE);
-        Person editedAlice = new PersonBuilder(ALICE).withNusId("A1234567C").build();
+        Person editedAlice = new PersonBuilder(ALICE).withNusMatric("A1234567X").build();
         FieldConflict conflict = new FieldConflict(FieldConflict.Type.EMAIL, ALICE);
         String expectedErrorMessage = DuplicatePersonFieldException.buildMessage(conflict);
 
@@ -144,9 +144,9 @@ public class UniquePersonListTest {
 
     @Test
     public void setPerson_editedPersonDoesNotTriggerAutomaticSort() {
-        Person tutorialGroupTen = createSortTestPerson("Set Sort Alpha", "A1234571F", "set-sort-a@test.com",
+        Person tutorialGroupTen = createSortTestPerson("Set Sort Alpha", "A1234571H", "set-sort-a@test.com",
                 "ssort1", "set-sort-a-gh", "10");
-        Person tutorialGroupTwo = createSortTestPerson("Set Sort Beta", "A1234572G", "set-sort-b@test.com",
+        Person tutorialGroupTwo = createSortTestPerson("Set Sort Beta", "A1234572E", "set-sort-b@test.com",
                 "ssort2", "set-sort-b-gh", "02");
         Person editedTutorialGroupTen = new PersonBuilder(tutorialGroupTen)
                 .withName("Set Sort Alpha Edited")
@@ -252,7 +252,7 @@ public class UniquePersonListTest {
 
     @Test
     public void setPersons_listWithDuplicateFields_throwsDuplicatePersonFieldException() {
-        Person editedAlice = new PersonBuilder(ALICE).withNusId("A1234567C").build();
+        Person editedAlice = new PersonBuilder(ALICE).withNusMatric("A1234567X").build();
         List<Person> listWithDuplicateFieldPersons = Arrays.asList(ALICE, editedAlice);
         FieldConflict conflict = new FieldConflict(FieldConflict.Type.EMAIL, editedAlice);
         String expectedErrorMessage = DuplicatePersonFieldException.buildMessage(conflict);
@@ -263,9 +263,9 @@ public class UniquePersonListTest {
 
     @Test
     public void setPersons_listPreservesProvidedOrderUntilExplicitSort() {
-        Person tutorialGroupTen = createSortTestPerson("List Sort Alpha", "A1234573H", "list-sort-a@test.com",
+        Person tutorialGroupTen = createSortTestPerson("List Sort Alpha", "A1234573A", "list-sort-a@test.com",
                 "lsort1", "list-sort-a-gh", "10");
-        Person tutorialGroupTwo = createSortTestPerson("List Sort Beta", "A1234574I", "list-sort-b@test.com",
+        Person tutorialGroupTwo = createSortTestPerson("List Sort Beta", "A1234574B", "list-sort-b@test.com",
                 "lsort2", "list-sort-b-gh", "02");
 
         uniquePersonList.setPersons(Arrays.asList(tutorialGroupTen, tutorialGroupTwo));
@@ -276,9 +276,9 @@ public class UniquePersonListTest {
 
     @Test
     public void sortByTutorialGroup_validTutorialGroups_sortsByGroupNumber() {
-        Person tutorialGroupTen = createSortTestPerson("Sort Wrapper Alpha", "A1234575J", "sort-wrapper-a@test.com",
+        Person tutorialGroupTen = createSortTestPerson("Sort Wrapper Alpha", "A1234575Y", "sort-wrapper-a@test.com",
                 "swrap1", "sort-wrapper-a-gh", "10");
-        Person tutorialGroupTwo = createSortTestPerson("Sort Wrapper Beta", "A1234576K", "sort-wrapper-b@test.com",
+        Person tutorialGroupTwo = createSortTestPerson("Sort Wrapper Beta", "A1234576X", "sort-wrapper-b@test.com",
                 "swrap2", "sort-wrapper-b-gh", "02");
 
         uniquePersonList.add(tutorialGroupTen);
@@ -291,9 +291,9 @@ public class UniquePersonListTest {
 
     @Test
     public void sortByTutorialGroup_sameTutorialGroups_preservesRelativeOrder() {
-        Person firstTutorialGroupTwo = createSortTestPerson("Sort Equal Alpha", "A1234577L", "sort-equal-a@test.com",
+        Person firstTutorialGroupTwo = createSortTestPerson("Sort Equal Alpha", "A1234577W", "sort-equal-a@test.com",
                 "sequal1", "sort-equal-a-gh", "02");
-        Person secondTutorialGroupTwo = createSortTestPerson("Sort Equal Beta", "A1234578M", "sort-equal-b@test.com",
+        Person secondTutorialGroupTwo = createSortTestPerson("Sort Equal Beta", "A1234578U", "sort-equal-b@test.com",
                 "sequal2", "sort-equal-b-gh", "2");
 
         uniquePersonList.add(firstTutorialGroupTwo);
@@ -306,9 +306,9 @@ public class UniquePersonListTest {
 
     @Test
     public void sortByName_unsortedNames_sortsAlphabeticallyIgnoringCase() {
-        Person zed = createSortTestPerson("zed sort", "A1234579N", "sort-name-z@test.com",
+        Person zed = createSortTestPerson("zed sort", "A1234579R", "sort-name-z@test.com",
                 "nsort1", "sort-name-z-gh", "05");
-        Person amy = createSortTestPerson("Amy sort", "A1234580P", "sort-name-a@test.com",
+        Person amy = createSortTestPerson("Amy sort", "A1234580H", "sort-name-a@test.com",
                 "nsort2", "sort-name-a-gh", "06");
 
         uniquePersonList.add(zed);
@@ -320,9 +320,9 @@ public class UniquePersonListTest {
 
     @Test
     public void sortByName_sameNameIgnoringCase_usesCaseSensitiveTieBreaker() {
-        Person lowercaseAmy = createSortTestPerson("amy sort", "A1234581Q", "sort-name-c@test.com",
+        Person lowercaseAmy = createSortTestPerson("amy sort", "A1234581E", "sort-name-c@test.com",
                 "nsort3", "sort-name-c-gh", "07");
-        Person uppercaseAmy = createSortTestPerson("Amy sort", "A1234582R", "sort-name-d@test.com",
+        Person uppercaseAmy = createSortTestPerson("Amy sort", "A1234582A", "sort-name-d@test.com",
                 "nsort4", "sort-name-d-gh", "08");
 
         uniquePersonList.add(lowercaseAmy);
@@ -343,12 +343,12 @@ public class UniquePersonListTest {
         assertEquals(uniquePersonList.asUnmodifiableObservableList().toString(), uniquePersonList.toString());
     }
 
-    private static Person createSortTestPerson(String name, String nusId, String email,
+    private static Person createSortTestPerson(String name, String nusMatric, String email,
                                                String socUsername, String githubUsername,
                                                String tutorialGroup) {
         return new PersonBuilder()
                 .withName(name)
-                .withNusId(nusId)
+                .withNusMatric(nusMatric)
                 .withEmail(email)
                 .withSocUsername(socUsername)
                 .withGithubUsername(githubUsername)

@@ -7,7 +7,7 @@ import cms.commons.core.index.Index;
 import cms.logic.Messages;
 import cms.logic.commands.DeleteCommand;
 import cms.logic.parser.exceptions.ParseException;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 
 /**
  * Parses input arguments and creates a new DeleteCommand object
@@ -23,9 +23,9 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
     public DeleteCommand parse(String args) throws ParseException {
         try {
             String trimmedArgs = args.trim();
-            if (trimmedArgs.startsWith("id/")) {
-                List<NusId> nusIds = ParserUtil.parseNusIds(parseNusIdTokens(trimmedArgs));
-                return DeleteCommand.byNusIds(nusIds);
+            if (trimmedArgs.startsWith("m/")) {
+                List<NusMatric> nusMatrics = ParserUtil.parseNusMatrics(parseNusMatricTokens(trimmedArgs));
+                return DeleteCommand.byNusMatrics(nusMatrics);
             }
 
             List<Index> indexes = ParserUtil.parseIndexes(trimmedArgs);
@@ -36,19 +36,19 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         }
     }
 
-    private List<String> parseNusIdTokens(String trimmedArgs) throws ParseException {
+    private List<String> parseNusMatricTokens(String trimmedArgs) throws ParseException {
         String[] tokens = trimmedArgs.split("\\s+");
         if (tokens.length == 0) {
-            throw new ParseException(NusId.MESSAGE_CONSTRAINTS);
+            throw new ParseException(NusMatric.MESSAGE_CONSTRAINTS);
         }
 
         return List.of(tokens).stream()
-                .map(this::stripNusIdPrefix)
+                .map(this::stripNusMatricPrefix)
                 .collect(Collectors.toList());
     }
 
-    private String stripNusIdPrefix(String token) {
-        return token.startsWith("id/") ? token.substring(3) : token;
+    private String stripNusMatricPrefix(String token) {
+        return token.startsWith("m/") ? token.substring(2) : token;
     }
 
 }

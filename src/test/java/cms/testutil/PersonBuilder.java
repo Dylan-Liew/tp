@@ -6,7 +6,7 @@ import java.util.Set;
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.person.Phone;
 import cms.model.person.Role;
@@ -23,7 +23,7 @@ public class PersonBuilder {
     public static final String DEFAULT_NAME = "Amy Bee";
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
-    public static final String DEFAULT_NUSID = "A0000001B";
+    public static final String DEFAULT_NUSMATRIC = "A0000001X";
     public static final String DEFAULT_SOCUSERNAME = "amybee";
     public static final String DEFAULT_GITHUBUSERNAME = "amybee";
     public static final Role DEFAULT_ROLE = Role.STUDENT;
@@ -32,7 +32,7 @@ public class PersonBuilder {
     private Name name;
     private Phone phone;
     private Email email;
-    private NusId nusId;
+    private NusMatric nusMatric;
     private SocUsername socUsername;
     private GithubUsername githubUsername;
     private Role role;
@@ -46,7 +46,7 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
-        nusId = new NusId(DEFAULT_NUSID);
+        nusMatric = new NusMatric(DEFAULT_NUSMATRIC);
         socUsername = new SocUsername(DEFAULT_SOCUSERNAME);
         githubUsername = new GithubUsername(DEFAULT_GITHUBUSERNAME);
         role = DEFAULT_ROLE;
@@ -61,7 +61,7 @@ public class PersonBuilder {
         name = personToCopy.getName();
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
-        nusId = personToCopy.getNusId();
+        nusMatric = personToCopy.getNusMatric();
         socUsername = personToCopy.getSocUsername();
         githubUsername = personToCopy.getGithubUsername();
         role = personToCopy.getRole();
@@ -102,10 +102,10 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code NusId} of the {@code Person} that we are building.
+     * Sets the {@code NusMatric} of the {@code Person} that we are building.
      */
-    public PersonBuilder withNusId(String nusId) {
-        this.nusId = new NusId(nusId);
+    public PersonBuilder withNusMatric(String nusMatric) {
+        this.nusMatric = new NusMatric(nusMatric);
         return this;
     }
 
@@ -142,7 +142,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return Person.create(name, phone, email, nusId, socUsername, githubUsername, role, tutorialGroup, tags);
+        return Person.create(name, phone, email, nusMatric, socUsername, githubUsername, role, tutorialGroup, tags);
     }
 
 }

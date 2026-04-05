@@ -5,7 +5,7 @@ import static cms.logic.commands.CommandTestUtil.DESC_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_GITHUBUSERNAME_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static cms.logic.commands.CommandTestUtil.VALID_NUSID_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSMATRIC_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_ROLE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_SOCUSERNAME_BOB;
@@ -52,8 +52,8 @@ public class EditPersonDescriptorTest {
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withEmail(VALID_EMAIL_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
-        // different nusId -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withNusId(VALID_NUSID_BOB).build();
+        // different nusMatric -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withNusMatric(VALID_NUSMATRIC_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different role -> returns false
@@ -83,8 +83,8 @@ public class EditPersonDescriptorTest {
         String expected = EditPersonDescriptor.class.getCanonicalName() + "{name="
                 + editPersonDescriptor.getName().orElse(null) + ", phone="
                 + editPersonDescriptor.getPhone().orElse(null) + ", email="
-                + editPersonDescriptor.getEmail().orElse(null) + ", nusId="
-                + editPersonDescriptor.getNusId().orElse(null) + ", role="
+                + editPersonDescriptor.getEmail().orElse(null) + ", nusMatric="
+                + editPersonDescriptor.getNusMatric().orElse(null) + ", role="
                 + editPersonDescriptor.getRole().orElse(null) + ", socUsername="
                 + editPersonDescriptor.getSocUsername().orElse(null) + ", githubUsername="
                 + editPersonDescriptor.getGithubUsername().orElse(null) + ", tutorialGroup="

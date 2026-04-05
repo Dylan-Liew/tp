@@ -28,7 +28,7 @@ import cms.model.UserPrefs;
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.person.Phone;
 import cms.model.person.Role;
@@ -54,7 +54,7 @@ public class TagCommandTest {
         expectedModel.setPerson(BENSON, updatedBenson);
 
         String expectedMessage = "tag1, tag2 has been added to "
-                + "1, Alice Pauline, A0000001B; 2, Benson Meier, A0234501C";
+                + "1, Alice Pauline, A0000001X; 2, Benson Meier, A0234501W";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -71,14 +71,14 @@ public class TagCommandTest {
         Person updatedBenson = new PersonBuilder(BENSON).withTags("owesMoney", "friends", "tag1").build();
         expectedModel.setPerson(BENSON, updatedBenson);
 
-        String expectedMessage = "tag1 has been added to 1, Benson Meier, A0234501C";
+        String expectedMessage = "tag1 has been added to 1, Benson Meier, A0234501W";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_deleteByNusIds_success() {
-        TagCommand command = TagCommand.byNusIds(TagCommand.Action.DELETE,
-                List.of(ALICE.getNusId(), BENSON.getNusId()),
+    public void execute_deleteByNusMatrics_success() {
+        TagCommand command = TagCommand.byNusMatrics(TagCommand.Action.DELETE,
+                List.of(ALICE.getNusMatric(), BENSON.getNusMatric()),
                 List.of(new Tag("friends"), new Tag("owesMoney")));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -88,17 +88,17 @@ public class TagCommandTest {
         expectedModel.setPerson(BENSON, updatedBenson);
 
         String expectedMessage = "friends has been removed from "
-                + "1, Alice Pauline, A0000001B; 2, Benson Meier, A0234501C\n"
-                + "owesmoney has been removed from 2, Benson Meier, A0234501C";
+                + "1, Alice Pauline, A0000001X; 2, Benson Meier, A0234501W\n"
+                + "owesmoney has been removed from 2, Benson Meier, A0234501W";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_deleteByNusIdPersonOutsideFilteredList_usesAddressBookIndexInSuccessMessage() {
+    public void execute_deleteByNusMatricPersonOutsideFilteredList_usesAddressBookIndexInSuccessMessage() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
-        TagCommand command = TagCommand.byNusIds(TagCommand.Action.DELETE,
-                List.of(BENSON.getNusId()),
+        TagCommand command = TagCommand.byNusMatrics(TagCommand.Action.DELETE,
+                List.of(BENSON.getNusMatric()),
                 List.of(new Tag("friends")));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -106,7 +106,7 @@ public class TagCommandTest {
         Person updatedBenson = new PersonBuilder(BENSON).withTags("owesMoney").build();
         expectedModel.setPerson(BENSON, updatedBenson);
 
-        String expectedMessage = "friends has been removed from 2, Benson Meier, A0234501C";
+        String expectedMessage = "friends has been removed from 2, Benson Meier, A0234501W";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -120,7 +120,7 @@ public class TagCommandTest {
         Person updatedBenson = new PersonBuilder(BENSON).withTags("friends").build();
         expectedModel.setPerson(BENSON, updatedBenson);
 
-        String expectedMessage = "owesmoney has been removed from 2, Benson Meier, A0234501C";
+        String expectedMessage = "owesmoney has been removed from 2, Benson Meier, A0234501W";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -154,21 +154,21 @@ public class TagCommandTest {
         Person updatedAlice = new PersonBuilder(ALICE).withTags("friends", "tag1").build();
         expectedModel.setPerson(ALICE, updatedAlice);
 
-        String expectedMessage = "tag1 has been added to 1, Alice Pauline, A0000001B";
+        String expectedMessage = "tag1 has been added to 1, Alice Pauline, A0000001X";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_duplicateNusIds_updatesPersonOnce() {
-        TagCommand command = TagCommand.byNusIds(TagCommand.Action.DELETE,
-                List.of(BENSON.getNusId(), BENSON.getNusId()),
+    public void execute_duplicateNusMatrics_updatesPersonOnce() {
+        TagCommand command = TagCommand.byNusMatrics(TagCommand.Action.DELETE,
+                List.of(BENSON.getNusMatric(), BENSON.getNusMatric()),
                 List.of(new Tag("friends")));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         Person updatedBenson = new PersonBuilder(BENSON).withTags("owesMoney").build();
         expectedModel.setPerson(BENSON, updatedBenson);
 
-        String expectedMessage = "friends has been removed from 2, Benson Meier, A0234501C";
+        String expectedMessage = "friends has been removed from 2, Benson Meier, A0234501W";
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -182,12 +182,12 @@ public class TagCommandTest {
     }
 
     @Test
-    public void execute_invalidNusId_throwsCommandException() {
-        TagCommand command = TagCommand.byNusIds(TagCommand.Action.DELETE,
-                List.of(new NusId("A9999999Z")),
+    public void execute_invalidNusMatric_throwsCommandException() {
+        TagCommand command = TagCommand.byNusMatrics(TagCommand.Action.DELETE,
+                List.of(new NusMatric("A9999999W")),
                 List.of(new Tag("friend")));
 
-        assertCommandFailure(command, model, TagCommand.MESSAGE_INVALID_NUS_ID);
+        assertCommandFailure(command, model, TagCommand.MESSAGE_INVALID_NUS_MATRIC);
     }
 
     @Test
@@ -195,11 +195,11 @@ public class TagCommandTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new TagCommand(TagCommand.Action.ADD, List.of(), List.of(new Tag("friend"))));
         assertThrows(IllegalArgumentException.class, () ->
-                TagCommand.byNusIds(TagCommand.Action.ADD, List.of(), List.of(new Tag("friend"))));
+                TagCommand.byNusMatrics(TagCommand.Action.ADD, List.of(), List.of(new Tag("friend"))));
         assertThrows(IllegalArgumentException.class, () ->
                 new TagCommand(TagCommand.Action.ADD, List.of(INDEX_FIRST_PERSON), List.of()));
         assertThrows(IllegalArgumentException.class, () ->
-                TagCommand.byNusIds(TagCommand.Action.ADD, List.of(ALICE.getNusId()), List.of()));
+                TagCommand.byNusMatrics(TagCommand.Action.ADD, List.of(ALICE.getNusMatric()), List.of()));
     }
 
     @Test
@@ -210,21 +210,21 @@ public class TagCommandTest {
                 List.of(new Tag("friend")));
         TagCommand deleteSecondCommand = new TagCommand(TagCommand.Action.DELETE, List.of(INDEX_SECOND_PERSON),
                 List.of(new Tag("friend")));
-        TagCommand byNusIdCommand = TagCommand.byNusIds(TagCommand.Action.ADD, List.of(ALICE.getNusId()),
+        TagCommand byNusMatricCommand = TagCommand.byNusMatrics(TagCommand.Action.ADD, List.of(ALICE.getNusMatric()),
                 List.of(new Tag("friend")));
         TagCommand differentIndexesCommand = new TagCommand(TagCommand.Action.ADD, List.of(INDEX_SECOND_PERSON),
                 List.of(new Tag("friend")));
-        TagCommand differentNusIdsCommand = TagCommand.byNusIds(TagCommand.Action.ADD, List.of(BENSON.getNusId()),
-                List.of(new Tag("friend")));
+        TagCommand differentNusMatricsCommand = TagCommand.byNusMatrics(TagCommand.Action.ADD,
+                List.of(BENSON.getNusMatric()), List.of(new Tag("friend")));
         TagCommand differentTagsCommand = new TagCommand(TagCommand.Action.ADD, List.of(INDEX_FIRST_PERSON),
                 List.of(new Tag("teammate")));
 
         assertTrue(addFirstCommand.equals(addFirstCommand));
         assertTrue(addFirstCommand.equals(addFirstCommandCopy));
         assertFalse(addFirstCommand.equals(deleteSecondCommand));
-        assertFalse(addFirstCommand.equals(byNusIdCommand));
+        assertFalse(addFirstCommand.equals(byNusMatricCommand));
         assertFalse(addFirstCommand.equals(differentIndexesCommand));
-        assertFalse(byNusIdCommand.equals(differentNusIdsCommand));
+        assertFalse(byNusMatricCommand.equals(differentNusMatricsCommand));
         assertFalse(addFirstCommand.equals(differentTagsCommand));
         assertFalse(addFirstCommand.equals(null));
         assertFalse(addFirstCommand.equals(1));
@@ -236,15 +236,15 @@ public class TagCommandTest {
                 List.of(new Tag("friend")));
         String expectedByIndex = TagCommand.class.getCanonicalName()
                 + "{action=ADD, targetType=INDEX, targetIndexes=["
-                + Index.class.getCanonicalName() + "{zeroBasedIndex=0}], targetNusIds=[], targetTags=[[friend]]}";
+                + Index.class.getCanonicalName() + "{zeroBasedIndex=0}], targetNusMatrics=[], targetTags=[[friend]]}";
         assertEquals(expectedByIndex, byIndexCommand.toString());
 
-        TagCommand byNusIdCommand = TagCommand.byNusIds(TagCommand.Action.DELETE, List.of(ALICE.getNusId()),
+        TagCommand byNusMatricCommand = TagCommand.byNusMatrics(TagCommand.Action.DELETE, List.of(ALICE.getNusMatric()),
                 List.of(new Tag("friend")));
-        String expectedByNusId = TagCommand.class.getCanonicalName()
-                + "{action=DELETE, targetType=NUS_ID, targetIndexes=[], targetNusIds=[A0000001B], "
+        String expectedByNusMatric = TagCommand.class.getCanonicalName()
+                + "{action=DELETE, targetType=NUS_MATRIC, targetIndexes=[], targetNusMatrics=[A0000001X], "
                 + "targetTags=[[friend]]}";
-        assertEquals(expectedByNusId, byNusIdCommand.toString());
+        assertEquals(expectedByNusMatric, byNusMatricCommand.toString());
     }
 
     @Test
@@ -259,7 +259,7 @@ public class TagCommandTest {
         InvocationTargetException thrown = assertThrows(InvocationTargetException.class, () ->
                 createUpdatedPerson.invoke(command, invalidPerson, Set.of(new Tag("friend"))));
         assertTrue(thrown.getCause() instanceof CommandException);
-        assertEquals(Person.MESSAGE_SOC_USERNAME_NUS_ID_MISMATCH, thrown.getCause().getMessage());
+        assertEquals(Person.MESSAGE_SOC_USERNAME_NUS_MATRIC_MISMATCH, thrown.getCause().getMessage());
     }
 
     @Test
@@ -269,7 +269,7 @@ public class TagCommandTest {
         Method findOneBasedIndex = TagCommand.class.getDeclaredMethod("findOneBasedIndex", List.class, Person.class);
         findOneBasedIndex.setAccessible(true);
 
-        Person absentPerson = new PersonBuilder().withNusId("A1234567Z").withSocUsername("absent1")
+        Person absentPerson = new PersonBuilder().withNusMatric("A1234567X").withSocUsername("absent1")
                 .withGithubUsername("absent-gh").withEmail("absent@example.com").build();
 
         int result = (int) findOneBasedIndex.invoke(command, model.getAddressBook().getPersonList(), absentPerson);
@@ -277,11 +277,11 @@ public class TagCommandTest {
     }
 
     private static class InvalidSocUsernamePerson extends Person {
-        private static final SocUsername INVALID_SOC_USERNAME = new SocUsername("A9999999Z");
+        private static final SocUsername INVALID_SOC_USERNAME = new SocUsername("A9999999W");
 
         InvalidSocUsernamePerson() {
             super(new Name("Invalid Person"), new Phone("81234567"), new Email("invalid@example.com"),
-                    new NusId("A0000001B"), new SocUsername("valid1"), new GithubUsername("invalid-gh"),
+                    new NusMatric("A0000001X"), new SocUsername("amybee"), new GithubUsername("invalid-gh"),
                     new TutorialGroup("1"), Set.of());
         }
 

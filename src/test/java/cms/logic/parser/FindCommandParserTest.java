@@ -13,7 +13,7 @@ import cms.logic.commands.FindCommand;
 import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.CombinedFindPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
-import cms.model.person.NusIdContainsKeywordsPredicate;
+import cms.model.person.NusMatricContainsKeywordsPredicate;
 
 public class FindCommandParserTest {
 
@@ -32,16 +32,16 @@ public class FindCommandParserTest {
                         new AllFieldsContainsKeywordsPredicate(
                                 Collections.singletonList("john")),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
         assertParseSuccess(parser, " a/john", expectedSingle);
 
         FindCommand expectedMulti = new FindCommand(
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(
-                                Arrays.asList("john", "A0234504F")),
+                                Arrays.asList("john", "A0234504N")),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
-        assertParseSuccess(parser, " a/john A0234504F", expectedMulti);
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " a/john A0234504N", expectedMulti);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class FindCommandParserTest {
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(
                                 Arrays.asList("John", "David")),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
         assertParseSuccess(parser, " n/John David", expected);
     }
 
@@ -61,9 +61,9 @@ public class FindCommandParserTest {
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(
-                                Arrays.asList("A0234502D", "A0234505G"))));
-        assertParseSuccess(parser, " id/A0234502D A0234505G", expected);
+                        new NusMatricContainsKeywordsPredicate(
+                                Arrays.asList("A0234502U", "A0234505M"))));
+        assertParseSuccess(parser, " m/A0234502U A0234505M", expected);
     }
 
     @Test
@@ -74,10 +74,10 @@ public class FindCommandParserTest {
                                 Arrays.asList("john", "david")),
                         new NameContainsKeywordsPredicate(
                                 Arrays.asList("tan", "lim")),
-                        new NusIdContainsKeywordsPredicate(
-                                Arrays.asList("A12345678B", "A0211111C"))));
+                        new NusMatricContainsKeywordsPredicate(
+                                Arrays.asList("A1234567X", "A0211111L"))));
         assertParseSuccess(parser,
-                " a/john david n/tan lim id/a12345678b a0211111c",
+                " a/john david n/tan lim m/a1234567x a0211111l",
                 expected);
     }
 
@@ -96,7 +96,7 @@ public class FindCommandParserTest {
                         new AllFieldsContainsKeywordsPredicate(
                                 Arrays.asList("john", "david")),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
         assertParseSuccess(parser, " a/  john   david  ", expected);
     }
 
@@ -107,7 +107,7 @@ public class FindCommandParserTest {
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Arrays.asList("john", "david")),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
         assertParseSuccess(parser, " n/  john   david  ", expected);
     }
 
@@ -118,8 +118,8 @@ public class FindCommandParserTest {
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Arrays.asList("A0234502D", "A0234505G"))));
-        assertParseSuccess(parser, " id/a0234502d a0234505g", expected);
+                        new NusMatricContainsKeywordsPredicate(Arrays.asList("A0234502U", "A0234505M"))));
+        assertParseSuccess(parser, " m/a0234502u a0234505m", expected);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class FindCommandParserTest {
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
         assertParseSuccess(parser, " a/  ", expected);
     }
 
@@ -140,19 +140,19 @@ public class FindCommandParserTest {
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
         assertParseSuccess(parser, " n/   ", expected);
     }
 
     @Test
     public void parse_idPrefix_blankValue() {
-        // id/ with only spaces should result in empty idKeywords list after filtering
+        // m/ with only spaces should result in empty idKeywords list after filtering
         FindCommand expected = new FindCommand(
                 new CombinedFindPredicate(
                         new AllFieldsContainsKeywordsPredicate(Collections.emptyList()),
                         new NameContainsKeywordsPredicate(Collections.emptyList()),
-                        new NusIdContainsKeywordsPredicate(Collections.emptyList())));
-        assertParseSuccess(parser, " id/   ", expected);
+                        new NusMatricContainsKeywordsPredicate(Collections.emptyList())));
+        assertParseSuccess(parser, " m/   ", expected);
     }
 }
 

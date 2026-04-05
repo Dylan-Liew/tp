@@ -37,7 +37,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
                 .withName("Alice Pauline")
                 .withPhone("91234567")
                 .withEmail("alice@example.com")
-                .withNusId("A0123456X")
+                .withNusMatric("A0123456J")
                 .withSocUsername("alice")
                 .withGithubUsername("alicegit")
                 .withRole("student")
@@ -49,8 +49,8 @@ public class AllFieldsContainsKeywordsPredicateTest {
         AllFieldsContainsKeywordsPredicate pName = new AllFieldsContainsKeywordsPredicate(Arrays.asList("alice"));
         assertTrue(pName.test(person));
 
-        // nus id equalsIgnoreCase
-        AllFieldsContainsKeywordsPredicate pNus = new AllFieldsContainsKeywordsPredicate(Arrays.asList("a0123456x"));
+        // nus matric equalsIgnoreCase
+        AllFieldsContainsKeywordsPredicate pNus = new AllFieldsContainsKeywordsPredicate(Arrays.asList("a0123456j"));
         assertTrue(pNus.test(person));
 
         // phone contains
@@ -84,10 +84,10 @@ public class AllFieldsContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void onlyNusIdMatches_returnsTrue() {
-        Person person = new PersonBuilder().withNusId("A0123456X").build();
+    public void onlyNusMatricMatches_returnsTrue() {
+        Person person = new PersonBuilder().withNusMatric("A0123456J").build();
         AllFieldsContainsKeywordsPredicate p = new AllFieldsContainsKeywordsPredicate(
-                Collections.singletonList("a0123456x"));
+                Collections.singletonList("a0123456j"));
         assertTrue(p.test(person));
     }
 
@@ -177,7 +177,7 @@ public class AllFieldsContainsKeywordsPredicateTest {
 
     // Helper test Person subclass that allows overriding specific getters to return null
     private static class PartialPerson extends Person {
-        private final boolean nulNusId;
+        private final boolean nulNusMatric;
         private final boolean nulPhone;
         private final boolean nulEmail;
         private final boolean nulSoc;
@@ -185,12 +185,12 @@ public class AllFieldsContainsKeywordsPredicateTest {
         private final boolean nulRole;
         private final boolean nulTutorial;
 
-        PartialPerson(boolean nulNusId, boolean nulPhone, boolean nulEmail, boolean nulSoc,
+        PartialPerson(boolean nulNusMatric, boolean nulPhone, boolean nulEmail, boolean nulSoc,
                 boolean nulGithub, boolean nulRole, boolean nulTutorial) {
-            super(new Name("X"), new Phone("11111111"), new Email("x@x.com"), new NusId("A0000001B"),
+            super(new Name("X"), new Phone("11111111"), new Email("x@x.com"), new NusMatric("A0000001X"),
                 new SocUsername("socuser"), new GithubUsername("ghuser"),
                 new TutorialGroup("1"), Collections.emptySet());
-            this.nulNusId = nulNusId;
+            this.nulNusMatric = nulNusMatric;
             this.nulPhone = nulPhone;
             this.nulEmail = nulEmail;
             this.nulSoc = nulSoc;
@@ -200,8 +200,8 @@ public class AllFieldsContainsKeywordsPredicateTest {
         }
 
         @Override
-        public NusId getNusId() {
-            return nulNusId ? null : super.getNusId();
+        public NusMatric getNusMatric() {
+            return nulNusMatric ? null : super.getNusMatric();
         }
 
         @Override
@@ -236,11 +236,11 @@ public class AllFieldsContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void nusIdNull_branchHandled() {
+    public void nusMatricNull_branchHandled() {
         Person p = new PartialPerson(true, false, false, false, false, false, false);
         AllFieldsContainsKeywordsPredicate pred = new AllFieldsContainsKeywordsPredicate(
-                Collections.singletonList("A0000001B"));
-        // nusId getter returns null, so predicate should not match nusId; overall should be false
+                Collections.singletonList("A0000001X"));
+        // nusMatric getter returns null, so predicate should not match nusMatric; overall should be false
         assertFalse(pred.test(p));
     }
 

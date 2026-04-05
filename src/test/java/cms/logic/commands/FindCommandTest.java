@@ -20,7 +20,7 @@ import cms.model.UserPrefs;
 import cms.model.person.AllFieldsContainsKeywordsPredicate;
 import cms.model.person.CombinedFindPredicate;
 import cms.model.person.NameContainsKeywordsPredicate;
-import cms.model.person.NusIdContainsKeywordsPredicate;
+import cms.model.person.NusMatricContainsKeywordsPredicate;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
@@ -78,9 +78,9 @@ public class FindCommandTest {
     @Test
     public void execute_idPrefix_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
-        NusIdContainsKeywordsPredicate predicate =
-                new NusIdContainsKeywordsPredicate(
-                        Arrays.asList("A0234502D", "A0234505G"));
+        NusMatricContainsKeywordsPredicate predicate =
+                new NusMatricContainsKeywordsPredicate(
+                        Arrays.asList("A0234502U", "A0234505M"));
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -94,8 +94,8 @@ public class FindCommandTest {
                 new AllFieldsContainsKeywordsPredicate(Arrays.asList("Kurz"));
         NameContainsKeywordsPredicate namePredicate =
                 new NameContainsKeywordsPredicate(Arrays.asList("Elle"));
-        NusIdContainsKeywordsPredicate idPredicate =
-                new NusIdContainsKeywordsPredicate(Arrays.asList("A0234505G"));
+        NusMatricContainsKeywordsPredicate idPredicate =
+                new NusMatricContainsKeywordsPredicate(Arrays.asList("A0234505M"));
         CombinedFindPredicate combinedPredicate =
                 new CombinedFindPredicate(allPredicate, namePredicate, idPredicate);
 
@@ -103,7 +103,7 @@ public class FindCommandTest {
         expectedModel.updateFilteredPersonList(combinedPredicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
 
-        // Expected union: CARL (Kurz), ELLE (name), FIONA (nusId)
+        // Expected union: CARL (Kurz), ELLE (name), FIONA (nusMatric)
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
     }
 

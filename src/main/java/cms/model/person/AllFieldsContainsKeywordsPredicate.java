@@ -23,8 +23,8 @@ public class AllFieldsContainsKeywordsPredicate implements Predicate<Person> {
         }
         for (String keyword : keywords) {
             boolean matchesName = StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword);
-            boolean matchesNusId = person.getNusId() != null
-                    && person.getNusId().value.equalsIgnoreCase(keyword);
+            boolean matchesNusMatric = person.getNusMatric() != null
+                    && person.getNusMatric().value.equalsIgnoreCase(keyword);
             boolean matchesPhone = person.getPhone() != null && person.getPhone().value.contains(keyword);
             boolean matchesEmail = person.getEmail() != null && person.getEmail().value.contains(keyword);
             boolean matchesSoc = person.getSocUsername() != null && person.getSocUsername().value.contains(keyword);
@@ -38,7 +38,7 @@ public class AllFieldsContainsKeywordsPredicate implements Predicate<Person> {
                     .anyMatch(tag -> tag.tagName.equalsIgnoreCase(keyword));
 
             if (matchesName
-                    || matchesNusId
+                    || matchesNusMatric
                     || matchesPhone
                     || matchesEmail
                     || matchesSoc

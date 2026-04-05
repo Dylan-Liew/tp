@@ -101,7 +101,7 @@ public class FilterCommandTest {
         Model localModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model localExpectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Person dualTaggedPerson = new PersonBuilder().withName("Hannah Dualtag")
-                .withNusId("A1234567B").withSocUsername("hannah1").withGithubUsername("hannah-dual")
+                .withNusMatric("A1234567X").withSocUsername("hannah1").withGithubUsername("hannah-dual")
                 .withEmail("hannah@example.com").withPhone("81234567")
                 .withTutorialGroup("01").withTags("friends", "owesMoney").build();
         localModel.addPerson(dualTaggedPerson);

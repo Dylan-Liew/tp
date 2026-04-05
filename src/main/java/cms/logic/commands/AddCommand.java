@@ -2,8 +2,8 @@ package cms.logic.commands;
 
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
+import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
 import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
 import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
@@ -29,7 +29,7 @@ public class AddCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the system. \n"
             + "Parameters: "
             + PREFIX_NAME + "NAME "
-            + PREFIX_NUSID + "NUSID "
+            + PREFIX_MATRIC + "NUS_MATRIC "
             + "[" + PREFIX_ROLE + "ROLE] "
             + PREFIX_SOCUSERNAME + "SOC_USERNAME "
             + PREFIX_GITHUBUSERNAME + "GITHUB_USERNAME "
@@ -40,7 +40,7 @@ public class AddCommand extends Command {
             + "If role is omitted, it defaults to student.\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
-            + PREFIX_NUSID + "A1234567E "
+            + PREFIX_MATRIC + "A1234567X "
             + PREFIX_ROLE + "student "
             + PREFIX_SOCUSERNAME + "johndoe "
             + PREFIX_GITHUBUSERNAME + "johndoe "

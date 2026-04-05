@@ -13,7 +13,7 @@ import cms.commons.exceptions.IllegalValueException;
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.person.Phone;
 import cms.model.person.Role;
@@ -32,7 +32,7 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String email;
-    private final String nusId;
+    private final String nusMatric;
     private final String socUsername;
     private final String githubUsername;
     private final String role;
@@ -46,7 +46,7 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name,
                              @JsonProperty("phone") String phone,
                              @JsonProperty("email") String email,
-                             @JsonProperty("nusId") String nusId,
+                             @JsonProperty("nusMatric") String nusMatric,
                              @JsonProperty("socUsername") String socUsername,
                              @JsonProperty("githubUsername") String githubUsername,
                              @JsonProperty("role") String role,
@@ -55,7 +55,7 @@ class JsonAdaptedPerson {
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.nusId = nusId;
+        this.nusMatric = nusMatric;
         this.socUsername = socUsername;
         this.githubUsername = githubUsername;
         this.role = role;
@@ -72,7 +72,7 @@ class JsonAdaptedPerson {
         name = source.getName().fullName;
         phone = source.getPhone().value;
         email = source.getEmail().value;
-        nusId = source.getNusId().value;
+        nusMatric = source.getNusMatric().value;
         socUsername = source.getSocUsername().value;
         githubUsername = source.getGithubUsername().value;
         role = source.getRole().value;
@@ -118,13 +118,14 @@ class JsonAdaptedPerson {
         }
         final Email modelEmail = new Email(email);
 
-        if (nusId == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, NusId.class.getSimpleName()));
+        if (nusMatric == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    NusMatric.class.getSimpleName()));
         }
-        if (!NusId.isValidNusId(nusId)) {
-            throw new IllegalValueException(NusId.MESSAGE_CONSTRAINTS);
+        if (!NusMatric.isValidNusMatric(nusMatric)) {
+            throw new IllegalValueException(NusMatric.MESSAGE_CONSTRAINTS);
         }
-        final NusId modelNusId = new NusId(nusId);
+        final NusMatric modelNusMatric = new NusMatric(nusMatric);
 
         if (socUsername == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
@@ -163,7 +164,7 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
         try {
-            return Person.create(modelName, modelPhone, modelEmail, modelNusId,
+            return Person.create(modelName, modelPhone, modelEmail, modelNusMatric,
                     modelSocUsername, modelGithubUsername,
                     modelRole, modelTutorialGroup, modelTags);
         } catch (InvalidPersonException e) {

@@ -6,12 +6,12 @@ import java.util.function.Predicate;
 import cms.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code NusId} matches any of the keywords given.
+ * Tests that a {@code Person}'s {@code NusMatric} matches any of the keywords given.
  */
-public class NusIdContainsKeywordsPredicate implements Predicate<Person> {
+public class NusMatricContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
-    public NusIdContainsKeywordsPredicate(List<String> keywords) {
+    public NusMatricContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = (keywords == null) ? List.of() : keywords;
     }
 
@@ -21,8 +21,8 @@ public class NusIdContainsKeywordsPredicate implements Predicate<Person> {
             return false;
         }
         return keywords.stream()
-                .anyMatch(keyword -> person.getNusId() != null
-                        && person.getNusId().value.equalsIgnoreCase(keyword));
+                .anyMatch(keyword -> person.getNusMatric() != null
+                        && person.getNusMatric().value.equalsIgnoreCase(keyword));
     }
 
     @Override
@@ -30,10 +30,10 @@ public class NusIdContainsKeywordsPredicate implements Predicate<Person> {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof NusIdContainsKeywordsPredicate)) {
+        if (!(other instanceof NusMatricContainsKeywordsPredicate)) {
             return false;
         }
-        NusIdContainsKeywordsPredicate otherPredicate = (NusIdContainsKeywordsPredicate) other;
+        NusMatricContainsKeywordsPredicate otherPredicate = (NusMatricContainsKeywordsPredicate) other;
         return keywords.equals(otherPredicate.keywords);
     }
 

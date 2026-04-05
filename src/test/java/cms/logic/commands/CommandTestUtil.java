@@ -2,8 +2,8 @@ package cms.logic.commands;
 
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
+import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
 import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
 import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
@@ -39,8 +39,8 @@ public class CommandTestUtil {
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
 
-    public static final String VALID_NUSID_AMY = "A0123456B";
-    public static final String VALID_NUSID_BOB = "A0234567C";
+    public static final String VALID_NUSMATRIC_AMY = "A0123456J";
+    public static final String VALID_NUSMATRIC_BOB = "A0234567X";
     public static final String VALID_SOCUSERNAME_AMY = "amybee";
     public static final String VALID_SOCUSERNAME_BOB = "bobchoo";
     public static final String VALID_GITHUBUSERNAME_AMY = "amybee";
@@ -59,8 +59,8 @@ public class CommandTestUtil {
     public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
 
-    public static final String NUSID_DESC_AMY = " " + PREFIX_NUSID + VALID_NUSID_AMY;
-    public static final String NUSID_DESC_BOB = " " + PREFIX_NUSID + VALID_NUSID_BOB;
+    public static final String NUSMATRIC_DESC_AMY = " " + PREFIX_MATRIC + VALID_NUSMATRIC_AMY;
+    public static final String NUSMATRIC_DESC_BOB = " " + PREFIX_MATRIC + VALID_NUSMATRIC_BOB;
     public static final String SOCUSERNAME_DESC_AMY = " " + PREFIX_SOCUSERNAME + VALID_SOCUSERNAME_AMY;
     public static final String SOCUSERNAME_DESC_BOB = " " + PREFIX_SOCUSERNAME + VALID_SOCUSERNAME_BOB;
     public static final String GITHUBUSERNAME_DESC_AMY = " " + PREFIX_GITHUBUSERNAME + VALID_GITHUBUSERNAME_AMY;
@@ -73,10 +73,10 @@ public class CommandTestUtil {
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
-    // SOC username (in nusId format) that does not match the NUS ID of the person
-    public static final String INVALID_SOCUSERNAME_NUSID_MISMATCH = "a9999999z";
-    public static final String INVALID_SOCUSERNAME_NUSID_MISMATCH_DESC =
-            " " + PREFIX_SOCUSERNAME + INVALID_SOCUSERNAME_NUSID_MISMATCH;
+    // SOC username (in nusMatric format) that does not match the NUS Matric of the person
+    public static final String INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH = "a9999999w";
+    public static final String INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH_DESC =
+            " " + PREFIX_SOCUSERNAME + INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH;
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
@@ -88,13 +88,13 @@ public class CommandTestUtil {
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
-                .withNusId(VALID_NUSID_AMY).withRole(VALID_ROLE_AMY)
+                .withNusMatric(VALID_NUSMATRIC_AMY).withRole(VALID_ROLE_AMY)
                 .withSocUsername(VALID_SOCUSERNAME_AMY).withGithubUsername(VALID_GITHUBUSERNAME_AMY)
                 .withTutorialGroup(VALID_TUTORIALGROUP_AMY)
                 .withTags(VALID_TAG_FRIEND).build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
-                .withNusId(VALID_NUSID_BOB).withRole(VALID_ROLE_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB).withRole(VALID_ROLE_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB).withGithubUsername(VALID_GITHUBUSERNAME_BOB)
                 .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
                 .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();

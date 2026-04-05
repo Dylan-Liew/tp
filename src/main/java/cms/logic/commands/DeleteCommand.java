@@ -13,7 +13,7 @@ import cms.commons.util.ToStringBuilder;
 import cms.logic.Messages;
 import cms.logic.commands.exceptions.CommandException;
 import cms.model.Model;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 
 /**
@@ -23,25 +23,25 @@ public class DeleteCommand extends Command {
 
     public static final String COMMAND_WORD = "delete";
     public static final String MESSAGE_EMPTY_INDEX_LIST = "At least one person index must be provided.";
-    public static final String MESSAGE_EMPTY_NUS_ID_LIST = "At least one NUS ID must be provided.";
-    public static final String MESSAGE_INVALID_NUS_ID = "One or more NUS IDs do not match any person.";
+    public static final String MESSAGE_EMPTY_NUS_MATRIC_LIST = "At least one NUS Matric must be provided.";
+    public static final String MESSAGE_INVALID_NUS_MATRIC = "One or more NUS Matrics do not match any person.";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes one or more persons by their displayed index or NUS ID.\n"
-            + "Parameters: INDEX [MORE_INDEXES]... or id/NUS_ID [MORE_NUS_IDS]...\n"
+            + ": Deletes one or more persons by their displayed index or NUS Matric.\n"
+            + "Parameters: INDEX [MORE_INDEXES]... or m/NUS_MATRIC [MORE_NUS_MATRICS]...\n"
             + "Examples: " + COMMAND_WORD + " 1, " + COMMAND_WORD + " 1 2 3, "
-            + COMMAND_WORD + " id/A1234567B, " + COMMAND_WORD + " id/A1234567B A2345678C";
+            + COMMAND_WORD + " m/A1234567X, " + COMMAND_WORD + " m/A1234567X A2345678L";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted persons:\n%1$s";
 
     private final TargetType targetType;
     private final List<Index> targetIndexes;
-    private final List<NusId> targetNusIds;
+    private final List<NusMatric> targetNusMatrics;
 
     private enum TargetType {
         INDEX,
-        NUS_ID
+        NUS_MATRIC
     }
 
     /**
@@ -58,32 +58,32 @@ public class DeleteCommand extends Command {
         this(TargetType.INDEX, targetIndexes, List.of());
     }
 
-    private DeleteCommand(TargetType targetType, List<Index> targetIndexes, List<NusId> targetNusIds) {
+    private DeleteCommand(TargetType targetType, List<Index> targetIndexes, List<NusMatric> targetNusMatrics) {
         requireNonNull(targetType);
         requireNonNull(targetIndexes);
-        requireNonNull(targetNusIds);
+        requireNonNull(targetNusMatrics);
         if (targetType == TargetType.INDEX) {
             checkArgument(!targetIndexes.isEmpty(), MESSAGE_EMPTY_INDEX_LIST);
         } else {
-            checkArgument(!targetNusIds.isEmpty(), MESSAGE_EMPTY_NUS_ID_LIST);
+            checkArgument(!targetNusMatrics.isEmpty(), MESSAGE_EMPTY_NUS_MATRIC_LIST);
         }
         this.targetType = targetType;
         this.targetIndexes = List.copyOf(targetIndexes);
-        this.targetNusIds = List.copyOf(targetNusIds);
+        this.targetNusMatrics = List.copyOf(targetNusMatrics);
     }
 
     /**
-     * Creates a {@code DeleteCommand} to delete a single person by NUS ID.
+     * Creates a {@code DeleteCommand} to delete a single person by NUS Matric.
      */
-    public static DeleteCommand byNusId(NusId targetNusId) {
-        return byNusIds(List.of(targetNusId));
+    public static DeleteCommand byNusMatric(NusMatric targetNusMatric) {
+        return byNusMatrics(List.of(targetNusMatric));
     }
 
     /**
-     * Creates a {@code DeleteCommand} to delete one or more persons by NUS ID.
+     * Creates a {@code DeleteCommand} to delete one or more persons by NUS Matric.
      */
-    public static DeleteCommand byNusIds(List<NusId> targetNusIds) {
-        return new DeleteCommand(TargetType.NUS_ID, List.of(), targetNusIds);
+    public static DeleteCommand byNusMatrics(List<NusMatric> targetNusMatrics) {
+        return new DeleteCommand(TargetType.NUS_MATRIC, List.of(), targetNusMatrics);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class DeleteCommand extends Command {
         if (targetType == TargetType.INDEX) {
             deletedPersons = deletePersonsByIndex(model);
         } else {
-            deletedPersons = deletePersonsByNusId(model);
+            deletedPersons = deletePersonsByNusMatric(model);
         }
 
         if (deletedPersons.size() == 1) {
@@ -139,25 +139,25 @@ public class DeleteCommand extends Command {
         return deletedPersons;
     }
 
-    private List<Person> deletePersonsByNusId(Model model) throws CommandException {
+    private List<Person> deletePersonsByNusMatric(Model model) throws CommandException {
         List<Person> personsInAddressBook = model.getAddressBook().getPersonList();
         List<Person> personsToDelete = new ArrayList<>();
-        List<NusId> seenNusIds = new ArrayList<>();
+        List<NusMatric> seenNusMatrics = new ArrayList<>();
 
-        for (NusId targetNusId : targetNusIds) {
-            if (seenNusIds.contains(targetNusId)) {
+        for (NusMatric targetNusMatric : targetNusMatrics) {
+            if (seenNusMatrics.contains(targetNusMatric)) {
                 continue;
             }
 
             Optional<Person> matchingPerson = personsInAddressBook.stream()
-                    .filter(person -> person.getNusId().equals(targetNusId))
+                    .filter(person -> person.getNusMatric().equals(targetNusMatric))
                     .findFirst();
             if (matchingPerson.isEmpty()) {
-                throw new CommandException(MESSAGE_INVALID_NUS_ID);
+                throw new CommandException(MESSAGE_INVALID_NUS_MATRIC);
             }
 
             personsToDelete.add(matchingPerson.get());
-            seenNusIds.add(targetNusId);
+            seenNusMatrics.add(targetNusMatric);
         }
 
         List<Person> deletedPersons = new ArrayList<>();
@@ -182,20 +182,20 @@ public class DeleteCommand extends Command {
         DeleteCommand otherDeleteCommand = (DeleteCommand) other;
         return targetType == otherDeleteCommand.targetType
                 && targetIndexes.equals(otherDeleteCommand.targetIndexes)
-                && targetNusIds.equals(otherDeleteCommand.targetNusIds);
+                && targetNusMatrics.equals(otherDeleteCommand.targetNusMatrics);
     }
 
     @Override
     public String toString() {
-        if (targetType == TargetType.NUS_ID) {
-            if (targetNusIds.size() == 1) {
+        if (targetType == TargetType.NUS_MATRIC) {
+            if (targetNusMatrics.size() == 1) {
                 return new ToStringBuilder(this)
-                        .add("targetNusId", targetNusIds.get(0))
+                        .add("targetNusMatric", targetNusMatrics.get(0))
                         .toString();
             }
 
             return new ToStringBuilder(this)
-                    .add("targetNusIds", targetNusIds)
+                    .add("targetNusMatrics", targetNusMatrics)
                     .toString();
         }
 

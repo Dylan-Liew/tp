@@ -84,7 +84,7 @@ public class AddressBookTest {
     public void sortPersonsByName_unsortedList_sortsByName() {
         Person zed = new PersonBuilder(ALICE)
                 .withName("Zed Address")
-                .withNusId("A1888881B")
+                .withNusMatric("A1888881W")
                 .withEmail("address-z@test.com")
                 .withSocUsername("addressz")
                 .withGithubUsername("address-z-gh")
@@ -92,7 +92,7 @@ public class AddressBookTest {
                 .build();
         Person amy = new PersonBuilder(ALICE)
                 .withName("Amy Address")
-                .withNusId("A1888882C")
+                .withNusMatric("A1888882U")
                 .withEmail("address-a@test.com")
                 .withSocUsername("addressa")
                 .withGithubUsername("address-a-gh")

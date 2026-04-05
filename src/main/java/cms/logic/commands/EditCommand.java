@@ -2,8 +2,8 @@ package cms.logic.commands;
 
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
+import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
 import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
 import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
@@ -28,7 +28,7 @@ import cms.model.Model;
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.person.Phone;
 import cms.model.person.Role;
@@ -50,7 +50,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_NUSID + "NUS ID] "
+            + "[" + PREFIX_MATRIC + "NUS Matric] "
             + "[" + PREFIX_ROLE + "ROLE] "
             + "[" + PREFIX_SOCUSERNAME + "SOC USERNAME] "
             + "[" + PREFIX_GITHUBUSERNAME + "GITHUB USERNAME] "
@@ -116,7 +116,7 @@ public class EditCommand extends Command {
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        NusId updatedNusId = editPersonDescriptor.getNusId().orElse(personToEdit.getNusId());
+        NusMatric updatedNusMatric = editPersonDescriptor.getNusMatric().orElse(personToEdit.getNusMatric());
         SocUsername updatedSocUsername = editPersonDescriptor.getSocUsername()
                 .orElse(personToEdit.getSocUsername());
         GithubUsername updatedGithubUsername = editPersonDescriptor.getGithubUsername()
@@ -126,7 +126,7 @@ public class EditCommand extends Command {
                 .orElse(personToEdit.getTutorialGroup());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return Person.create(updatedName, updatedPhone, updatedEmail, updatedNusId,
+        return Person.create(updatedName, updatedPhone, updatedEmail, updatedNusMatric,
                 updatedSocUsername, updatedGithubUsername, updatedRole, updatedTutorialGroup, updatedTags);
     }
 
@@ -162,7 +162,7 @@ public class EditCommand extends Command {
         private Name name;
         private Phone phone;
         private Email email;
-        private NusId nusId;
+        private NusMatric nusMatric;
         private Role role;
         private SocUsername socUsername;
         private GithubUsername githubUsername;
@@ -180,7 +180,7 @@ public class EditCommand extends Command {
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
-            setNusId(toCopy.nusId);
+            setNusMatric(toCopy.nusMatric);
             setRole(toCopy.role);
             setSocUsername(toCopy.socUsername);
             setGithubUsername(toCopy.githubUsername);
@@ -192,7 +192,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, nusId, role,
+            return CollectionUtil.isAnyNonNull(name, phone, email, nusMatric, role,
                     socUsername, githubUsername, tutorialGroup, tags);
         }
 
@@ -220,12 +220,12 @@ public class EditCommand extends Command {
             return Optional.ofNullable(email);
         }
 
-        public void setNusId(NusId nusId) {
-            this.nusId = nusId;
+        public void setNusMatric(NusMatric nusMatric) {
+            this.nusMatric = nusMatric;
         }
 
-        public Optional<NusId> getNusId() {
-            return Optional.ofNullable(nusId);
+        public Optional<NusMatric> getNusMatric() {
+            return Optional.ofNullable(nusMatric);
         }
 
         public void setRole(Role role) {
@@ -292,7 +292,7 @@ public class EditCommand extends Command {
             return Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
-                    && Objects.equals(nusId, otherEditPersonDescriptor.nusId)
+                    && Objects.equals(nusMatric, otherEditPersonDescriptor.nusMatric)
                     && Objects.equals(role, otherEditPersonDescriptor.role)
                     && Objects.equals(socUsername, otherEditPersonDescriptor.socUsername)
                     && Objects.equals(githubUsername, otherEditPersonDescriptor.githubUsername)
@@ -306,7 +306,7 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("phone", phone)
                     .add("email", email)
-                    .add("nusId", nusId)
+                    .add("nusMatric", nusMatric)
                     .add("role", role)
                     .add("socUsername", socUsername)
                     .add("githubUsername", githubUsername)

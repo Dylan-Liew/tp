@@ -2,8 +2,8 @@ package cms.testutil;
 
 import static cms.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static cms.logic.parser.CliSyntax.PREFIX_GITHUBUSERNAME;
+import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
 import static cms.logic.parser.CliSyntax.PREFIX_NAME;
-import static cms.logic.parser.CliSyntax.PREFIX_NUSID;
 import static cms.logic.parser.CliSyntax.PREFIX_PHONE;
 import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
 import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
@@ -35,7 +35,7 @@ public class PersonUtil {
     public static String getPersonDetails(Person person) {
         StringBuilder sb = new StringBuilder();
         sb.append(PREFIX_NAME + person.getName().fullName + " ");
-        sb.append(PREFIX_NUSID + person.getNusId().value + " ");
+        sb.append(PREFIX_MATRIC + person.getNusMatric().value + " ");
         sb.append(PREFIX_ROLE + person.getRole().value + " ");
         sb.append(PREFIX_SOCUSERNAME + person.getSocUsername().value + " ");
         sb.append(PREFIX_GITHUBUSERNAME + person.getGithubUsername().value + " ");
@@ -56,7 +56,7 @@ public class PersonUtil {
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
         descriptor.getEmail().ifPresent(email -> sb.append(PREFIX_EMAIL).append(email.value).append(" "));
-        descriptor.getNusId().ifPresent(nusId -> sb.append(PREFIX_NUSID).append(nusId.value).append(" "));
+        descriptor.getNusMatric().ifPresent(nusMatric -> sb.append(PREFIX_MATRIC).append(nusMatric.value).append(" "));
         descriptor.getRole().ifPresent(role -> sb.append(PREFIX_ROLE).append(role.value).append(" "));
         descriptor.getSocUsername().ifPresent(
             socUsername -> sb.append(PREFIX_SOCUSERNAME).append(socUsername.value).append(" "));

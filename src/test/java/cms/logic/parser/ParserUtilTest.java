@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.Email;
 import cms.model.person.Name;
-import cms.model.person.NusId;
+import cms.model.person.NusMatric;
 import cms.model.person.Phone;
 import cms.model.tag.Tag;
 
@@ -68,15 +68,15 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseNusIds_emptyInput_throwsParseException() {
-        assertThrows(ParseException.class, NusId.MESSAGE_CONSTRAINTS, () ->
-                ParserUtil.parseNusIds(Collections.emptyList()));
+    public void parseNusMatrics_emptyInput_throwsParseException() {
+        assertThrows(ParseException.class, NusMatric.MESSAGE_CONSTRAINTS, () ->
+                ParserUtil.parseNusMatrics(Collections.emptyList()));
     }
 
     @Test
-    public void parseNusIds_validInput_success() throws Exception {
-        assertEquals(List.of(new NusId("A0123456B"), new NusId("A0234567C")),
-                ParserUtil.parseNusIds(List.of("A0123456B", "A0234567C")));
+    public void parseNusMatrics_validInput_success() throws Exception {
+        assertEquals(List.of(new NusMatric("A0123456J"), new NusMatric("A0234567X")),
+                ParserUtil.parseNusMatrics(List.of("A0123456J", "A0234567X")));
     }
 
     @Test

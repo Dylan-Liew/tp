@@ -5,7 +5,7 @@ import static cms.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static cms.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.GITHUBUSERNAME_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.NAME_DESC_AMY;
-import static cms.logic.commands.CommandTestUtil.NUSID_DESC_AMY;
+import static cms.logic.commands.CommandTestUtil.NUSMATRIC_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.ROLE_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.SOCUSERNAME_DESC_AMY;
@@ -13,7 +13,7 @@ import static cms.logic.commands.CommandTestUtil.TUTORIALGROUP_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_GITHUBUSERNAME_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static cms.logic.commands.CommandTestUtil.VALID_NUSID_BOB;
+import static cms.logic.commands.CommandTestUtil.VALID_NUSMATRIC_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_SOCUSERNAME_BOB;
 import static cms.logic.commands.CommandTestUtil.VALID_TUTORIALGROUP_BOB;
@@ -94,7 +94,7 @@ public class LogicManagerTest {
     public void execute_sortCommandByTutorialGroup_success() throws Exception {
         Person tutorialGroupTen = new PersonBuilder()
                 .withName("Logic Sort Alpha")
-                .withNusId("A1999991B")
+                .withNusMatric("A1999991L")
                 .withEmail("logic-sort-a@test.com")
                 .withSocUsername("logic1")
                 .withGithubUsername("logic-gh-1")
@@ -102,7 +102,7 @@ public class LogicManagerTest {
                 .build();
         Person tutorialGroupTwo = new PersonBuilder()
                 .withName("Logic Sort Beta")
-                .withNusId("A1999992C")
+                .withNusMatric("A1999992J")
                 .withEmail("logic-sort-b@test.com")
                 .withSocUsername("logic2")
                 .withGithubUsername("logic-gh-2")
@@ -123,7 +123,7 @@ public class LogicManagerTest {
     public void execute_sortCommandByName_success() throws Exception {
         Person zed = new PersonBuilder()
                 .withName("Zed Logic")
-                .withNusId("A1999993D")
+                .withNusMatric("A1999993H")
                 .withEmail("logic-sort-c@test.com")
                 .withSocUsername("logic3")
                 .withGithubUsername("logic-gh-3")
@@ -131,7 +131,7 @@ public class LogicManagerTest {
                 .build();
         Person amy = new PersonBuilder()
                 .withName("Amy Logic")
-                .withNusId("A1999994E")
+                .withNusMatric("A1999994E")
                 .withEmail("logic-sort-d@test.com")
                 .withSocUsername("logic4")
                 .withGithubUsername("logic-gh-4")
@@ -152,14 +152,14 @@ public class LogicManagerTest {
     public void execute_tagCommandAdd_success() throws Exception {
         Person firstPerson = new PersonBuilder()
                 .withName("Tag Logic Alpha")
-                .withNusId("A1888881B")
+                .withNusMatric("A1888881W")
                 .withEmail("tag-logic-a@test.com")
                 .withSocUsername("taglogi1")
                 .withGithubUsername("tag-logic-1")
                 .build();
         Person secondPerson = new PersonBuilder()
                 .withName("Tag Logic Beta")
-                .withNusId("A1888882C")
+                .withNusMatric("A1888882U")
                 .withEmail("tag-logic-b@test.com")
                 .withSocUsername("taglogi2")
                 .withGithubUsername("tag-logic-2")
@@ -176,7 +176,7 @@ public class LogicManagerTest {
 
         String commandText = TagCommand.COMMAND_WORD + " add n/1 2 tag/tag1 tag2";
         String expectedMessage = "tag1, tag2 has been added to "
-                + "1, Tag Logic Alpha, A1888881B; 2, Tag Logic Beta, A1888882C";
+            + "1, Tag Logic Alpha, A1888881W; 2, Tag Logic Beta, A1888882U";
 
         assertCommandSuccess(commandText, expectedMessage, expectedModel);
     }
@@ -224,7 +224,7 @@ public class LogicManagerTest {
 
     @Test
     public void execute_exportCommand_writesToSpecifiedPath() throws Exception {
-        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSMATRIC_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY;
         logic.execute(addCommand);
@@ -238,7 +238,7 @@ public class LogicManagerTest {
 
     @Test
     public void execute_importCommand_readsFromSpecifiedPath() throws Exception {
-        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSMATRIC_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY;
         logic.execute(addCommand);
@@ -304,14 +304,14 @@ public class LogicManagerTest {
 
     @Test
     public void execute_importCommandWithCurrentDataAndNoKeep_throwsCommandException() throws Exception {
-        logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
+        logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSMATRIC_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
         Person expectedCurrentPerson = new PersonBuilder(AMY).withTags().build();
 
         Path importPath = createImportFileWithSinglePerson(new PersonBuilder()
                 .withName(VALID_NAME_BOB)
-                .withNusId(VALID_NUSID_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB)
                 .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
                 .withEmail(VALID_EMAIL_BOB)
@@ -328,7 +328,7 @@ public class LogicManagerTest {
 
     @Test
     public void execute_importCommandKeepCurrent_keepsExistingData() throws Exception {
-        logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
+        logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSMATRIC_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
         Person expectedCurrentPerson = new PersonBuilder(AMY).withTags().build();
@@ -339,7 +339,7 @@ public class LogicManagerTest {
                 .build();
         Person nonConflictingIncomingPerson = new PersonBuilder()
                 .withName(VALID_NAME_BOB)
-                .withNusId(VALID_NUSID_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB)
                 .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
                 .withEmail(VALID_EMAIL_BOB)
@@ -361,7 +361,7 @@ public class LogicManagerTest {
 
     @Test
     public void execute_importCommandKeepIncoming_replacesConflictsAndAddsNonConflicts() throws Exception {
-        logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
+        logic.execute(AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSMATRIC_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
 
@@ -371,7 +371,7 @@ public class LogicManagerTest {
                 .build();
         Person nonConflictingIncomingPerson = new PersonBuilder()
                 .withName(VALID_NAME_BOB)
-                .withNusId(VALID_NUSID_BOB)
+                .withNusMatric(VALID_NUSMATRIC_BOB)
                 .withSocUsername(VALID_SOCUSERNAME_BOB)
                 .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
                 .withEmail(VALID_EMAIL_BOB)
@@ -486,7 +486,7 @@ public class LogicManagerTest {
         logic = new LogicManager(model, storage);
 
         // Triggers the saveAddressBook method by executing an add command
-        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSID_DESC_AMY + ROLE_DESC_AMY
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + NUSMATRIC_DESC_AMY + ROLE_DESC_AMY
                 + SOCUSERNAME_DESC_AMY + GITHUBUSERNAME_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY;
         Person expectedPerson = new PersonBuilder(AMY).withTags().build();
@@ -505,7 +505,7 @@ public class LogicManagerTest {
             incomingAddressBook.addPerson(person);
         }
 
-        String fileName = persons.length > 0 ? persons[0].getNusId().toString() : "import";
+        String fileName = persons.length > 0 ? persons[0].getNusMatric().toString() : "import";
         Path importPath = temporaryFolder.resolve("imports").resolve(fileName + ".json");
         new JsonAddressBookStorage(importPath).saveAddressBook(incomingAddressBook, importPath);
         return importPath;
