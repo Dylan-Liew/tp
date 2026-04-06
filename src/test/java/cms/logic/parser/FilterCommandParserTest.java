@@ -106,9 +106,10 @@ public class FilterCommandParserTest {
     }
 
     @Test
-    public void parse_threeDigitTutorialGroup_throwsParseException() {
-        assertParseFailure(parser, " t/001",
-                FilterCommandParser.MESSAGE_FILTER_TUTORIAL_GROUP_CONSTRAINTS);
+    public void parse_tutorialGroupWithMultipleLeadingZeros_success() {
+        FilterCommand expectedCommand =
+                new FilterCommand(new TagTutorialGroupMatchesPredicate(Set.of(), Set.of(new TutorialGroup("01"))));
+        assertParseSuccess(parser, " t/001", expectedCommand);
     }
 
     @Test

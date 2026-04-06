@@ -132,7 +132,7 @@ Format: `filter [tag/TAG]... [t/TUTORIAL_GROUP_NUMBER]`
 * If `t/` is given, a person must belong to that tutorial group.
 * When both `tag/` and `t/` are provided, a person must satisfy both filters.
 * Tag matching is case-insensitive.
-* Tutorial group input accepts values from `1` to `99`, with or without a leading zero (e.g. `t/1` and `t/01` are both accepted).
+* Tutorial group input accepts values from `1` to `99`, with leading zeros allowed (e.g. `t/1`, `t/01`, and `t/001` are all accepted).
 
 Examples:
 * `filter tag/friend`
