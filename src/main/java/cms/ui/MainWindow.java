@@ -8,7 +8,9 @@ import cms.logic.Logic;
 import cms.logic.commands.CommandResult;
 import cms.logic.commands.exceptions.CommandException;
 import cms.logic.parser.exceptions.ParseException;
+import cms.model.person.Person;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
@@ -170,12 +172,38 @@ public class MainWindow extends UiPart<Stage> {
      * Rebuilds the person list panel and wires its selection to the detail panel.
      */
     private void refreshPersonListPanel() {
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList(), logic.isMasked());
+        refreshPersonListPanel(personListPanel == null ? null : personListPanel.selectedPersonProperty().get());
+    }
+
+    /**
+     * Rebuilds the person list panel and restores the previous selection when possible.
+     */
+    private void refreshPersonListPanel(Person previouslySelectedPerson) {
+        ObservableList<Person> filteredPersons = logic.getFilteredPersonList();
+        Person personToRestore = findMatchingPerson(filteredPersons, previouslySelectedPerson);
+
+        personListPanel = new PersonListPanel(filteredPersons, logic.isMasked());
         personListPanel.selectedPersonProperty().addListener((observable, oldValue, newValue) ->
                 personDetailPanel.showPerson(newValue));
+
+        if (personToRestore != null) {
+            personListPanel.selectPerson(personToRestore);
+        }
+
         personDetailPanel.showPerson(personListPanel.selectedPersonProperty().get());
 
         personListPanelPlaceholder.getChildren().setAll(personListPanel.getRoot());
+    }
+
+    static Person findMatchingPerson(ObservableList<Person> persons, Person targetPerson) {
+        if (targetPerson == null) {
+            return null;
+        }
+
+        return persons.stream()
+                .filter(candidate -> candidate.isSamePerson(targetPerson))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -238,6 +266,9 @@ public class MainWindow extends UiPart<Stage> {
      * @see cms.logic.Logic#execute(String)
      */
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
+        Person previouslySelectedPerson = personListPanel == null
+                ? null : personListPanel.selectedPersonProperty().get();
+
         try {
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
@@ -251,7 +282,7 @@ public class MainWindow extends UiPart<Stage> {
                 handleExit();
             }
 
-            refreshPersonListPanel();
+            refreshPersonListPanel(previouslySelectedPerson);
 
             return commandResult;
         } catch (CommandException | ParseException e) {

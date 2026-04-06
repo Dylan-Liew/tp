@@ -52,6 +52,27 @@ public class PersonListPanel extends UiPart<Region> {
     }
 
     /**
+     * Selects the given person if it exists in the current list.
+     *
+     * @return true if the person was found and selected
+     */
+    public boolean selectPerson(Person person) {
+        if (person == null) {
+            return false;
+        }
+
+        for (Person candidate : personListView.getItems()) {
+            if (candidate.isSamePerson(person)) {
+                personListView.getSelectionModel().select(candidate);
+                personListView.scrollTo(candidate);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Custom {@code ListCell} that displays the graphics of a {@code Person} using a {@code PersonCard}.
      */
     class PersonListViewCell extends ListCell<Person> {
