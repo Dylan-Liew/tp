@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane fx:id="placeHolder" xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml/1">
-    <Label fx:id="resultDisplay" styleClass="result-display" textOverrun="CLIP"/>
+    <TextArea fx:id="resultDisplay" styleClass="result-display" editable="false"
+              wrapText="true" focusTraversable="false"/>
 </StackPane>

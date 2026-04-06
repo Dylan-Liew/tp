@@ -34,7 +34,7 @@
                 </MenuBar>
 
                 <StackPane VBox.vgrow="NEVER" fx:id="resultDisplayPlaceholder" styleClass="result-strip"
-                           minHeight="38" prefHeight="38" maxHeight="38">
+                           minHeight="60" prefHeight="60" maxHeight="60">
                     <padding>
                         <Insets top="4" right="12" bottom="4" left="12"/>
                     </padding>

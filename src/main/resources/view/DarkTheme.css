@@ -140,6 +140,27 @@
     -fx-font-family: "Consolas";
     -fx-font-size: 13px;
     -fx-text-fill: #6fa56e;
+    -fx-control-inner-background: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.result-display .content {
+    -fx-background-color: transparent;
+}
+
+.result-display .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.result-display .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.result-display .scroll-bar {
+    -fx-background-color: transparent;
 }
 
 .status-bar .label {
