@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
+import cms.model.person.NusMatric;
 import cms.model.person.Phone;
 import cms.model.person.SocUsername;
 
@@ -48,6 +49,12 @@ public class MaskingUtilTest {
         assertEquals("********", MaskingUtil.maskGithubUsername(new GithubUsername("abc")));
         assertEquals("********", MaskingUtil.maskGithubUsername(new GithubUsername("abcdefg")));
         assertEquals("********", MaskingUtil.maskGithubUsername(new GithubUsername("ab")));
+    }
+
+    @Test
+    public void maskNusMatric() {
+        assertNull(MaskingUtil.maskNusMatric(null));
+        assertEquals("********", MaskingUtil.maskNusMatric(new NusMatric("A1234567X")));
     }
 
     @Test

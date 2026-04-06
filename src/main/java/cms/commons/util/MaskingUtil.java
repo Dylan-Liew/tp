@@ -2,6 +2,7 @@ package cms.commons.util;
 
 import cms.model.person.Email;
 import cms.model.person.GithubUsername;
+import cms.model.person.NusMatric;
 import cms.model.person.Phone;
 import cms.model.person.SocUsername;
 
@@ -29,7 +30,7 @@ public class MaskingUtil {
     }
 
     /**
-     * Masks a SOC username by keeping only first 3 characters.
+     * Masks a SOC username.
      */
     public static String maskSocUsername(SocUsername socUsername) {
         if (socUsername == null) {
@@ -39,10 +40,20 @@ public class MaskingUtil {
     }
 
     /**
-     * Masks a GitHub username by keeping only first 3 characters.
+     * Masks a GitHub username.
      */
     public static String maskGithubUsername(GithubUsername githubUsername) {
         if (githubUsername == null) {
+            return null;
+        }
+        return USERNAME_MASK;
+    }
+
+    /**
+     * Masks a NUS Matric number.
+     */
+    public static String maskNusMatric(NusMatric nusMatric) {
+        if (nusMatric == null) {
             return null;
         }
         return USERNAME_MASK;
