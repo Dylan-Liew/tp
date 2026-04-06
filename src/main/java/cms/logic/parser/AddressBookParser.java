@@ -70,7 +70,7 @@ public class AddressBookParser {
             return new DeleteCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
-            return new ClearCommand();
+            return new ClearCommandParser().parse(arguments);
 
         case FindCommand.COMMAND_WORD:
             return new FindCommandParser().parse(arguments);
@@ -79,7 +79,7 @@ public class AddressBookParser {
             return new FilterCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
-            return new ListCommand();
+            return new ListCommandParser().parse(arguments);
 
         case SortCommand.COMMAND_WORD:
             return new SortCommandParser().parse(arguments);
@@ -88,13 +88,13 @@ public class AddressBookParser {
             return new TagCommandParser().parse(arguments);
 
         case MaskCommand.COMMAND_WORD:
-            return new MaskCommand();
+            return new MaskCommandParser().parse(arguments);
 
         case UnmaskCommand.COMMAND_WORD:
-            return new UnmaskCommand();
+            return new UnmaskCommandParser().parse(arguments);
 
         case ExitCommand.COMMAND_WORD:
-            return new ExitCommand();
+            return new ExitCommandParser().parse(arguments);
 
         case ExportCommand.COMMAND_WORD:
             return new ExportCommandParser().parse(arguments);
