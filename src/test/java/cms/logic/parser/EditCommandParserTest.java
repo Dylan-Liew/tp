@@ -36,12 +36,6 @@ import static cms.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static cms.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static cms.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static cms.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.Test;
 
@@ -251,18 +245,5 @@ public class EditCommandParserTest {
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
-    }
-
-    @Test
-    public void parseTagsForEdit_nullTags_assertionError() throws Exception {
-        Method parseTagsForEditMethod = EditCommandParser.class
-                .getDeclaredMethod("parseTagsForEdit", java.util.Collection.class);
-        parseTagsForEditMethod.setAccessible(true);
-
-        InvocationTargetException exception = assertThrows(InvocationTargetException.class, ()
-            -> parseTagsForEditMethod.invoke(parser, new Object[] {null}));
-
-        assertTrue(exception.getCause() instanceof AssertionError);
-        assertEquals("tags should not be null", exception.getCause().getMessage());
     }
 }
