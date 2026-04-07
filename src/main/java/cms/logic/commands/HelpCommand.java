@@ -79,6 +79,13 @@ public class HelpCommand extends Command {
         return HELP_MESSAGES.containsKey(commandWord.toLowerCase(Locale.ROOT));
     }
 
+    /**
+     * Returns the formatted overview help shown by {@code help} with no arguments.
+     */
+    public static String getOverviewHelpMessage() {
+        return getAllHelpMessages();
+    }
+
     static String getAllHelpMessages() {
         String header = "Available commands (use help COMMAND for full usage):";
         return HELP_MESSAGES.values().stream()

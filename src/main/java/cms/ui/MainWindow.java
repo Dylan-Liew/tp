@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import cms.commons.core.GuiSettings;
 import cms.commons.core.LogsCenter;
 import cms.logic.Logic;
+import cms.logic.commands.HelpCommand;
 import cms.logic.commands.CommandResult;
 import cms.logic.commands.exceptions.CommandException;
 import cms.logic.parser.exceptions.ParseException;
@@ -195,7 +196,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     public void handleHelp() {
-        helpWindow.resetToDefaultHelpMessage();
+        helpWindow.setHelpMessage(HelpCommand.getOverviewHelpMessage());
         showOrFocusHelpWindow();
     }
 

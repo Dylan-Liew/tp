@@ -3,6 +3,7 @@ package cms.logic.commands;
 import static cms.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -49,5 +50,33 @@ public class HelpCommandTest {
     public void toOneLineHelp_noNewline_returnsSameLine() {
         String result = HelpCommand.toOneLineHelp("list: Lists all persons.");
         assertEquals("- list: Lists all persons.", result);
+    }
+
+    @Test
+    public void getOverviewHelpMessage_containsAllParserCommands() {
+        String overview = HelpCommand.getOverviewHelpMessage();
+        assertTrue(overview.contains("- " + AddCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + EditCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + DeleteCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + ListCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + FindCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + FilterCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + SortCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + MaskCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + UnmaskCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + ExportCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + ImportCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + HelpCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + ClearCommand.COMMAND_WORD + ":"));
+        assertTrue(overview.contains("- " + ExitCommand.COMMAND_WORD + ":"));
+    }
+
+    @Test
+    public void getHelpMessage_supportedCommand_notNull() {
+        assertNotNull(HelpCommand.getHelpMessage(AddCommand.COMMAND_WORD));
+        assertNotNull(HelpCommand.getHelpMessage(FilterCommand.COMMAND_WORD));
+        assertNotNull(HelpCommand.getHelpMessage(SortCommand.COMMAND_WORD));
+        assertNotNull(HelpCommand.getHelpMessage(MaskCommand.COMMAND_WORD));
+        assertNotNull(HelpCommand.getHelpMessage(UnmaskCommand.COMMAND_WORD));
     }
 }
