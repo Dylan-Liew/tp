@@ -46,6 +46,12 @@ public class ExportCommandParserTest {
     }
 
     @Test
+    public void parse_singleQuoteToken_failure() {
+        assertParseFailure(parser, "\"",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
+    }
+
+    @Test
     public void parse_invalidPath_failureIncludesReason() {
         String invalidPath = "bad\u0000name.json";
 

@@ -48,6 +48,10 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         boolean startsWithQuote = input.startsWith("\"");
         boolean endsWithQuote = input.endsWith("\"");
 
+        if (startsWithQuote && endsWithQuote && input.length() == 1) {
+            return null;
+        }
+
         if (startsWithQuote != endsWithQuote) {
             return null;
         }
