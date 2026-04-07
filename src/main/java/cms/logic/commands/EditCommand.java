@@ -9,7 +9,6 @@ import static cms.logic.parser.CliSyntax.PREFIX_ROLE;
 import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
 import static cms.logic.parser.CliSyntax.PREFIX_TUTORIALGROUP;
-import static cms.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collections;
@@ -101,7 +100,6 @@ public class EditCommand extends Command {
         }
 
         model.setPerson(personToEdit, editedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS,
                 Messages.format(editedPerson, model.isMasked())));
     }
