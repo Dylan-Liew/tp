@@ -4,7 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import cms.commons.exceptions.DataLoadingException;
 import cms.logic.commands.exceptions.CommandException;
@@ -44,6 +46,8 @@ public class ImportCommand extends Command {
     public static final String MESSAGE_KEEP_REQUIRED_NON_EMPTY = "Current data is non-empty. "
             + "Re-run the import command and add keep/current or keep/incoming "
             + "after the import command to choose how conflicts are resolved.";
+    private static final String MESSAGE_CONFLICT_PREVIEW_HEADER = "\nConflicting entries detected:";
+    private static final int CONFLICT_PREVIEW_LIMIT = 5;
 
     /** Resolution policy when importing into a non-empty address book. */
     public enum KeepPolicy {
@@ -92,7 +96,8 @@ public class ImportCommand extends Command {
 
         boolean hasCurrentData = !model.getAddressBook().getPersonList().isEmpty();
         if (hasCurrentData && keepPolicy == null) {
-            throw new CommandException(MESSAGE_KEEP_REQUIRED_NON_EMPTY);
+            String conflictPreviewMessage = buildConflictPreviewMessage(model.getAddressBook(), importedAddressBook);
+            throw new CommandException(MESSAGE_KEEP_REQUIRED_NON_EMPTY + conflictPreviewMessage);
         }
 
         if (!hasCurrentData) {
@@ -141,6 +146,57 @@ public class ImportCommand extends Command {
             }
         }
         return conflicts;
+    }
+
+    /**
+     * Builds a concise preview of conflicts between incoming and current data for user decision-making.
+     */
+    private String buildConflictPreviewMessage(ReadOnlyAddressBook currentAddressBook,
+                                               ReadOnlyAddressBook importedAddressBook) {
+        Set<String> conflictLines = new LinkedHashSet<>();
+
+        for (Person incomingPerson : importedAddressBook.getPersonList()) {
+            for (Person existingPerson : currentAddressBook.getPersonList()) {
+                String conflictLine = getConflictDescription(incomingPerson, existingPerson);
+                if (conflictLine != null) {
+                    conflictLines.add(conflictLine);
+                }
+            }
+        }
+
+        if (conflictLines.isEmpty()) {
+            return "\nNo direct conflicts were detected in the import preview.";
+        }
+
+        List<String> limitedConflictLines = new ArrayList<>(conflictLines);
+        int displayedCount = Math.min(limitedConflictLines.size(), CONFLICT_PREVIEW_LIMIT);
+        StringBuilder preview = new StringBuilder(MESSAGE_CONFLICT_PREVIEW_HEADER);
+        for (int i = 0; i < displayedCount; i++) {
+            preview.append("\n- ").append(limitedConflictLines.get(i));
+        }
+
+        int hiddenCount = limitedConflictLines.size() - displayedCount;
+        if (hiddenCount > 0) {
+            preview.append("\n- ... and ").append(hiddenCount).append(" more conflict(s)");
+        }
+
+        return preview.toString();
+    }
+
+    private String getConflictDescription(Person incomingPerson, Person existingPerson) {
+        if (incomingPerson.isSamePerson(existingPerson)) {
+            return String.format("incoming '%s' conflicts with current '%s' by NUS Matric (%s)",
+                    incomingPerson.getName(), existingPerson.getName(), incomingPerson.getNusMatric());
+        }
+
+        cms.model.person.FieldConflict fieldConflict = incomingPerson.findConflictingField(existingPerson);
+        if (fieldConflict == null) {
+            return null;
+        }
+
+        return String.format("incoming '%s' conflicts with current '%s' by %s (%s)",
+                incomingPerson.getName(), existingPerson.getName(),
+                fieldConflict.getFieldName(), fieldConflict.getFieldValue());
     }
 
     public Path getImportFilePath() {

@@ -309,19 +309,21 @@ public class LogicManagerTest {
                 + EMAIL_DESC_AMY + TUTORIALGROUP_DESC_AMY);
         Person expectedCurrentPerson = new PersonBuilder(AMY).withTags().build();
 
-        Path importPath = createImportFileWithSinglePerson(new PersonBuilder()
-                .withName(VALID_NAME_BOB)
-                .withNusMatric(VALID_NUSMATRIC_BOB)
-                .withSocUsername(VALID_SOCUSERNAME_BOB)
-                .withGithubUsername(VALID_GITHUBUSERNAME_BOB)
-                .withEmail(VALID_EMAIL_BOB)
-                .withPhone(VALID_PHONE_BOB)
-                .withTutorialGroup(VALID_TUTORIALGROUP_BOB)
-                .build());
+        Person conflictingIncomingPerson = new PersonBuilder(AMY)
+            .withName("Amy Updated")
+            .withPhone("99990000")
+            .build();
+        Path importPath = createImportFileWithSinglePerson(conflictingIncomingPerson);
 
         Path normalizedImportPath = importPath.toAbsolutePath().normalize();
         String importCommand = buildImportCommand(normalizedImportPath, null);
-        assertCommandFailure(importCommand, CommandException.class, ImportCommand.MESSAGE_KEEP_REQUIRED_NON_EMPTY);
+
+        CommandException thrownException = org.junit.jupiter.api.Assertions.assertThrows(
+            CommandException.class, () -> logic.execute(importCommand));
+        assertTrue(thrownException.getMessage().contains(ImportCommand.MESSAGE_KEEP_REQUIRED_NON_EMPTY));
+        assertTrue(thrownException.getMessage().contains(conflictingIncomingPerson.getName().toString()));
+        assertTrue(thrownException.getMessage().contains(expectedCurrentPerson.getName().toString()));
+
         assertEquals(1, model.getFilteredPersonList().size());
         assertEquals(expectedCurrentPerson, model.getFilteredPersonList().get(0));
     }
