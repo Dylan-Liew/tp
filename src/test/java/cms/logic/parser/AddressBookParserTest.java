@@ -176,6 +176,14 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_sortMixedCaseArguments() throws Exception {
+        assertEquals(new SortCommand(SortCommand.SORT_BY_TUTORIAL_GROUP),
+                parser.parseCommand(SortCommand.COMMAND_WORD + " Tg"));
+        assertEquals(new SortCommand(SortCommand.SORT_BY_NAME),
+                parser.parseCommand(SortCommand.COMMAND_WORD + " NaMe"));
+    }
+
+    @Test
     public void parseCommand_sortInvalidArgument_throwsParseException() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE);
         assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand(SortCommand.COMMAND_WORD

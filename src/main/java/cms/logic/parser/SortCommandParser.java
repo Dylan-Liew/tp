@@ -2,6 +2,8 @@ package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
+import java.util.Locale;
+
 import cms.logic.commands.SortCommand;
 import cms.logic.parser.exceptions.ParseException;
 
@@ -17,10 +19,10 @@ public class SortCommandParser implements Parser<SortCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public SortCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        if (SortCommand.SORT_BY_TUTORIAL_GROUP.equals(trimmedArgs)
-                || SortCommand.SORT_BY_NAME.equals(trimmedArgs)) {
-            return new SortCommand(trimmedArgs);
+        String normalizedArgs = args.trim().toLowerCase(Locale.ROOT);
+        if (SortCommand.SORT_BY_TUTORIAL_GROUP.equals(normalizedArgs)
+                || SortCommand.SORT_BY_NAME.equals(normalizedArgs)) {
+            return new SortCommand(normalizedArgs);
         }
 
         throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
