@@ -73,6 +73,11 @@ public class CommandTestUtil {
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
+    public static final String INVALID_NUSMATRIC_DESC = " " + PREFIX_MATRIC + "A1234567A";
+    public static final String INVALID_SOCUSERNAME_DESC = " " + PREFIX_SOCUSERNAME + "ab";
+    public static final String INVALID_GITHUBUSERNAME_DESC = " " + PREFIX_GITHUBUSERNAME + "-bob";
+    public static final String INVALID_ROLE_DESC = " " + PREFIX_ROLE + "professor";
+    public static final String INVALID_TUTORIALGROUP_DESC = " " + PREFIX_TUTORIALGROUP + "100";
     // SOC username (in nusMatric format) that does not match the NUS Matric of the person
     public static final String INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH = "a9999999w";
     public static final String INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH_DESC =

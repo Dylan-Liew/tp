@@ -20,6 +20,7 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_FIELDS =
             "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_IGNORED_PARAMETERS = "Extra input '%1$s' was ignored";
+    public static final String MESSAGE_MISSING_REQUIRED_FIELD = "Missing required field: %1$s";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
@@ -31,6 +32,13 @@ public class Messages {
                 Stream.of(duplicatePrefixes).map(Prefix::toString).collect(Collectors.toSet());
 
         return MESSAGE_DUPLICATE_FIELDS + String.join(" ", duplicateFields);
+    }
+
+    /**
+     * Returns an error message indicating the missing required field.
+     */
+    public static String getMissingRequiredAddFieldMessage(String fieldName) {
+        return String.format(MESSAGE_MISSING_REQUIRED_FIELD, fieldName);
     }
 
     /**

@@ -6,10 +6,15 @@ import static cms.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static cms.logic.commands.CommandTestUtil.GITHUBUSERNAME_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.GITHUBUSERNAME_DESC_BOB;
 import static cms.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
+import static cms.logic.commands.CommandTestUtil.INVALID_GITHUBUSERNAME_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
+import static cms.logic.commands.CommandTestUtil.INVALID_NUSMATRIC_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
+import static cms.logic.commands.CommandTestUtil.INVALID_ROLE_DESC;
+import static cms.logic.commands.CommandTestUtil.INVALID_SOCUSERNAME_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_SOCUSERNAME_NUSMATRIC_MISMATCH_DESC;
 import static cms.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static cms.logic.commands.CommandTestUtil.INVALID_TUTORIALGROUP_DESC;
 import static cms.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static cms.logic.commands.CommandTestUtil.NAME_DESC_BOB;
 import static cms.logic.commands.CommandTestUtil.NUSMATRIC_DESC_AMY;
@@ -48,9 +53,14 @@ import org.junit.jupiter.api.Test;
 import cms.logic.Messages;
 import cms.logic.commands.AddCommand;
 import cms.model.person.Email;
+import cms.model.person.GithubUsername;
 import cms.model.person.Name;
+import cms.model.person.NusMatric;
 import cms.model.person.Person;
 import cms.model.person.Phone;
+import cms.model.person.Role;
+import cms.model.person.SocUsername;
+import cms.model.person.TutorialGroup;
 import cms.model.tag.Tag;
 import cms.testutil.PersonBuilder;
 
@@ -161,23 +171,46 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
+        String expectedUsage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
 
         // missing name prefix
-        assertParseFailure(parser, VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
-                expectedMessage);
+        assertParseFailure(parser, NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB + GITHUBUSERNAME_DESC_BOB
+                + PHONE_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("name"), expectedUsage));
 
-        // missing phone prefix
-        assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB,
-                expectedMessage);
+        // missing matric prefix
+        assertParseFailure(parser, NAME_DESC_BOB + SOCUSERNAME_DESC_BOB + GITHUBUSERNAME_DESC_BOB
+                + PHONE_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("matric"), expectedUsage));
+
+        // missing soc username prefix
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + GITHUBUSERNAME_DESC_BOB
+                + PHONE_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("socusername"), expectedUsage));
+
+        // missing github username prefix
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB
+                + PHONE_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("githubusername"), expectedUsage));
 
         // missing email prefix
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB,
-                expectedMessage);
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB
+                + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("email"), expectedUsage));
 
-        // all prefixes missing
+        // missing phone prefix
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB
+                + GITHUBUSERNAME_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("phone"), expectedUsage));
+
+        // missing tutorial group prefix
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB
+                + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("tutorialgroup"), expectedUsage));
+
+        // all required prefixes missing are parsed as preamble and should report invalid format
         assertParseFailure(parser, VALID_NAME_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB,
-                expectedMessage);
+                expectedUsage);
     }
 
     @Test
@@ -196,6 +229,32 @@ public class AddCommandParserTest {
         assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + SOCUSERNAME_DESC_BOB
                 + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC
                 + TUTORIALGROUP_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Email.MESSAGE_CONSTRAINTS);
+
+        // invalid NUS Matric
+        assertParseFailure(parser, NAME_DESC_BOB + INVALID_NUSMATRIC_DESC + ROLE_DESC_BOB + SOCUSERNAME_DESC_BOB
+                + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + TUTORIALGROUP_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, NusMatric.MESSAGE_CONSTRAINTS);
+
+        // invalid SOC username
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + INVALID_SOCUSERNAME_DESC
+                + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + TUTORIALGROUP_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, SocUsername.MESSAGE_CONSTRAINTS);
+
+        // invalid Github username
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + SOCUSERNAME_DESC_BOB
+                + INVALID_GITHUBUSERNAME_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + TUTORIALGROUP_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, GithubUsername.MESSAGE_CONSTRAINTS);
+
+        // invalid role
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + INVALID_ROLE_DESC + SOCUSERNAME_DESC_BOB
+                + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + TUTORIALGROUP_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Role.MESSAGE_CONSTRAINTS);
+
+        // invalid tutorial group
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + SOCUSERNAME_DESC_BOB
+                + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + INVALID_TUTORIALGROUP_DESC + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                TutorialGroup.MESSAGE_CONSTRAINTS);
 
         // invalid tag
         assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + SOCUSERNAME_DESC_BOB
@@ -223,5 +282,9 @@ public class AddCommandParserTest {
                         + SOCUSERNAME_DESC_BOB + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                                                 + TUTORIALGROUP_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+    }
+
+    private String missingMessageWithUsage(String missingMessage, String usageMessage) {
+        return missingMessage + "\n" + usageMessage;
     }
 }

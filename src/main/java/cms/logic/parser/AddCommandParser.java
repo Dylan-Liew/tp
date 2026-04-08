@@ -11,9 +11,10 @@ import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
 import static cms.logic.parser.CliSyntax.PREFIX_TUTORIALGROUP;
 
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
+import cms.logic.Messages;
 import cms.logic.commands.AddCommand;
 import cms.logic.parser.exceptions.ParseException;
 import cms.model.person.Email;
@@ -45,11 +46,16 @@ public class AddCommandParser implements Parser<AddCommand> {
                         PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME, PREFIX_EMAIL,
                         PREFIX_PHONE, PREFIX_TUTORIALGROUP, PREFIX_TAG);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_MATRIC,
-                PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME, PREFIX_EMAIL,
-                PREFIX_PHONE, PREFIX_TUTORIALGROUP)
-                || !argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        String usageMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
+
+        if (!argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(usageMessage);
+        }
+
+        Optional<String> firstMissingRequiredField = getFirstMissingRequiredField(argMultimap);
+        if (firstMissingRequiredField.isPresent()) {
+            throw new ParseException(Messages.getMissingRequiredAddFieldMessage(firstMissingRequiredField.get())
+                    + "\n" + usageMessage);
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_MATRIC, PREFIX_ROLE,
@@ -78,12 +84,29 @@ public class AddCommandParser implements Parser<AddCommand> {
         return new AddCommand(person);
     }
 
-    /**
-     * Returns true if none of the prefixes contains empty {@code Optional} values in the given
-     * {@code ArgumentMultimap}.
-     */
-    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
-        return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
+    private Optional<String> getFirstMissingRequiredField(ArgumentMultimap argMultimap) {
+        if (argMultimap.getValue(PREFIX_NAME).isEmpty()) {
+            return Optional.of("name");
+        }
+        if (argMultimap.getValue(PREFIX_MATRIC).isEmpty()) {
+            return Optional.of("matric");
+        }
+        if (argMultimap.getValue(PREFIX_SOCUSERNAME).isEmpty()) {
+            return Optional.of("socusername");
+        }
+        if (argMultimap.getValue(PREFIX_GITHUBUSERNAME).isEmpty()) {
+            return Optional.of("githubusername");
+        }
+        if (argMultimap.getValue(PREFIX_EMAIL).isEmpty()) {
+            return Optional.of("email");
+        }
+        if (argMultimap.getValue(PREFIX_PHONE).isEmpty()) {
+            return Optional.of("phone");
+        }
+        if (argMultimap.getValue(PREFIX_TUTORIALGROUP).isEmpty()) {
+            return Optional.of("tutorialgroup");
+        }
+        return Optional.empty();
     }
 
 }
