@@ -57,19 +57,19 @@ The Help Window is a separate window opened by the `help` command (or `F1`), and
 Action | Format
 --------|------------------
 **List** | `list`
-**Add** | `add n/NAME m/NUS_MATRIC role/ROLE soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`<br><br>e.g. `add n/John Doe m/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01`
+**Add** | `add n/NAME m/NUS_MATRIC [role/ROLE] soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`<br><br>e.g. `add n/John Doe m/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01`
 **Edit** | `edit INDEX [n/NAME] [m/NUS_MATRIC] [role/ROLE] [soc/SOC_USERNAME] [gh/GITHUB_USERNAME] [e/EMAIL] [p/PHONE] [t/TUTORIAL_GROUP] [tag/TAG]...`<br><br>e.g. `edit 2 p/98765432 e/johndoe@example.com`
-**Delete** | `delete INDEX`<br>`delete INDEX [MORE_INDEXES]...`<br>`delete m/NUS_MATRIC`<br><br>e.g. `delete 1 3 5`
-**Find** | `find a/KEYWORD [MORE_KEYWORDS]...`<br>`find n/KEYWORD [MORE_NAME_KEYWORDS]...`<br>`find m/NUS_MATRIC [MORE_NUS_MATRIC]...`<br><br>e.g. `find n/jane n/eunice m/A0123456B`
+**Delete** | `delete INDEX`<br>`delete INDEX [MORE_INDEXES]...`<br>`delete m/NUS_MATRIC [MORE_NUS_MATRICS]...`<br><br>e.g. `delete 1 3 5`
+**Find** | `find a/KEYWORD [MORE_KEYWORDS]...`<br>`find n/KEYWORD [MORE_NAME_KEYWORDS]...`<br>`find m/NUS_MATRIC [MORE_NUS_MATRICS]...`<br><br>e.g. `find n/jane n/eunice m/A0123456B`
 **Tag** | `tag add n/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]...`<br>`tag add m/NUS_MATRIC [MORE_NUS_MATRICS]... tag/TAG [MORE_TAGS]...`<br>`tag delete n/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]...`<br>`tag delete m/NUS_MATRIC [MORE_NUS_MATRICS]... tag/TAG [MORE_TAGS]...`<br><br>e.g. `tag add n/1 2 tag/friend tutor`
-**Filter** | `filter [tag/TAG]... [t/TUTORIAL_GROUP_NUMBER]...`<br><br>e.g. `filter tag/friends t/01`
+**Filter** | `filter [tag/TAG]... [t/TUTORIAL_GROUP_NUMBER]`<br><br>e.g. `filter tag/friends t/01`
 **Sort** | `sort tg`<br>`sort name`<br><br>e.g. `sort tg`
 **Import** | `import FILE_PATH [keep/current|keep/incoming]`<br><br>e.g. `import data/addressbook.json keep/current`
 **Export** | `export FILE_PATH`<br><br>e.g. `export "C:\\Users\\Josh\\Documents\\backup.json"`
 **Mask** | `mask`
 **Unmask** | `unmask`
 **Help** | `help [COMMAND]`
-**Clear** | `clear`
+**Clear** | `clear`<br>`clear confirm/yes`
 **Exit** | `exit`
 
 --------------------------------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ Action | Format
 * Items in square brackets are optional.
 * `...` means the field can be repeated.
 * Parameters can be in any order.
-* For commands without parameters (`list`, `exit`, `clear`), extra text is ignored.
+* For commands without parameters (`list`, `mask`, `unmask`, `exit`), extra text does not block execution and is reported as ignored.
 * e.g. `add n/John Doe m/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01 tag/mentor`
 </div>
 
@@ -97,7 +97,7 @@ Shows all records currently stored in CMS.
 
 **Format:** `list`
 
-**Requirements:** None.
+**Constraints:** None.
 
 **Example:** `list`
 
@@ -109,24 +109,24 @@ Shows all records currently stored in CMS.
 
 Adds a student or tutor record to CMS.
 
-**Format:** `add n/NAME m/NUS_MATRIC role/ROLE soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`
+**Format:** `add n/NAME m/NUS_MATRIC [role/ROLE] soc/SOC_USERNAME gh/GITHUB_USERNAME e/EMAIL p/PHONE t/TUTORIAL_GROUP [tag/TAG]...`
 
-**Requirements:**
-* All required fields must be provided.
+**Constraints:**
+* `n/`, `m/`, `soc/`, `gh/`, `e/`, `p/`, and `t/` are mandatory.
 * All field values must satisfy the rules in [Fields and accepted formats](#fields-and-accepted-formats).
-* Unique fields must not conflict with an existing person.
+* Fields that must be unique cannot duplicate an existing person.
+* If `role/` is omitted, the role defaults to `student`.
 
 **Examples:**
 * `add n/David Tan m/A0211111C role/student soc/david1 gh/davidtan99 e/david@u.nus.edu p/97654321 t/05`
 * `add n/John Doe m/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01 tag/python-experienced`
+* `add n/Jane Lim m/A0123456B soc/janelim gh/jane-lim e/jane@u.nus.edu p/81234567 t/03`
 
 **Expected result:**
 * The new person appears in the Person List Panel.
 * The Result Display confirms the added person.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:**
-Use the [Fields and accepted formats](#fields-and-accepted-formats) section as a checklist before submitting the command.
-</div>
+**Note:** Use the [Fields and accepted formats](#fields-and-accepted-formats) section as a checklist before submitting the command.
 
 ### Editing a student / tutor : `edit`
 
@@ -134,11 +134,13 @@ Edits an existing student or tutor record in CMS.
 
 **Format:** `edit INDEX [n/NAME] [m/NUS_MATRIC] [role/ROLE] [soc/SOC_USERNAME] [gh/GITHUB_USERNAME] [e/EMAIL] [p/PHONE] [t/TUTORIAL_GROUP] [tag/TAG]...`
 
-**Requirements:**
-* Edits the person at the specified `INDEX`.
+**Constraints:**
 * `INDEX` must be a positive integer (1, 2, 3, ...).
-* At least one optional field must be provided.
-* Edited values must satisfy the same field rules as `add` (see [Fields and accepted formats](#fields-and-accepted-formats)).
+* At least one field must be provided after the index.
+* Each provided field replaces the existing value for that field.
+* If `tag/` appears, it replaces the full tag set instead of adding to it.
+* `tag/` with no value clears all tags.
+* Edited field values must satisfy the same rules as `add`.
 
 **Examples:**
 * `edit 1 p/91234567 e/johndoe@example.com`
@@ -157,15 +159,18 @@ Deletes one or more persons by displayed index, or by NUS Matric.
 **Format:**
 * `delete INDEX`
 * `delete INDEX [MORE_INDEXES]...`
-* `delete m/NUS_MATRIC`
+* `delete m/NUS_MATRIC [MORE_NUS_MATRICS]...`
 
-**Requirements:**
-* For index-based delete, each index refers to the displayed list and must be a positive integer.
+**Constraints:**
+* Use either displayed indexes or NUS Matrics, not both in the same command.
+* Each index must refer to the current displayed list and be a positive integer.
+* Each NUS Matric must be valid.
 
 **Examples:**
 * `delete 2`
 * `delete 1 3 5`
 * `delete m/A0234567B`
+* `delete m/A0234567B A0345678C`
 
 **Expected result:**
 * Matching person(s) are removed from the Person List Panel.
@@ -173,7 +178,7 @@ Deletes one or more persons by displayed index, or by NUS Matric.
 
 ### Finding students / tutors : `find`
 
-Finds persons whose names or NUS Matrics contain any of the given keywords.
+Finds persons by name, NUS Matric, or any supported field.
 
 **Format:**
 * `find a/KEYWORD [MORE_KEYWORDS]...`
@@ -181,9 +186,13 @@ Finds persons whose names or NUS Matrics contain any of the given keywords.
 * `find m/NUS_MATRIC [MORE_NUS_MATRICS]...`
 * `find n/KEYWORD [MORE_NAME_KEYWORDS]... m/NUS_MATRIC [MORE_NUS_MATRICS]...`
 
-**Requirements:**
-* Prefix is required (`a/`, `n/`, `m/`).
-* Each used prefix must have at least one non-blank keyword. e.g. `find n/   ` is invalid.
+**Constraints:**
+* At least one of `a/`, `n/`, or `m/` must be present.
+* Every used prefix must contain at least one non-blank keyword.
+* `a/` matches across supported fields, including name, NUS Matric, phone, email, SoC username, GitHub username, role, tutorial group, and tags.
+* When multiple prefixes are used, matches are combined with OR.
+* `n/` matching is case-insensitive and matches full words.
+* `m/` matching is case-insensitive.
 
 **Examples:**
 * `find a/jane`
@@ -207,12 +216,13 @@ Adds or removes one or more tags from one or more persons.
 * `tag delete n/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]...`
 * `tag delete m/NUS_MATRIC [MORE_NUS_MATRICS]... tag/TAG [MORE_TAGS]...`
 
-**Requirements:**
-* Use `add` to add tags and `delete` to remove tags.
-* Target persons by either displayed index (`n/`) or NUS Matric (`m/`), but not both in the same command.
-* For index-based tagging, each index refers to the displayed list and must be a positive integer.
+**Constraints:**
+* The action must be either `add` or `delete`.
+* Target persons must be specified by either displayed indexes (`n/`) or NUS Matrics (`m/`), not both.
+* Each index must refer to the current displayed list and be a positive integer.
 * At least one target person and one tag must be provided.
-* Tag values must follow the same rules as [`tag/TAG`](#field-tag).
+* Tag values must satisfy the rules for [`tag/TAG`](#field-tag).
+* Repeated tags in the same command are ignored.
 
 **Examples:**
 * `tag add n/1 2 tag/friend tutor`
@@ -230,13 +240,14 @@ Filters persons by tag, tutorial group, or both.
 
 **Format:** `filter [tag/TAG]... [t/TUTORIAL_GROUP_NUMBER]`
 
-**Requirements:**
-* At least one filter must be provided.
-* `tag/` can be repeated to filter by multiple tags.
-* `t/` can appear at most once.
-* If multiple `tag/` values are given, a person must have all of them.
-* If `t/` is given, a person must belong to that tutorial group.
-* When both `tag/` and `t/` are provided, a person must satisfy both filters.
+**Constraints:**
+* At least one of `tag/` or `t/` must be present.
+* `tag/` may be repeated; `t/` may appear at most once.
+* When multiple `tag/` values are given, all of them must match.
+* If `t/` is given, it must match the person's tutorial group.
+* When both `tag/` and `t/` are provided, both conditions must be satisfied.
+* Tag matching is case-insensitive.
+* Tutorial group input must be a number from `1` to `99`, with leading zeros allowed.
 
 **Examples:**
 * `filter tag/friend`
@@ -256,11 +267,11 @@ Sorts all persons by name or tutorial group.
 * `sort name`
 * `sort tg`
 
-**Requirements:** Use either `name` or `tg` as the sort key.
+**Constraints:** The sort key must be either `name` or `tg`.
 
 **Examples:**
-* `sort name`
-* `sort tg`
+* `sort NAME`
+* `sort Tg`
 
 **Expected result:**
 * Persons are reordered based on the selected sort key.
@@ -271,11 +282,12 @@ Imports records from a `.json` file into CMS.
 
 **Format:** `import FILE_PATH [keep/current|keep/incoming]`
 
-**Requirements:**
+**Constraints:**
 * `FILE_PATH` must point to a `.json` file.
-* File paths with spaces are supported, e.g. `C:/Users/Test/My Data/import.json`.
-* Quoted file paths are also supported, e.g. `"C:/Users/Test/My Data/import.json"`.
-* Platform path separators are accepted (for example `/` and `\`).
+* File paths with spaces are allowed, including quoted paths.
+* Platform path separators such as `/` and `\` are accepted.
+* If CMS already contains data, a keep policy is required.
+* The keep policy must be either `keep/current` or `keep/incoming`.
 
 **Examples:**
 * `import data/addressbook.json`
@@ -285,6 +297,7 @@ Imports records from a `.json` file into CMS.
 **Expected result:**
 * Records from the file are imported into CMS.
 * The Result Display confirms the import outcome.
+* If CMS already contains data and no keep policy is provided, CMS rejects the command and asks you to rerun it with a keep policy.
 
 ### Exporting records to a JSON file : `export`
 
@@ -292,10 +305,10 @@ Exports current CMS data to a `.json` file.
 
 **Format:** `export FILE_PATH`
 
-**Requirements:**
+**Constraints:**
 * `FILE_PATH` must end with `.json`.
-* File paths with spaces are supported, e.g. `C:/Users/Test/My Data/export.json`.
-* Quoted file paths are also supported, e.g. `"C:/Users/Test/My Documents/backup.json"`.
+* File paths with spaces are allowed, including quoted paths.
+* Platform path separators such as `/` and `\` are accepted.
 
 **Examples:**
 * `export data/backup.json`
@@ -311,12 +324,13 @@ Masks sensitive fields (NUS ID, SoC username, GitHub username, email, phone numb
 
 **Format:** `mask`
 
-**Requirements:** None.
+**Constraints:** None.
 
 **Example:** `mask`
 
 **Expected result:**
 * Sensitive fields are hidden until `unmask` is used.
+* Extra text after `mask` is reported as ignored.
 
 ### Unmasking sensitive fields : `unmask`
 
@@ -324,12 +338,13 @@ Unmasks sensitive fields in the person list and detail panels.
 
 **Format:** `unmask`
 
-**Requirements:** None.
+**Constraints:** None.
 
 **Example:** `unmask`
 
 **Expected result:**
 * Sensitive fields are shown again.
+* Extra text after `unmask` is reported as ignored.
 
 ### Viewing help : `help`
 
@@ -337,10 +352,10 @@ Opens the Help Window with command guidance and a User Guide link.
 
 **Format:** `help [COMMAND]`
 
-**Requirements:**
-* If `COMMAND` is omitted, CMS shows a brief command summary.
-* If `COMMAND` is provided (for example `add`), CMS shows detailed usage for that command.
-* The Help Window is opened if closed, otherwise the same window is focused.
+**Constraints:**
+* `COMMAND` is optional.
+* If provided, `COMMAND` must be a supported command word.
+* Only one command word may be supplied.
 
 **Examples:**
 * `help`
@@ -354,19 +369,25 @@ Opens the Help Window with command guidance and a User Guide link.
 
 Deletes **all** records from CMS.
 
-**Format:** `clear`
+**Format:**
+* `clear`
+* `clear confirm/yes`
 
-**Requirements:** None.
+**Constraints:**
+* The command accepts only no argument or the exact confirmation token `confirm/yes`.
+* Any other input after `clear` is treated as an invalid format.
 
-**Example:** `clear`
+**Examples:**
+* `clear`
+* `clear confirm/yes`
 
 **Expected result:**
-* All stored records are removed from CMS.
+* All stored records are removed from CMS after confirmation.
 * The Person List Panel becomes empty.
 * The Result Display confirms that all records were cleared.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-Use `clear` only when you are sure, as this cannot be undone from within CMS.
+This action cannot be undone from within CMS.
 </div>
 
 ### Exiting the program : `exit`
@@ -375,12 +396,13 @@ Exits CMS.
 
 **Format:** `exit`
 
-**Requirements:** None.
+**Constraints:** None.
 
 **Example:** `exit`
 
 **Expected result:**
 * CMS closes.
+* Extra text after `exit` is reported as ignored.
 
 ### Saving data
 
@@ -412,7 +434,7 @@ Use this section as a quick checklist when adding or editing command examples an
 
 <a id="field-nus-matric"></a>
 **`m/NUS_MATRIC`**
-* Must be `A` + 7 digits + uppercase letter (e.g. `A0234567X`) or `U` + 7 digits + uppercase letter (e.g. `U023456W`).
+* Must be `A` + 7 digits + uppercase letter (e.g. `A0234567X`) or `U` + 6 digits + uppercase letter (e.g. `U023456W`).
 * Must be unique in CMS.
 * Case sensitivity: case-insensitive input (stored in uppercase).
 * Valid: `m/A0234567B`

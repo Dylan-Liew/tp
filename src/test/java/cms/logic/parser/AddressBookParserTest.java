@@ -57,9 +57,16 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_clear() throws Exception {
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
-        // Extra arguments should create a ClearCommand with ignored args
-        assertEquals(new ClearCommand("3"), parser.parseCommand(ClearCommand.COMMAND_WORD + " 3"));
+        assertEquals(new ClearCommand(false), parser.parseCommand(ClearCommand.COMMAND_WORD));
+        assertEquals(new ClearCommand(true),
+                parser.parseCommand(ClearCommand.COMMAND_WORD + " confirm/yes"));
+    }
+
+    @Test
+    public void parseCommand_clearInvalidArgs_throwsParseException() {
+        assertThrows(ParseException.class,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ClearCommand.MESSAGE_USAGE), () ->
+                    parser.parseCommand(ClearCommand.COMMAND_WORD + " foo"));
     }
 
     @Test

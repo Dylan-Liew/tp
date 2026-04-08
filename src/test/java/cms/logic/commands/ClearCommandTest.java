@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-import cms.logic.Messages;
 import cms.model.AddressBook;
 import cms.model.Model;
 import cms.model.ModelManager;
@@ -16,54 +15,43 @@ import cms.model.UserPrefs;
 public class ClearCommandTest {
 
     @Test
-    public void execute_emptyAddressBook_success() {
+    public void execute_withoutConfirmation_showsReminder() {
         Model model = new ModelManager();
         Model expectedModel = new ModelManager();
 
-        assertCommandSuccess(new ClearCommand(), model, ClearCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new ClearCommand(false), model,
+                ClearCommand.MESSAGE_CONFIRMATION_REQUIRED, expectedModel);
     }
 
     @Test
-    public void execute_nonEmptyAddressBook_success() {
+    public void execute_withConfirmationOnNonEmptyAddressBook_success() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel.setAddressBook(new AddressBook());
 
-        assertCommandSuccess(new ClearCommand(), model, ClearCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new ClearCommand(true), model, ClearCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     @Test
-    public void execute_clearWithIgnoredArgs_showsWarning() {
-        String ignoredArgs = "tag";
+    public void execute_withConfirmationOnEmptyAddressBook_success() {
         Model model = new ModelManager();
         Model expectedModel = new ModelManager();
-        String expectedMessage = ClearCommand.MESSAGE_SUCCESS + "\n"
-                + String.format(Messages.MESSAGE_IGNORED_PARAMETERS, ignoredArgs);
 
-        assertCommandSuccess(new ClearCommand(ignoredArgs), model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_clearWithEmptyIgnoredArgs_noWarning() {
-        Model model = new ModelManager();
-        Model expectedModel = new ModelManager();
-        // Empty string should not trigger warning
-        assertCommandSuccess(new ClearCommand(""), model, ClearCommand.MESSAGE_SUCCESS, expectedModel);
+        assertCommandSuccess(new ClearCommand(true), model, ClearCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     @Test
     public void equals() {
-        ClearCommand clearCommand = new ClearCommand();
-        ClearCommand clearCommandWithArgs = new ClearCommand("tag");
-        ClearCommand clearCommandWithSameArgs = new ClearCommand("tag");
-        ClearCommand clearCommandWithDifferentArgs = new ClearCommand("all");
+        ClearCommand clearCommand = new ClearCommand(false);
+        ClearCommand confirmedClearCommand = new ClearCommand(true);
+        ClearCommand anotherConfirmedClearCommand = new ClearCommand(true);
 
         // same object -> returns true
         assertEquals(clearCommand, clearCommand);
 
         // same values -> returns true
-        assertEquals(clearCommand, new ClearCommand());
-        assertEquals(clearCommandWithArgs, clearCommandWithSameArgs);
+        assertEquals(clearCommand, new ClearCommand(false));
+        assertEquals(confirmedClearCommand, anotherConfirmedClearCommand);
 
         // different types -> returns false
         assertNotEquals(clearCommand, 1);
@@ -71,29 +59,28 @@ public class ClearCommandTest {
         // null -> returns false
         assertNotEquals(clearCommand, null);
 
-        // different ignoredArgs -> returns false
-        assertNotEquals(clearCommand, clearCommandWithArgs);
-        assertNotEquals(clearCommandWithArgs, clearCommandWithDifferentArgs);
+        // different confirmation state -> returns false
+        assertNotEquals(clearCommand, confirmedClearCommand);
     }
 
     @Test
-    public void hashCode_sameIgnoredArgs_sameHashCode() {
-        ClearCommand clearCommand1 = new ClearCommand("tag");
-        ClearCommand clearCommand2 = new ClearCommand("tag");
+    public void hashCode_sameConfirmationState_sameHashCode() {
+        ClearCommand clearCommand1 = new ClearCommand(true);
+        ClearCommand clearCommand2 = new ClearCommand(true);
         assertEquals(clearCommand1.hashCode(), clearCommand2.hashCode());
     }
 
     @Test
-    public void hashCode_differentIgnoredArgs_differentHashCode() {
-        ClearCommand clearCommand1 = new ClearCommand("tag");
-        ClearCommand clearCommand2 = new ClearCommand("all");
+    public void hashCode_differentConfirmationState_differentHashCode() {
+        ClearCommand clearCommand1 = new ClearCommand(true);
+        ClearCommand clearCommand2 = new ClearCommand(false);
         assertNotEquals(clearCommand1.hashCode(), clearCommand2.hashCode());
     }
 
     @Test
-    public void hashCode_nullIgnoredArgs_consistent() {
-        ClearCommand clearCommand1 = new ClearCommand();
-        ClearCommand clearCommand2 = new ClearCommand();
+    public void hashCode_unconfirmedClear_consistent() {
+        ClearCommand clearCommand1 = new ClearCommand(false);
+        ClearCommand clearCommand2 = new ClearCommand(false);
         assertEquals(clearCommand1.hashCode(), clearCommand2.hashCode());
     }
 }

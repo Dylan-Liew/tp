@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
 
-import cms.logic.Messages;
 import cms.model.AddressBook;
 import cms.model.Model;
 
@@ -16,39 +15,33 @@ public class ClearCommand extends Command {
     public static final String COMMAND_WORD = "clear";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-        + ": Clears all entries from the Course Management System.\n"
-        + "Example: " + COMMAND_WORD;
+        + ": Clears all entries from the Course Management System after confirmation.\n"
+        + "Format: " + COMMAND_WORD + " or " + COMMAND_WORD + " confirm/yes\n"
+        + "Example: " + COMMAND_WORD + " confirm/yes";
 
     public static final String MESSAGE_SUCCESS = "Course Management System has been cleared!";
+    public static final String MESSAGE_CONFIRMATION_REQUIRED = "This will delete all records from CMS. "
+            + "Type clear confirm/yes to proceed.";
 
-    private final String ignoredArgs;
-
-    /**
-     * Creates a ClearCommand with no ignored arguments.
-     */
-    public ClearCommand() {
-        this.ignoredArgs = null;
-    }
+    private final boolean isConfirmed;
 
     /**
-     * Creates a ClearCommand that will report the given arguments as ignored.
-     *
-     * @param ignoredArgs The arguments that were provided but will be ignored.
+     * Creates a ClearCommand.
      */
-    public ClearCommand(String ignoredArgs) {
-        this.ignoredArgs = ignoredArgs;
+    public ClearCommand(boolean isConfirmed) {
+        this.isConfirmed = isConfirmed;
     }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.setAddressBook(new AddressBook());
 
-        String feedback = MESSAGE_SUCCESS;
-        if (ignoredArgs != null && !ignoredArgs.isEmpty()) {
-            feedback += "\n" + String.format(Messages.MESSAGE_IGNORED_PARAMETERS, ignoredArgs);
+        if (!isConfirmed) {
+            return new CommandResult(MESSAGE_CONFIRMATION_REQUIRED);
         }
-        return new CommandResult(feedback);
+
+        model.setAddressBook(new AddressBook());
+        return new CommandResult(MESSAGE_SUCCESS);
     }
 
     @Override
@@ -62,11 +55,11 @@ public class ClearCommand extends Command {
         }
 
         ClearCommand otherCommand = (ClearCommand) other;
-        return Objects.equals(ignoredArgs, otherCommand.ignoredArgs);
+        return isConfirmed == otherCommand.isConfirmed;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ignoredArgs);
+        return Objects.hash(isConfirmed);
     }
 }
