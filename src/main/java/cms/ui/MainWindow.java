@@ -30,6 +30,9 @@ import javafx.stage.Stage;
 public class MainWindow extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
+    private static final double MIN_LIST_PANEL_WIDTH = 180;
+    private static final double MIN_DETAIL_PANEL_WIDTH = 280;
+    private static final double MAX_INITIAL_LIST_RATIO = 0.5;
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
@@ -158,14 +161,18 @@ public class MainWindow extends UiPart<Stage> {
                 .max()
                 .orElse(personListPanel.getRoot().prefWidth(-1));
 
-        double targetWidth = Math.max(180, Math.ceil(widestCard) + 28);
-        personListPanelPlaceholder.setMinWidth(targetWidth);
+        double targetWidth = Math.max(MIN_LIST_PANEL_WIDTH, Math.ceil(widestCard) + 28);
+        personListPanelPlaceholder.setMinWidth(MIN_LIST_PANEL_WIDTH);
         personListPanelPlaceholder.setPrefWidth(targetWidth);
-        personListPanelPlaceholder.setMaxWidth(targetWidth);
+        personListPanelPlaceholder.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        personDetailPlaceholder.setMinWidth(MIN_DETAIL_PANEL_WIDTH);
 
         double splitWidth = mainContentSplitPane.getWidth();
         if (splitWidth > 0) {
-            mainContentSplitPane.setDividerPositions(Math.min(0.5, targetWidth / splitWidth));
+            double maxInitialListWidth = Math.max(0, splitWidth - MIN_DETAIL_PANEL_WIDTH);
+            double boundedListWidth = Math.min(targetWidth, maxInitialListWidth);
+            double dividerPosition = boundedListWidth <= 0 ? MAX_INITIAL_LIST_RATIO : boundedListWidth / splitWidth;
+            mainContentSplitPane.setDividerPositions(Math.min(MAX_INITIAL_LIST_RATIO, dividerPosition));
         }
     }
 

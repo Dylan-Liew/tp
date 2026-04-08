@@ -8,11 +8,15 @@ import java.util.Comparator;
 
 import cms.commons.util.MaskingUtil;
 import cms.model.person.Person;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
 
 /**
  * A side panel that shows the full details of the selected person.
@@ -28,7 +32,11 @@ public class PersonDetailPanel extends UiPart<Region> {
     @FXML
     private Region detailContent;
     @FXML
+    private HBox nameRow;
+    @FXML
     private Label name;
+    @FXML
+    private Hyperlink nameToggle;
     @FXML
     private Label role;
     @FXML
@@ -46,11 +54,18 @@ public class PersonDetailPanel extends UiPart<Region> {
     @FXML
     private FlowPane tags;
 
+    private String fullName = "";
+    private boolean isNameExpanded;
+
     /**
      * Creates an empty detail panel that updates when a person is selected.
      */
     public PersonDetailPanel() {
         super(FXML);
+        name.setTextOverrun(OverrunStyle.ELLIPSIS);
+        name.setWrapText(false);
+        nameToggle.setOnAction(event -> toggleNameExpansion());
+        nameRow.widthProperty().addListener((observable, oldValue, newValue) -> updateNamePresentation());
         showPerson(null, false);
     }
 
@@ -65,10 +80,17 @@ public class PersonDetailPanel extends UiPart<Region> {
         detailContent.setManaged(hasPerson);
 
         if (!hasPerson) {
+            fullName = "";
+            isNameExpanded = false;
+            name.setText("");
+            nameToggle.setVisible(false);
+            nameToggle.setManaged(false);
             return;
         }
 
-        name.setText(person.getName().fullName);
+        fullName = person.getName().fullName;
+        isNameExpanded = false;
+        name.setText(fullName);
         role.setText(person.getRole().value.toUpperCase());
         tutorialGroup.setText(String.format("T%02d", person.getTutorialGroup().value));
 
@@ -104,6 +126,48 @@ public class PersonDetailPanel extends UiPart<Region> {
                     tagLabel.getStyleClass().add("detail-tag");
                     tags.getChildren().add(tagLabel);
                 });
+
+        Platform.runLater(this::updateNamePresentation);
+    }
+
+    private void toggleNameExpansion() {
+        isNameExpanded = !isNameExpanded;
+        updateNamePresentation();
+    }
+
+    private void updateNamePresentation() {
+        if (fullName == null || fullName.isBlank() || nameRow == null) {
+            return;
+        }
+
+        name.applyCss();
+        nameRow.applyCss();
+        nameToggle.applyCss();
+
+        double rowWidth = nameRow.getWidth();
+        if (rowWidth <= 0) {
+            Platform.runLater(this::updateNamePresentation);
+            return;
+        }
+
+        double fullNameWidth = measureNameWidth(fullName);
+        double toggleWidth = nameToggle.prefWidth(-1);
+        double reservedWidth = toggleWidth + nameRow.getSpacing();
+        boolean shouldShowToggle = isNameExpanded || fullNameWidth > Math.max(0, rowWidth - reservedWidth);
+
+        nameToggle.setVisible(shouldShowToggle);
+        nameToggle.setManaged(shouldShowToggle);
+        nameToggle.setText(isNameExpanded ? "Collapse" : "Expand");
+
+        name.setWrapText(isNameExpanded);
+        name.setTextOverrun(isNameExpanded ? OverrunStyle.CLIP : OverrunStyle.ELLIPSIS);
+        name.setText(fullName);
+    }
+
+    private double measureNameWidth(String value) {
+        Text helper = new Text(value);
+        helper.setFont(name.getFont());
+        return helper.getLayoutBounds().getWidth();
     }
 
     /**

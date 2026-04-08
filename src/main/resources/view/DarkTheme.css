@@ -465,6 +465,18 @@
     -fx-text-fill: #f1f1f1;
 }
 
+.detail-name-toggle {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 13px;
+    -fx-text-fill: #8eb2d8;
+    -fx-padding: 6 0 0 0;
+    -fx-border-color: transparent;
+}
+
+.detail-name-toggle:hover {
+    -fx-text-fill: #c4ddf7;
+}
+
 .detail-role-badge {
     -fx-font-family: "Consolas";
     -fx-font-size: 14px;

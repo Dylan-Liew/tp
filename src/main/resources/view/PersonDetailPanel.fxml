@@ -16,14 +16,24 @@
     <Label fx:id="emptyStateLabel" styleClass="detail-empty" text="Select a person from the list to view their full profile." wrapText="true"/>
 
     <VBox fx:id="detailContent" spacing="14">
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label fx:id="name" styleClass="detail-name" text="Name"/>
-            <Label fx:id="role" styleClass="detail-role-badge" text="ROLE"/>
-        </HBox>
+        <VBox spacing="10">
+            <HBox fx:id="nameRow" alignment="TOP_LEFT" spacing="12" fillHeight="false">
+                <Label fx:id="name" styleClass="detail-name" text="Name"
+                       minWidth="0.0" maxWidth="1.7976931348623157E308"
+                       textOverrun="ELLIPSIS" wrapText="false">
+                    <HBox.hgrow>ALWAYS</HBox.hgrow>
+                </Label>
+                <Hyperlink fx:id="nameToggle" styleClass="detail-name-toggle" text="Expand" visible="false"
+                           managed="false"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label fx:id="role" styleClass="detail-role-badge" text="ROLE" contentDisplay="CENTER"/>
+                <Label fx:id="tutorialGroup" styleClass="detail-tutorial-badge" text="T01"/>
+            </HBox>
+        </VBox>
 
         <FlowPane fx:id="tags" hgap="8" vgap="8"/>
-
-        <Label fx:id="tutorialGroup" styleClass="detail-tutorial-badge" text="T01"/>
 
         <HBox styleClass="detail-row" spacing="24">
             <Label styleClass="detail-label" text="NUS Matric"/>
