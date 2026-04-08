@@ -69,7 +69,7 @@ Action | Format
 **Mask** | `mask`
 **Unmask** | `unmask`
 **Help** | `help [COMMAND]`
-**Clear** | `clear`
+**Clear** | `clear`<br>`clear confirm/yes`
 **Exit** | `exit`
 
 --------------------------------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ Action | Format
 * Items in square brackets are optional.
 * `...` means the field can be repeated.
 * Parameters can be in any order.
-* For commands without parameters (`list`, `exit`, `clear`), extra text is ignored.
+* For commands without parameters (`list`, `exit`), extra text is ignored.
 * e.g. `add n/John Doe m/A0234567B role/tutor soc/johndoe gh/johndoe e/johndoe@u.nus.edu p/91234567 t/01 tag/mentor`
 </div>
 
@@ -336,11 +336,17 @@ Examples:
 
 Deletes **all** records from CMS.
 
-Format: `clear`
+Format: `clear` or `clear confirm/yes`
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-Use `clear` only when you are sure, as this cannot be undone from within CMS.
+This action cannot be undone from within CMS.
 </div>
+
+Enter `clear` first to see a confirmation reminder.
+
+Use `clear confirm/yes` to proceed with deleting all records.
+
+Typing anything else after `clear` is treated as an invalid format.
 
 ### Exiting the program : `exit`
 
