@@ -21,8 +21,12 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_noPrefix_throwsParseException() {
-        assertParseFailure(parser, "john doe",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "john doe", FindCommandParser.MESSAGE_PREFIX_REQUIRED);
+    }
+
+    @Test
+    public void parse_emptyInput_throwsPrefixRequiredParseException() {
+        assertParseFailure(parser, "   ", FindCommandParser.MESSAGE_PREFIX_REQUIRED);
     }
 
     @Test

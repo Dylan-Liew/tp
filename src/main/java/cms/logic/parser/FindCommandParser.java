@@ -20,6 +20,8 @@ import cms.model.person.NusMatricContainsKeywordsPredicate;
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandParser implements Parser<FindCommand> {
+    public static final String MESSAGE_PREFIX_REQUIRED =
+            "A supported prefix is required. Use at least one of a/, n/, or m/.";
     public static final String MESSAGE_EMPTY_KEYWORDS =
             "Find keywords cannot be blank. Provide at least one non-whitespace keyword after each prefix used.";
 
@@ -32,8 +34,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
         if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(MESSAGE_PREFIX_REQUIRED);
         }
 
         // Tokenize for required prefixes
@@ -44,7 +45,11 @@ public class FindCommandParser implements Parser<FindCommand> {
         boolean hasNusMatric = argMultimap.getValue(PREFIX_MATRIC).isPresent();
 
         // require at least one prefix to be present and no preamble
-        if (!(hasAll || hasName || hasNusMatric) || !argMultimap.getPreamble().isEmpty()) {
+        if (!(hasAll || hasName || hasNusMatric)) {
+            throw new ParseException(MESSAGE_PREFIX_REQUIRED);
+        }
+
+        if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 

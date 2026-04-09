@@ -20,7 +20,7 @@ public class FindCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Finds all persons by name, NUS Matric, or any field (using the a/ prefix).\n"
             + "Parameters: a/KEYWORD [MORE_KEYWORDS]... | n/NAME [MORE_NAMES]... | m/NUS_MATRIC [MORE_IDS]... "
-            + "(multiple prefixes allowed; no prefix treats input as name search)\n"
+            + "(multiple prefixes allowed; at least one prefix is required)\n"
             + "Examples: " + COMMAND_WORD + " a/Alice Bob, " + COMMAND_WORD + " n/Alice Bob, "
             + COMMAND_WORD + " m/A0234567X, " + COMMAND_WORD + " a/Alice n/Bob m/A0123456J";
 
