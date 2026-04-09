@@ -276,12 +276,14 @@ Sorts all persons by name or tutorial group.
 **Expected result:**
 * Persons are reordered based on the selected sort key.
 
-#### File Path Requirements
+### File Path Requirements
 
 For both `import` and `export` commands:
 * File paths must be enclosed in double quotes.
 * File paths with spaces are allowed.
-* Use a simple file name made of letters, numbers, hyphens, or underscores only; avoid special characters such as `#`, `%`, `?`, `:`, `*`, `<`, `>`, `|`, or `/` in the file name.
+* Use a simple file name made of letters, numbers, hyphens, or underscores only.
+* Do not include double quotes (`"`) in file names.
+* Avoid special characters such as `#`, `%`, `?`, `:`, `*`, `<`, `>`, `|`, or `/` in the file name.
 * Platform path separators such as `/` and `\` are accepted.
 
 ### Importing records from a JSON file : `import`
