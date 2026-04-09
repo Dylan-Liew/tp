@@ -40,12 +40,12 @@ public class TagCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds or removes tags from one or more persons.\n"
             + "Parameters: "
-            + ACTION_ADD + " n/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]... or "
+            + ACTION_ADD + " id/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]... or "
             + ACTION_ADD + " m/NUS_MATRIC [MORE_NUS_MATRICS]... tag/TAG [MORE_TAGS]...\n"
             + "            "
-            + ACTION_DELETE + " n/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]... or "
+            + ACTION_DELETE + " id/INDEX [MORE_INDEXES]... tag/TAG [MORE_TAGS]... or "
             + ACTION_DELETE + " m/NUS_MATRIC [MORE_NUS_MATRICS]... tag/TAG [MORE_TAGS]...\n"
-            + "Examples: " + COMMAND_WORD + " " + ACTION_ADD + " n/1 2 tag/friend tutor, "
+            + "Examples: " + COMMAND_WORD + " " + ACTION_ADD + " id/1 2 tag/friend tutor, "
             + COMMAND_WORD + " " + ACTION_DELETE + " m/A1234567X A2345678J tag/friend";
 
     private final Action action;

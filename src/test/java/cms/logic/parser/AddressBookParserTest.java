@@ -200,7 +200,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_tag() throws Exception {
         assertEquals(new TagCommand(TagCommand.Action.ADD, List.of(INDEX_FIRST_PERSON), List.of(new Tag("friend"))),
-                parser.parseCommand(TagCommand.COMMAND_WORD + " add n/" + INDEX_FIRST_PERSON.getOneBased()
+                parser.parseCommand(TagCommand.COMMAND_WORD + " add id/" + INDEX_FIRST_PERSON.getOneBased()
                         + " tag/friend"));
     }
 

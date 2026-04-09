@@ -25,7 +25,7 @@ public class TagCommandParserTest {
 
     @Test
     public void parse_validAddArgs_returnsTagCommand() {
-        assertParseSuccess(parser, "add n/1 2 tag/friend tutor",
+        assertParseSuccess(parser, "add id/1 2 tag/friend tutor",
                 new TagCommand(Action.ADD, List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON),
                         List.of(new Tag("friend"), new Tag("tutor"))));
 
@@ -34,13 +34,13 @@ public class TagCommandParserTest {
                         List.of(new NusMatric(VALID_NUSMATRIC_AMY), new NusMatric(VALID_NUSMATRIC_BOB)),
                         List.of(new Tag("friend"))));
 
-        assertParseSuccess(parser, "add n/1 tag/friend friend",
+        assertParseSuccess(parser, "add id/1 tag/friend friend",
                 new TagCommand(Action.ADD, List.of(INDEX_FIRST_PERSON), List.of(new Tag("friend"))));
     }
 
     @Test
     public void parse_validDeleteArgs_returnsTagCommand() {
-        assertParseSuccess(parser, "delete n/1 2 tag/friend tutor",
+        assertParseSuccess(parser, "delete id/1 2 tag/friend tutor",
                 new TagCommand(Action.DELETE, List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON),
                         List.of(new Tag("friend"), new Tag("tutor"))));
 
@@ -55,13 +55,13 @@ public class TagCommandParserTest {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE);
 
         assertParseFailure(parser, "add", expectedMessage);
-        assertParseFailure(parser, "rename n/1 tag/friend", expectedMessage);
+        assertParseFailure(parser, "rename id/1 tag/friend", expectedMessage);
         assertParseFailure(parser, "add 1 tag/friend", expectedMessage);
-        assertParseFailure(parser, "add n/1 m/" + VALID_NUSMATRIC_AMY + " tag/friend", expectedMessage);
-        assertParseFailure(parser, "delete n/1", expectedMessage);
+        assertParseFailure(parser, "add id/1 m/" + VALID_NUSMATRIC_AMY + " tag/friend", expectedMessage);
+        assertParseFailure(parser, "delete id/1", expectedMessage);
         assertParseFailure(parser, "add tag/friend", expectedMessage);
-        assertParseFailure(parser, "add n/1 tag/   ", expectedMessage);
-        assertParseFailure(parser, "delete n/1 x", expectedMessage);
+        assertParseFailure(parser, "add id/1 tag/   ", expectedMessage);
+        assertParseFailure(parser, "delete id/1 x", expectedMessage);
     }
 
     @Test

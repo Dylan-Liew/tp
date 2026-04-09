@@ -1,8 +1,8 @@
 package cms.logic.parser;
 
 import static cms.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static cms.logic.parser.CliSyntax.PREFIX_ID;
 import static cms.logic.parser.CliSyntax.PREFIX_MATRIC;
-import static cms.logic.parser.CliSyntax.PREFIX_NAME;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
@@ -35,13 +35,13 @@ public class TagCommandParser implements Parser<TagCommand> {
             String remainingArgs = splitArgs[1];
 
             ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
-                    " " + remainingArgs, PREFIX_NAME, PREFIX_MATRIC, PREFIX_TAG);
+                    " " + remainingArgs, PREFIX_ID, PREFIX_MATRIC, PREFIX_TAG);
 
             if (!argMultimap.getPreamble().isEmpty()) {
                 throw new ParseException(TagCommand.MESSAGE_USAGE);
             }
 
-            boolean hasIndexTargets = !argMultimap.getAllValues(PREFIX_NAME).isEmpty();
+            boolean hasIndexTargets = !argMultimap.getAllValues(PREFIX_ID).isEmpty();
             boolean hasNusMatricTargets = !argMultimap.getAllValues(PREFIX_MATRIC).isEmpty();
             if (hasIndexTargets == hasNusMatricTargets) {
                 throw new ParseException(TagCommand.MESSAGE_USAGE);
@@ -53,7 +53,7 @@ public class TagCommandParser implements Parser<TagCommand> {
             }
 
             if (hasIndexTargets) {
-                List<Index> indexes = ParserUtil.parseIndexes(String.join(" ", argMultimap.getAllValues(PREFIX_NAME)));
+                List<Index> indexes = ParserUtil.parseIndexes(String.join(" ", argMultimap.getAllValues(PREFIX_ID)));
                 return new TagCommand(action, indexes, tags);
             }
 

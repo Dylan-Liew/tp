@@ -232,13 +232,13 @@ The `tag` feature is implemented by [`TagCommandParser`](../src/main/java/cms/lo
 and [`TagCommand`](../src/main/java/cms/logic/commands/TagCommand.java).
 
 `TagCommandParser` first extracts the action word, which must be either `add` or `delete`. It then tokenizes the
-remaining input using `n/`, `m/`, and `tag/`. Exactly one targeting mode must be present:
+remaining input using `id/`, `m/`, and `tag/`. Exactly one targeting mode must be present:
 
-* `n/` for one or more indexes from the current displayed list
+* `id/` for one or more indexes from the current displayed list
 * `m/` for one or more NUS Matrics from the full address book
 
 The parser also splits repeated whitespace-separated values inside the same prefixed argument, so commands such as
-`tag add n/1 2 tag/friend tutor` are accepted. Repeated tags are deduplicated during parsing before the command is
+`tag add id/1 2 tag/friend tutor` are accepted. Repeated tags are deduplicated during parsing before the command is
 constructed.
 
 During execution, `TagCommand` resolves the target persons, skips repeated indexes or repeated NUS Matrics, and then
@@ -492,13 +492,13 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: `list` has at least two persons.
 
-   1. Test case: `tag add n/1 2 tag/mentor`<br>
+   1. Test case: `tag add id/1 2 tag/mentor`<br>
       Expected: Tag `mentor` is added to both target persons.
 
-   1. Test case: `tag delete n/1 tag/mentor`<br>
+   1. Test case: `tag delete id/1 tag/mentor`<br>
       Expected: Tag `mentor` is removed from person 1.
 
-   1. Incorrect command to try: `tag add n/1 m/A0234501W tag/mentor`<br>
+   1. Incorrect command to try: `tag add id/1 m/A0234501W tag/mentor`<br>
       Expected: Command is rejected because index and matric targeting cannot be mixed.
 
 ### Filtering persons
