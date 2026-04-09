@@ -153,6 +153,61 @@ Classes used by multiple components are in the `cms.commons` package.
 
 This section describes the current CMS implementation at a high level. The command flow, component responsibilities, and diagrams above reflect the existing architecture and supported command-based workflow.
 
+### Find feature
+
+The `find` feature is implemented by [`FindCommandParser`](../src/main/java/cms/logic/parser/FindCommandParser.java)
+and [`FindCommand`](../src/main/java/cms/logic/commands/FindCommand.java).
+
+When the user enters a `find` command, `FindCommandParser` tokenizes the input using the supported prefixes
+`a/`, `n/`, and `m/`. The parser rejects inputs without at least one supported prefix, inputs with stray preamble
+text, and prefixes that are present but contain only whitespace.
+
+After validation, the parser constructs up to three predicates:
+
+* `AllFieldsContainsKeywordsPredicate` for `a/`
+* `NameContainsKeywordsPredicate` for `n/`
+* `NusMatricContainsKeywordsPredicate` for `m/`
+
+These predicates are wrapped in `CombinedFindPredicate`, which combines them with OR semantics. This means a person is
+shown if they match any active prefix group. `FindCommand` then passes the combined predicate to
+`Model#updateFilteredPersonList(...)`, so the filtered list shown by the UI updates automatically without mutating the
+underlying address book data.
+
+### Sort feature
+
+The `sort` feature is implemented by [`SortCommandParser`](../src/main/java/cms/logic/parser/SortCommandParser.java)
+and [`SortCommand`](../src/main/java/cms/logic/commands/SortCommand.java).
+
+`SortCommandParser` normalizes the user input to lowercase before validating it, so the accepted sort keys are
+case-insensitive. The current implementation supports two sort modes only:
+
+* `name`, which sorts persons alphabetically by name
+* `tg`, which sorts persons by tutorial group
+
+Once parsed, `SortCommand` delegates the actual reordering to the model through either
+`Model#sortPersonsByName()` or `Model#sortPersonsByTutorialGroup()`. Unlike `find` and `filter`, sorting changes the
+order of the stored person list rather than only replacing the filtered view.
+
+### Tag feature
+
+The `tag` feature is implemented by [`TagCommandParser`](../src/main/java/cms/logic/parser/TagCommandParser.java)
+and [`TagCommand`](../src/main/java/cms/logic/commands/TagCommand.java).
+
+`TagCommandParser` first extracts the action word, which must be either `add` or `delete`. It then tokenizes the
+remaining input using `n/`, `m/`, and `tag/`. Exactly one targeting mode must be present:
+
+* `n/` for one or more indexes from the current displayed list
+* `m/` for one or more NUS Matrics from the full address book
+
+The parser also splits repeated whitespace-separated values inside the same prefixed argument, so commands such as
+`tag add n/1 2 tag/friend tutor` are accepted. Repeated tags are deduplicated during parsing before the command is
+constructed.
+
+During execution, `TagCommand` resolves the target persons, skips repeated indexes or repeated NUS Matrics, and then
+updates each matching `Person` by creating a replacement `Person` object with the revised tag set. This preserves the
+immutability assumptions used by the model layer. For `add`, tags are merged into the existing set. For `delete`, only
+the requested tags are removed. If no effective change occurs, the command returns a no-op message instead of silently
+reporting success.
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -368,6 +423,30 @@ testers are expected to do more *exploratory* testing.
    1. Incorrect delete command to try: `delete m/A9999999Z`<br>
       Expected: Error messages are shown describing the invalid command format or invalid target person(s).
 
+### Finding persons
+
+1. Finding persons by supported prefixes
+
+   1. Prerequisites: List all persons using the `list` command. Use the sample data shown on first launch.
+
+   1. Test case: `find n/Elle`<br>
+      Expected: Only `Elle Meyer` remains in the shown list.
+
+   1. Test case: `find m/A0234502U A0234505M`<br>
+      Expected: Only the persons with NUS Matrics `A0234502U` and `A0234505M` remain in the shown list.
+
+   1. Test case: `find a/friends`<br>
+      Expected: Only persons whose fields contain `friends` remain in the shown list, including persons tagged `friends`.
+
+   1. Test case: `find n/Elle m/A0234505M`<br>
+      Expected: Matches are combined with OR, so both `Elle Meyer` and the person with NUS Matric `A0234505M` remain.
+
+   1. Test case: `find n/NoSuchPerson`<br>
+      Expected: The shown list becomes empty and the result display reports `0 persons listed!`
+
+   1. Incorrect command to try: `find Elle`<br>
+      Expected: Command is rejected because at least one supported prefix (`a/`, `n/`, or `m/`) is required.
+
 ### Tagging persons
 
 1. Adding and removing tags
@@ -380,7 +459,7 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `tag delete n/1 tag/mentor`<br>
       Expected: Tag `mentor` is removed from person 1.
 
-   1. Incorrect command to try: `tag add n/1 m/A0123456X tag/mentor`<br>
+   1. Incorrect command to try: `tag add n/1 m/A0234501W tag/mentor`<br>
       Expected: Command is rejected because index and matric targeting cannot be mixed.
 
 ### Filtering persons
@@ -404,6 +483,9 @@ testers are expected to do more *exploratory* testing.
 
    1. Test case: `sort tg`<br>
       Expected: Persons are sorted by tutorial group.
+
+   1. Test case: `sort NAME`<br>
+      Expected: Persons are still sorted by name because the sort key is case-insensitive.
 
    1. Incorrect command to try: `sort tag`<br>
       Expected: Command is rejected with usage guidance.
