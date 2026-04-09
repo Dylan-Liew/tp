@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -31,6 +32,8 @@ public class PersonDetailPanel extends UiPart<Region> {
     private Label emptyStateLabel;
     @FXML
     private Region detailContent;
+    @FXML
+    private ScrollPane detailScrollPane;
     @FXML
     private HBox nameRow;
     @FXML
@@ -76,6 +79,8 @@ public class PersonDetailPanel extends UiPart<Region> {
         boolean hasPerson = person != null;
         emptyStateLabel.setVisible(!hasPerson);
         emptyStateLabel.setManaged(!hasPerson);
+        detailScrollPane.setVisible(hasPerson);
+        detailScrollPane.setManaged(hasPerson);
         detailContent.setVisible(hasPerson);
         detailContent.setManaged(hasPerson);
 

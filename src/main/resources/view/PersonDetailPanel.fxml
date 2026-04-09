@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -15,45 +16,51 @@
 
     <Label fx:id="emptyStateLabel" styleClass="detail-empty" text="Select a person from the list to view their full profile." wrapText="true"/>
 
-    <VBox fx:id="detailContent" spacing="14">
-        <VBox spacing="10">
-            <HBox fx:id="nameRow" alignment="TOP_LEFT" spacing="12" fillHeight="false">
-                <Label fx:id="name" styleClass="detail-name" text="Name"
-                       minWidth="0.0" maxWidth="1.7976931348623157E308"
-                       textOverrun="ELLIPSIS" wrapText="false">
-                    <HBox.hgrow>ALWAYS</HBox.hgrow>
-                </Label>
-                <Hyperlink fx:id="nameToggle" styleClass="detail-name-toggle" text="Expand" visible="false"
-                           managed="false"/>
-            </HBox>
+    <ScrollPane fx:id="detailScrollPane" fitToHeight="true" fitToWidth="false"
+                hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" pannable="true"
+                styleClass="detail-scroll-pane" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox fx:id="detailContent" spacing="14">
+                <VBox spacing="10">
+                    <HBox fx:id="nameRow" alignment="TOP_LEFT" spacing="12" fillHeight="false">
+                        <Label fx:id="name" styleClass="detail-name" text="Name"
+                               minWidth="0.0" maxWidth="1.7976931348623157E308"
+                               textOverrun="ELLIPSIS" wrapText="false">
+                            <HBox.hgrow>ALWAYS</HBox.hgrow>
+                        </Label>
+                        <Hyperlink fx:id="nameToggle" styleClass="detail-name-toggle" text="Expand" visible="false"
+                                   managed="false"/>
+                    </HBox>
 
-            <HBox alignment="CENTER_LEFT" spacing="8">
-                <Label fx:id="role" styleClass="detail-role-badge" text="ROLE" contentDisplay="CENTER"/>
-                <Label fx:id="tutorialGroup" styleClass="detail-tutorial-badge" text="T01"/>
-            </HBox>
-        </VBox>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label fx:id="role" styleClass="detail-role-badge" text="ROLE" contentDisplay="CENTER"/>
+                        <Label fx:id="tutorialGroup" styleClass="detail-tutorial-badge" text="T01"/>
+                    </HBox>
+                </VBox>
 
-        <FlowPane fx:id="tags" hgap="8" vgap="8"/>
+                <FlowPane fx:id="tags" hgap="8" vgap="8"/>
 
-        <HBox styleClass="detail-row" spacing="24">
-            <Label styleClass="detail-label" text="NUS Matric"/>
-            <Label fx:id="nusMatric" styleClass="detail-value" text="A0000000Y"/>
-        </HBox>
-        <HBox styleClass="detail-row" spacing="24">
-            <Label styleClass="detail-label" text="SOC USER"/>
-            <Label fx:id="socUsername" styleClass="detail-value" text="socuser"/>
-        </HBox>
-        <HBox styleClass="detail-row" spacing="24">
-            <Label styleClass="detail-label" text="GITHUB"/>
-            <Hyperlink fx:id="githubUsername" styleClass="detail-value detail-link" text="github.com/user"/>
-        </HBox>
-        <HBox styleClass="detail-row" spacing="24">
-            <Label styleClass="detail-label" text="EMAIL"/>
-            <Hyperlink fx:id="email" styleClass="detail-value detail-link" text="user@example.com"/>
-        </HBox>
-        <HBox styleClass="detail-row" spacing="24">
-            <Label styleClass="detail-label" text="PHONE"/>
-            <Label fx:id="phone" styleClass="detail-value" text="91234567"/>
-        </HBox>
-    </VBox>
+                <HBox styleClass="detail-row" spacing="24">
+                    <Label styleClass="detail-label" text="NUS Matric"/>
+                    <Label fx:id="nusMatric" styleClass="detail-value" text="A0000000Y"/>
+                </HBox>
+                <HBox styleClass="detail-row" spacing="24">
+                    <Label styleClass="detail-label" text="SOC USER"/>
+                    <Label fx:id="socUsername" styleClass="detail-value" text="socuser"/>
+                </HBox>
+                <HBox styleClass="detail-row" spacing="24">
+                    <Label styleClass="detail-label" text="GITHUB"/>
+                    <Hyperlink fx:id="githubUsername" styleClass="detail-value detail-link" text="github.com/user"/>
+                </HBox>
+                <HBox styleClass="detail-row" spacing="24">
+                    <Label styleClass="detail-label" text="EMAIL"/>
+                    <Hyperlink fx:id="email" styleClass="detail-value detail-link" text="user@example.com"/>
+                </HBox>
+                <HBox styleClass="detail-row" spacing="24">
+                    <Label styleClass="detail-label" text="PHONE"/>
+                    <Label fx:id="phone" styleClass="detail-value" text="91234567"/>
+                </HBox>
+            </VBox>
+        </content>
+    </ScrollPane>
 </VBox>
