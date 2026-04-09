@@ -340,7 +340,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
    Use case ends.
 
-* 3a. The specified tutorial group does not exist.
+* 3a. The specified tutorial group is invalid.
 
    * 3a1. Course Management System shows an error message.
    * 3a2. Course coordinator retries with a valid tutorial group.
@@ -425,7 +425,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `add n/John Doe m/A0123456X role/student soc/johnd gh/john-gh p/91234567 e/john@example.com t/01`<br>
+   1. Test case: `add n/John Doe m/A0234567X role/student soc/johnd gh/john-gh p/91234567 e/john@example.com t/01`<br>
       Expected: New contact is added to the list. Details of the added contact shown in the status message.
 
    1. Test case: Repeat the same `add` command above a second time.<br>
