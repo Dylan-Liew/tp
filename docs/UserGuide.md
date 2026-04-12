@@ -328,7 +328,7 @@ Exports current CMS data to a `.json` file.
 
 ### Masking sensitive fields : `mask`
 
-Masks sensitive fields (NUS ID, SoC username, GitHub username, email, phone number) in the person list and detail panels.
+Masks sensitive fields (NUS Matric, SoC username, GitHub username, email, phone number) in the person list and detail panels.
 
 **Format:** `mask`
 
@@ -338,7 +338,7 @@ Masks sensitive fields (NUS ID, SoC username, GitHub username, email, phone numb
 
 **Expected result:**
 * Sensitive fields are hidden until `unmask` is used.
-* Extra text after `mask` is reported as ignored.
+* Extra arguments after `mask` are ignored.
 
 ### Unmasking sensitive fields : `unmask`
 
@@ -352,7 +352,7 @@ Unmasks sensitive fields in the person list and detail panels.
 
 **Expected result:**
 * Sensitive fields are shown again.
-* Extra text after `unmask` is reported as ignored.
+* Extra arguments after `unmask` are ignored.
 
 ### Viewing help : `help`
 
@@ -375,7 +375,7 @@ Opens the Help Window with command guidance and a User Guide link.
 
 ### Purging all records : `clear`
 
-Deletes **all** records from CMS.
+Requests confirmation before deleting **all** records from CMS.
 
 **Format:**
 * `clear`
@@ -390,9 +390,9 @@ Deletes **all** records from CMS.
 * `clear confirm/yes`
 
 **Expected result:**
-* All stored records are removed from CMS after confirmation.
-* The Person List Panel becomes empty.
-* The Result Display confirms that all records were cleared.
+* Entering `clear` does not delete any records and shows a confirmation prompt.
+* Entering `clear confirm/yes` deletes all stored records.
+* After confirmation, the Person List Panel becomes empty and the Result Display confirms that all records were cleared.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 This action cannot be undone from within CMS.
