@@ -182,17 +182,17 @@ public class AddCommandParserTest {
         // missing matric prefix
         assertParseFailure(parser, NAME_DESC_BOB + SOCUSERNAME_DESC_BOB + GITHUBUSERNAME_DESC_BOB
                 + PHONE_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
-                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("matric"), expectedUsage));
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("nus matric"), expectedUsage));
 
         // missing soc username prefix
         assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + GITHUBUSERNAME_DESC_BOB
                 + PHONE_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
-                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("socusername"), expectedUsage));
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("soc username"), expectedUsage));
 
         // missing github username prefix
         assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB
                 + PHONE_DESC_BOB + EMAIL_DESC_BOB + TUTORIALGROUP_DESC_BOB,
-                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("githubusername"), expectedUsage));
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("github username"), expectedUsage));
 
         // missing email prefix
         assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB
@@ -207,7 +207,28 @@ public class AddCommandParserTest {
         // missing tutorial group prefix
         assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + SOCUSERNAME_DESC_BOB
                 + GITHUBUSERNAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
-                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("tutorialgroup"), expectedUsage));
+                missingMessageWithUsage(Messages.getMissingRequiredAddFieldMessage("tutorial group"), expectedUsage));
+
+        // three missing required fields
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + SOCUSERNAME_DESC_BOB
+                        + GITHUBUSERNAME_DESC_BOB,
+                missingMessageWithUsage("Missing required fields: email, phone, tutorial group", expectedUsage));
+
+        // two missing required fields
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + SOCUSERNAME_DESC_BOB
+                        + GITHUBUSERNAME_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage("Missing required fields: email, phone", expectedUsage));
+
+        // multiple missing required fields
+        assertParseFailure(parser, NAME_DESC_BOB + NUSMATRIC_DESC_BOB + ROLE_DESC_BOB + TUTORIALGROUP_DESC_BOB,
+                missingMessageWithUsage("Missing required fields: soc username, github username, email, phone",
+                        expectedUsage));
+
+        // six missing required fields, preserving parser-defined order
+        assertParseFailure(parser, NAME_DESC_BOB,
+                missingMessageWithUsage("Missing required fields: nus matric, soc username, github username, email, "
+                                + "phone, tutorial group",
+                        expectedUsage));
 
         // all required prefixes missing are parsed as preamble and should report invalid format
         assertParseFailure(parser, VALID_NAME_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB,

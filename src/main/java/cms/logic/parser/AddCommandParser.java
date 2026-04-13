@@ -11,7 +11,8 @@ import static cms.logic.parser.CliSyntax.PREFIX_SOCUSERNAME;
 import static cms.logic.parser.CliSyntax.PREFIX_TAG;
 import static cms.logic.parser.CliSyntax.PREFIX_TUTORIALGROUP;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import cms.logic.Messages;
@@ -34,6 +35,12 @@ import cms.model.tag.Tag;
  */
 public class AddCommandParser implements Parser<AddCommand> {
 
+    private static final List<Prefix> REQUIRED_PREFIXES = List.of(PREFIX_NAME, PREFIX_MATRIC,
+            PREFIX_SOCUSERNAME, PREFIX_GITHUBUSERNAME, PREFIX_EMAIL, PREFIX_PHONE, PREFIX_TUTORIALGROUP);
+
+    private static final List<String> REQUIRED_FIELD_NAMES = List.of("name", "nus matric", "soc username",
+            "github username", "email", "phone", "tutorial group");
+
     /**
      * Parses the given {@code String} of arguments in the context of the AddCommand
      * and returns an AddCommand object for execution.
@@ -52,10 +59,12 @@ public class AddCommandParser implements Parser<AddCommand> {
             throw new ParseException(usageMessage);
         }
 
-        Optional<String> firstMissingRequiredField = getFirstMissingRequiredField(argMultimap);
-        if (firstMissingRequiredField.isPresent()) {
-            throw new ParseException(Messages.getMissingRequiredAddFieldMessage(firstMissingRequiredField.get())
-                    + "\n" + usageMessage);
+        List<String> missingRequiredFields = getMissingRequiredFields(argMultimap);
+        if (!missingRequiredFields.isEmpty()) {
+            String missingFieldMessage = missingRequiredFields.size() == 1
+                    ? Messages.getMissingRequiredAddFieldMessage(missingRequiredFields.get(0))
+                    : "Missing required fields: " + String.join(", ", missingRequiredFields);
+            throw new ParseException(missingFieldMessage + "\n" + usageMessage);
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_MATRIC, PREFIX_ROLE,
@@ -84,29 +93,15 @@ public class AddCommandParser implements Parser<AddCommand> {
         return new AddCommand(person);
     }
 
-    private Optional<String> getFirstMissingRequiredField(ArgumentMultimap argMultimap) {
-        if (argMultimap.getValue(PREFIX_NAME).isEmpty()) {
-            return Optional.of("name");
+    private List<String> getMissingRequiredFields(ArgumentMultimap argMultimap) {
+        List<String> missingFields = new ArrayList<>();
+
+        for (int i = 0; i < REQUIRED_PREFIXES.size(); i++) {
+            if (argMultimap.getValue(REQUIRED_PREFIXES.get(i)).isEmpty()) {
+                missingFields.add(REQUIRED_FIELD_NAMES.get(i));
+            }
         }
-        if (argMultimap.getValue(PREFIX_MATRIC).isEmpty()) {
-            return Optional.of("matric");
-        }
-        if (argMultimap.getValue(PREFIX_SOCUSERNAME).isEmpty()) {
-            return Optional.of("socusername");
-        }
-        if (argMultimap.getValue(PREFIX_GITHUBUSERNAME).isEmpty()) {
-            return Optional.of("githubusername");
-        }
-        if (argMultimap.getValue(PREFIX_EMAIL).isEmpty()) {
-            return Optional.of("email");
-        }
-        if (argMultimap.getValue(PREFIX_PHONE).isEmpty()) {
-            return Optional.of("phone");
-        }
-        if (argMultimap.getValue(PREFIX_TUTORIALGROUP).isEmpty()) {
-            return Optional.of("tutorialgroup");
-        }
-        return Optional.empty();
+        return missingFields;
     }
 
 }
