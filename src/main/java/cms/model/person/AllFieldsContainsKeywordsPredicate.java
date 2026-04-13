@@ -23,6 +23,7 @@ public class AllFieldsContainsKeywordsPredicate implements Predicate<Person> {
             return false;
         }
         for (String keyword : keywords) {
+            String tutorialKeyword = keyword.replaceFirst("(?i)^T(?=0*[1-9][0-9]?$)", "");
             boolean matchesName = StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword);
             boolean matchesNusMatric = person.getNusMatric() != null
                     && person.getNusMatric().value.equalsIgnoreCase(keyword);
@@ -35,8 +36,8 @@ public class AllFieldsContainsKeywordsPredicate implements Predicate<Person> {
             boolean matchesRole = person.getRole() != null
                     && person.getRole().value.equalsIgnoreCase(keyword);
             boolean matchesTutorial = person.getTutorialGroup() != null
-                    && TutorialGroup.isValidTutorialGroup(keyword)
-                    && person.getTutorialGroup().toString().equals(TutorialGroup.canonicalise(keyword));
+                    && TutorialGroup.isValidTutorialGroup(tutorialKeyword)
+                    && person.getTutorialGroup().toString().equals(TutorialGroup.canonicalise(tutorialKeyword));
             boolean matchesTag = person.getTags().stream()
                     .anyMatch(tag -> tag.tagName.equalsIgnoreCase(keyword));
 

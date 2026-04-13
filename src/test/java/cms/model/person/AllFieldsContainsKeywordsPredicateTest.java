@@ -153,6 +153,10 @@ public class AllFieldsContainsKeywordsPredicateTest {
         AllFieldsContainsKeywordsPredicate leadingZero = new AllFieldsContainsKeywordsPredicate(
                 Collections.singletonList("010"));
         assertTrue(leadingZero.test(person));
+
+        AllFieldsContainsKeywordsPredicate prefixed = new AllFieldsContainsKeywordsPredicate(
+                Collections.singletonList("T10"));
+        assertTrue(prefixed.test(person));
     }
 
     @Test
