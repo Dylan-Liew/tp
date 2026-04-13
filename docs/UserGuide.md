@@ -39,7 +39,7 @@ To transfer your data to another computer, install CMS there and overwrite the e
 
 ## User interface overview
 
-![UI overview](images/Ui.png)
+![UI overview](images/SampleUi.png)
 
 CMS uses a single main window with four working areas:
 
@@ -337,6 +337,8 @@ Masks sensitive fields (NUS Matric, SoC username, GitHub username, email, phone 
 **Constraints:** None.
 
 **Example:** `mask`
+
+![Masked UI](images/MaskedUi.png)
 
 **Expected result:**
 * Sensitive fields are hidden until `unmask` is used.
