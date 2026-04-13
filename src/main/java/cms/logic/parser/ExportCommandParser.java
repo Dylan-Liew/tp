@@ -15,6 +15,7 @@ public class ExportCommandParser implements Parser<ExportCommand> {
 
     public static final String MESSAGE_INVALID_FILE_PATH = "File path is invalid: %1$s\n"
         + "Format: " + ExportCommand.MESSAGE_USAGE;
+    public static final String MESSAGE_EMPTY_FILE_PATH = "File path cannot be empty";
     public static final String MESSAGE_FILE_EXTENSION_REQUIRED = "File path must end with .json\n"
         + "Format: " + ExportCommand.MESSAGE_USAGE;
 
@@ -28,6 +29,9 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         String pathString = extractQuotedPath(trimmedArgs);
         if (pathString == null) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE));
+        }
+        if (pathString.trim().isEmpty()) {
+            throw new ParseException(MESSAGE_EMPTY_FILE_PATH);
         }
 
         final Path exportFilePath;
