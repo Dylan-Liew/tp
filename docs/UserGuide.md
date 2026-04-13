@@ -65,7 +65,7 @@ Action | Format
 **Filter** | `filter [tag/TAG]... [t/TUTORIAL_GROUP_NUMBER]`<br><br>e.g. `filter tag/friends t/01`
 **Sort** | `sort tg`<br>`sort name`<br><br>e.g. `sort tg`
 **Import** | `import "FILE_PATH" [keep/current|keep/incoming]`<br><br>e.g. `import "data/addressbook.json" keep/current`
-**Export** | `export "FILE_PATH"`<br><br>e.g. `export "C:\\Users\\Josh\\Documents\\backup.json"`
+**Export** | `export "FILE_PATH"`<br><br>e.g. `export "data/backup.json"`
 **Mask** | `mask`
 **Unmask** | `unmask`
 **Help** | `help [COMMAND]`
@@ -282,11 +282,25 @@ Sorts all persons by name or tutorial group.
 
 For both `import` and `export` commands:
 * File paths must be enclosed in double quotes.
-* File paths with spaces are allowed.
-* Use a simple file name made of letters, numbers, hyphens, or underscores only.
-* Do not include double quotes (`"`) in file names.
-* Avoid special characters such as `#`, `%`, `?`, `:`, `*`, `<`, `>`, `|`, or `/` in the file name.
+* File paths may be relative or absolute.
+* File names and folder names may contain spaces.
 * Platform path separators such as `/` and `\` are accepted.
+* The file name must end with `.json`.
+* Do not include double quotes (`"`) in the path.
+* Avoid characters that are invalid in file names on your operating system, such as `#`, `%`, `?`, `*`, `<`, `>`, or `|`.
+
+**Valid examples:**
+* `export "data/backup.json"`
+* `export "data/My Backups/backup.json"`
+* `export "C:/Users/Test/Documents/backup.json"`
+
+**Invalid examples:**
+* `export data/backup.json`<br>
+   Missing the required double quotes.
+* `export "data/backup.txt"`<br>
+   The file name must end with `.json`.
+* `export "data/backup?.json"`<br>
+   `?` is not a valid file-name character.
 
 ### Importing records from a JSON file : `import`
 
@@ -320,7 +334,7 @@ Exports current CMS data to a `.json` file.
 
 **Examples:**
 * `export "data/backup.json"`
-* `export "C:/Users/Test/My Documents/backup.json"`
+* `export "data/My Backups/backup.json"`
 
 **Expected result:**
 * Current CMS data is written to the specified file.
