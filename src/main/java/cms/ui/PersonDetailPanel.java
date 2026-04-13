@@ -25,6 +25,8 @@ import javafx.scene.text.Text;
 public class PersonDetailPanel extends UiPart<Region> {
 
     private static final String FXML = "PersonDetailPanel.fxml";
+    private static final String EMPTY_LIST_MESSAGE = "No records to display yet.";
+    private static final String NO_SELECTION_MESSAGE = "Select a person from the list to view their full profile.";
     private static final String ROLE_STUDENT_STYLE_CLASS = "role-student";
     private static final String ROLE_TUTOR_STYLE_CLASS = "role-tutor";
 
@@ -69,13 +71,13 @@ public class PersonDetailPanel extends UiPart<Region> {
         name.setWrapText(false);
         nameToggle.setOnAction(event -> toggleNameExpansion());
         nameRow.widthProperty().addListener((observable, oldValue, newValue) -> updateNamePresentation());
-        showPerson(null, false);
+        showPerson(null, false, false);
     }
 
     /**
      * Updates the panel to show the selected person, optionally masking sensitive fields.
      */
-    public void showPerson(Person person, boolean isMasked) {
+    public void showPerson(Person person, boolean isMasked, boolean hasPersonsInList) {
         boolean hasPerson = person != null;
         emptyStateLabel.setVisible(!hasPerson);
         emptyStateLabel.setManaged(!hasPerson);
@@ -85,6 +87,7 @@ public class PersonDetailPanel extends UiPart<Region> {
         detailContent.setManaged(hasPerson);
 
         if (!hasPerson) {
+            emptyStateLabel.setText(hasPersonsInList ? NO_SELECTION_MESSAGE : EMPTY_LIST_MESSAGE);
             fullName = "";
             isNameExpanded = false;
             name.setText("");

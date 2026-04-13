@@ -21,7 +21,7 @@ public class ClearCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Course Management System has been cleared!";
     public static final String MESSAGE_CONFIRMATION_REQUIRED = "This will delete all records from CMS. "
-            + "Type clear confirm/yes to proceed.";
+            + "Type \"clear confirm/yes\" to proceed.";
 
     private final boolean isConfirmed;
 

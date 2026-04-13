@@ -194,13 +194,13 @@ public class MainWindow extends UiPart<Stage> {
 
         personListPanel = new PersonListPanel(filteredPersons, isMasked);
         personListPanel.selectedPersonProperty().addListener((observable, oldValue, newValue) ->
-                personDetailPanel.showPerson(newValue, isMasked));
+                personDetailPanel.showPerson(newValue, isMasked, !filteredPersons.isEmpty()));
 
         if (personToRestore != null) {
             personListPanel.selectPerson(personToRestore);
         }
 
-        personDetailPanel.showPerson(personListPanel.selectedPersonProperty().get(), isMasked);
+        personDetailPanel.showPerson(personListPanel.selectedPersonProperty().get(), isMasked, !filteredPersons.isEmpty());
 
         personListPanelPlaceholder.getChildren().setAll(personListPanel.getRoot());
     }
