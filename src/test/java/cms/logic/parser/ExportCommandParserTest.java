@@ -41,6 +41,16 @@ public class ExportCommandParserTest {
     }
 
     @Test
+    public void parse_emptyQuotedPath_failureWithSpecificMessage() {
+        assertParseFailure(parser, "\"\"", ExportCommandParser.MESSAGE_EMPTY_FILE_PATH);
+    }
+
+    @Test
+    public void parse_whitespaceOnlyQuotedPath_failureWithSpecificMessage() {
+        assertParseFailure(parser, "\"   \"", ExportCommandParser.MESSAGE_EMPTY_FILE_PATH);
+    }
+
+    @Test
     public void parse_invalidExtension_failure() {
         assertParseFailure(parser, "\"data/export.txt\"", ExportCommandParser.MESSAGE_FILE_EXTENSION_REQUIRED);
     }

@@ -293,7 +293,6 @@ For both `import` and `export` commands:
 * File names and folder names may contain spaces.
 * Platform path separators such as `/` and `\` are accepted.
 * The file name must end with `.json`.
-* Do not include double quotes (`"`) in the path.
 * Avoid characters that are invalid in file names on your operating system (allowed characters may differ by platform).
 
 **Valid examples:**
