@@ -295,29 +295,186 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `Course Management System` and the **Actor** is the `course coordinator`, unless specified otherwise)
 
-**Use case: Assign a student to a tutorial group**
+**Use case: Add a student or tutor**
 
 **MSS**
 
-1.  Course coordinator requests to list all persons
-2.  Course Management System shows all persons
-3.  Course coordinator requests to update a student's tutorial group
-4.  Course Management System updates the student's tutorial group
+1.  Course coordinator requests to add a person and provides the required fields
+2.  Course Management System validates the input
+3.  Course Management System adds the person and shows a confirmation message
 
-      Use case ends.
+    Use case ends.
 
 **Extensions**
 
-* 2a. There are no students in the system.
+* 2a. The command is missing required fields or contains invalid values.
+
+   * 2a1. Course Management System shows an error message.
+   * 2a2. Course coordinator retries with corrected values.
+
+      Use case resumes at step 1.
+
+* 2b. A unique field duplicates an existing person.
+
+   * 2b1. Course Management System shows an error message indicating the duplicate field.
+   * 2b2. Course coordinator retries with a non-duplicate value.
+
+      Use case resumes at step 1.
+
+**Use case: Edit a person's details**
+
+**MSS**
+
+1.  Course coordinator requests to list or find persons
+2.  Course Management System shows the matching persons
+3.  Course coordinator requests to edit a person and provides one or more updated fields
+4.  Course Management System validates the input
+5.  Course Management System updates the person's details and shows a confirmation message
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. No persons match the current view or search.
 
    Use case ends.
 
-* 3a. The specified tutorial group is invalid.
+* 4a. The specified displayed index is invalid.
 
-   * 3a1. Course Management System shows an error message.
-   * 3a2. Course coordinator retries with a valid tutorial group.
+   * 4a1. Course Management System shows an error message.
+   * 4a2. Course coordinator retries with a valid index.
 
       Use case resumes at step 3.
+
+* 4b. A provided field value is invalid or duplicates an existing unique field.
+
+   * 4b1. Course Management System shows an error message.
+   * 4b2. Course coordinator retries with corrected values.
+
+      Use case resumes at step 3.
+
+**Use case: Delete one or more persons**
+
+**MSS**
+
+1.  Course coordinator requests to list or find persons
+2.  Course Management System shows the matching persons
+3.  Course coordinator requests to delete one or more persons by displayed index or NUS Matric
+4.  Course Management System validates the targets
+5.  Course Management System deletes the matching person(s) and shows a confirmation message
+
+    Use case ends.
+
+**Extensions**
+
+* 4a. The command mixes displayed indexes and NUS Matrics.
+
+   * 4a1. Course Management System shows an error message.
+   * 4a2. Course coordinator retries with only one target mode.
+
+      Use case resumes at step 3.
+
+* 4b. One or more targets are invalid or do not exist in the current displayed list.
+
+   * 4b1. Course Management System shows an error message.
+   * 4b2. Course coordinator retries with valid targets.
+
+      Use case resumes at step 3.
+
+**Use case: Find persons**
+
+**MSS**
+
+1.  Course coordinator requests to find persons using supported prefixes
+2.  Course Management System validates the search input
+3.  Course Management System shows the matching persons
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The command omits required prefixes or uses an invalid format.
+
+   * 2a1. Course Management System shows an error message.
+   * 2a2. Course coordinator retries with a valid find command.
+
+      Use case resumes at step 1.
+
+* 3a. No persons match the search criteria.
+
+   * 3a1. Course Management System shows an empty list and a result message indicating no matches.
+
+      Use case ends.
+
+**Use case: Add or remove tags from persons**
+
+**MSS**
+
+1.  Course coordinator requests to tag one or more persons by displayed index or NUS Matric
+2.  Course Management System validates the target persons and tag values
+3.  Course Management System updates the persons' tags and shows a confirmation message
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The command mixes displayed indexes and NUS Matrics.
+
+   * 2a1. Course Management System shows an error message.
+   * 2a2. Course coordinator retries with only one target mode.
+
+      Use case resumes at step 1.
+
+* 2b. No target persons or no tags are provided, or one of the tags is invalid.
+
+   * 2b1. Course Management System shows an error message.
+   * 2b2. Course coordinator retries with valid targets and tags.
+
+      Use case resumes at step 1.
+
+**Use case: Filter persons**
+
+**MSS**
+
+1.  Course coordinator requests to filter persons by tag, tutorial group, or both
+2.  Course Management System validates the filter criteria
+3.  Course Management System shows the matching persons
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. No filter criteria are provided or a criterion is invalid.
+
+   * 2a1. Course Management System shows an error message.
+   * 2a2. Course coordinator retries with valid filter criteria.
+
+      Use case resumes at step 1.
+
+* 3a. No persons match the filter criteria.
+
+   * 3a1. Course Management System shows an empty list.
+
+      Use case ends.
+
+**Use case: Sort persons**
+
+**MSS**
+
+1.  Course coordinator requests to sort the displayed persons by a supported key
+2.  Course Management System validates the sort key
+3.  Course Management System reorders the displayed persons
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The sort key is not supported.
+
+   * 2a1. Course Management System shows an error message.
+   * 2a2. Course coordinator retries with a supported sort key.
+
+      Use case resumes at step 1.
 
 **Use case: Import records from JSON**
 
@@ -350,6 +507,91 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
    * 2c2. Course coordinator fixes the source file and retries the import.
 
       Use case resumes at step 1.
+
+**Use case: Export records to JSON**
+
+**MSS**
+
+1.  Course coordinator requests to export data and provides a JSON file path
+2.  Course Management System validates the file path
+3.  Course Management System writes the current data to the file and shows a confirmation message
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. The file path is invalid or does not end with `.json`.
+
+   * 2a1. Course Management System shows an error message.
+   * 2a2. Course coordinator retries with a valid file path.
+
+      Use case resumes at step 1.
+
+* 3a. The file cannot be written.
+
+   * 3a1. Course Management System shows an error message describing the failure.
+
+      Use case ends.
+
+**Use case: Mask or unmask sensitive fields**
+
+**MSS**
+
+1.  Course coordinator requests to mask or unmask sensitive fields
+2.  Course Management System updates the masking state
+3.  Course Management System refreshes the UI to reflect the new masking state
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The command includes extra text after `mask` or `unmask`.
+
+   * 1a1. Course Management System executes the command and reports that the extra text was ignored.
+
+      Use case resumes at step 2.
+
+**Use case: Clear all records**
+
+**MSS**
+
+1.  Course coordinator requests to clear all records
+2.  Course Management System asks for explicit confirmation
+3.  Course coordinator confirms the action
+4.  Course Management System removes all records and shows a confirmation message
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. Course coordinator does not provide the required confirmation token.
+
+   * 3a1. Course Management System leaves the data unchanged and shows a reminder message.
+
+      Use case ends.
+
+**Use case: View command help**
+
+**MSS**
+
+1.  Course coordinator requests help
+2.  Course Management System opens the Help Window and shows command guidance
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Course coordinator requests help for a specific command.
+
+   * 1a1. Course Management System shows guidance for that command.
+
+      Use case ends.
+
+* 1b. Course coordinator specifies an unsupported command word.
+
+   * 1b1. Course Management System shows an error message.
+
+      Use case ends.
 
 ### Non-Functional Requirements
 
