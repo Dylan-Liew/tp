@@ -31,6 +31,8 @@ public class TagCommand extends Command {
     public static final String ACTION_ADD = "add";
     public static final String ACTION_DELETE = "delete";
 
+    public static final String MESSAGE_INVALID_ACTION =
+            "Tag action must be lowercase and either 'add' or 'delete'.";
     public static final String MESSAGE_EMPTY_INDEX_LIST = "At least one person index must be provided.";
     public static final String MESSAGE_EMPTY_NUS_MATRIC_LIST = "At least one NUS Matric must be provided.";
     public static final String MESSAGE_EMPTY_TAG_LIST = "At least one tag must be provided.";

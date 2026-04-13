@@ -55,13 +55,19 @@ public class TagCommandParserTest {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE);
 
         assertParseFailure(parser, "add", expectedMessage);
-        assertParseFailure(parser, "rename id/1 tag/friend", expectedMessage);
         assertParseFailure(parser, "add 1 tag/friend", expectedMessage);
         assertParseFailure(parser, "add id/1 m/" + VALID_NUSMATRIC_AMY + " tag/friend", expectedMessage);
         assertParseFailure(parser, "delete id/1", expectedMessage);
         assertParseFailure(parser, "add tag/friend", expectedMessage);
         assertParseFailure(parser, "add id/1 tag/   ", expectedMessage);
         assertParseFailure(parser, "delete id/1 x", expectedMessage);
+    }
+
+    @Test
+    public void parse_invalidActionCase_throwsSpecificParseException() {
+        assertParseFailure(parser, "ADD id/1 tag/friend", TagCommand.MESSAGE_INVALID_ACTION);
+        assertParseFailure(parser, "Delete id/1 tag/friend", TagCommand.MESSAGE_INVALID_ACTION);
+        assertParseFailure(parser, "rename id/1 tag/friend", TagCommand.MESSAGE_INVALID_ACTION);
     }
 
     @Test

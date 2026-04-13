@@ -61,6 +61,9 @@ public class TagCommandParser implements Parser<TagCommand> {
                     splitValues(argMultimap.getAllValues(PREFIX_MATRIC)));
             return TagCommand.byNusMatrics(action, nusMatrics, tags);
         } catch (ParseException pe) {
+            if (TagCommand.MESSAGE_INVALID_ACTION.equals(pe.getMessage())) {
+                throw pe;
+            }
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE), pe);
         }
     }
@@ -74,7 +77,7 @@ public class TagCommandParser implements Parser<TagCommand> {
             return Action.DELETE;
         }
 
-        throw new ParseException(TagCommand.MESSAGE_USAGE);
+        throw new ParseException(TagCommand.MESSAGE_INVALID_ACTION);
     }
 
     private List<Tag> parseTags(List<String> tagValues) throws ParseException {
