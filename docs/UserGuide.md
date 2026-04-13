@@ -491,7 +491,7 @@ Use this section as a quick checklist when adding or editing command examples an
 <a id="field-phone"></a>
 **`p/PHONE`**
 * Digits only.
-* At least 3 digits.
+* Between 3 and 15 digits.
 * Case sensitivity: not applicable (numeric only).
 * Valid: `p/91234567`
 * Invalid: `p/+6591234567`
