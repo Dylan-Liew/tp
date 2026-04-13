@@ -105,7 +105,9 @@ public class ImportCommandTest {
 
         CommandResult result = importCommand.execute(model, storage);
 
-        assertEquals(String.format(ImportCommand.MESSAGE_KEEP_INCOMING_SUCCESS, path), result.getFeedbackToUser());
+        assertEquals(String.format(ImportCommand.MESSAGE_KEEP_INCOMING_SUCCESS
+                        + " (%d added, %d replaced, %d processed)", path, 0, 1, 1),
+                result.getFeedbackToUser());
         assertEquals(1, model.getFilteredPersonList().size());
         assertTrue(model.getFilteredPersonList().contains(incomingPerson));
         assertFalse(model.getFilteredPersonList().contains(existingPerson));
