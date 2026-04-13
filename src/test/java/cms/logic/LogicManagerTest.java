@@ -440,7 +440,8 @@ public class LogicManagerTest {
         String importCommand = buildImportCommand(normalizedImportPath, "keep/current");
         CommandResult result = logic.execute(importCommand);
 
-        assertEquals(String.format(ImportCommand.MESSAGE_KEEP_CURRENT_SUCCESS, normalizedImportPath),
+        assertEquals(String.format(ImportCommand.MESSAGE_KEEP_CURRENT_SUCCESS
+                        + " (%d added, %d skipped, %d processed)", normalizedImportPath, 1, 1, 2),
             result.getFeedbackToUser());
         assertEquals(2, model.getFilteredPersonList().size());
         assertTrue(model.getFilteredPersonList().contains(expectedCurrentPerson));
@@ -472,7 +473,8 @@ public class LogicManagerTest {
         String importCommand = buildImportCommand(normalizedImportPath, "keep/incoming");
         CommandResult result = logic.execute(importCommand);
 
-        assertEquals(String.format(ImportCommand.MESSAGE_KEEP_INCOMING_SUCCESS, normalizedImportPath),
+        assertEquals(String.format(ImportCommand.MESSAGE_KEEP_INCOMING_SUCCESS
+                + " (%d added, %d replaced, %d processed)", normalizedImportPath, 1, 1, 2),
                 result.getFeedbackToUser());
         assertEquals(2, model.getFilteredPersonList().size());
         assertTrue(model.getFilteredPersonList().contains(conflictingIncomingPerson));

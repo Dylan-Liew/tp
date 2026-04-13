@@ -117,12 +117,14 @@ public class ImportCommand extends Command {
         }
 
         AddressBook mergedAddressBook = new AddressBook(model.getAddressBook());
+        int overlapCount = 0;
         for (Person incomingPerson : importedAddressBook.getPersonList()) {
             List<Person> conflictingPersons = findConflictingPersons(mergedAddressBook, incomingPerson);
             if (conflictingPersons.isEmpty()) {
                 mergedAddressBook.addPerson(incomingPerson);
                 continue;
             }
+            overlapCount++;
 
             if (keepPolicy == KeepPolicy.CURRENT) {
                 continue;
@@ -138,9 +140,15 @@ public class ImportCommand extends Command {
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
         if (keepPolicy == KeepPolicy.CURRENT) {
-            return new CommandResult(String.format(MESSAGE_KEEP_CURRENT_SUCCESS, importFilePath));
+            return new CommandResult(String.format(MESSAGE_KEEP_CURRENT_SUCCESS
+                + " (%d added, %d skipped, %d processed)", importFilePath,
+                importedAddressBook.getPersonList().size() - overlapCount, overlapCount,
+                importedAddressBook.getPersonList().size()));
         }
-        return new CommandResult(String.format(MESSAGE_KEEP_INCOMING_SUCCESS, importFilePath));
+        return new CommandResult(String.format(MESSAGE_KEEP_INCOMING_SUCCESS
+            + " (%d added, %d replaced, %d processed)", importFilePath,
+            importedAddressBook.getPersonList().size() - overlapCount, overlapCount,
+            importedAddressBook.getPersonList().size()));
     }
 
     /**
